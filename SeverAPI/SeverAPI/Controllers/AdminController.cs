@@ -43,7 +43,7 @@ namespace SeverAPI.Controllers
             AdminCommandPost command = new AdminCommandPost();
 
             if (command.Execute(adminResult) == null)
-                return NotFound("The object couldn't be created");
+                return BadRequest("The object couldn't be created");
 
             return Ok("Task completed succesfully");
         }

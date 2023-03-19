@@ -13,6 +13,8 @@ namespace SeverAPI.Commands.ConfigCommands
         public int? CreatedBy { get; set; }
         public bool? Status { get; set; }
         public List<Source>? Sources { get; set; }
+        public List<Destination>? Destinations { get; set; }
+        public List<Database.Models.Tasks> Tasks { get; set; }
 
         public Config Execute(int id)
         {
@@ -30,6 +32,8 @@ namespace SeverAPI.Commands.ConfigCommands
             config.CreatedBy = CreatedBy ?? config.CreatedBy;
             config.Status = Status ?? config.Status;
             config.Sources = Sources ?? config.Sources;
+            config.Destinations = Destinations ?? config.Destinations;
+            config.Tasks = Tasks ?? config.Tasks;
 
             context.SaveChanges();
 

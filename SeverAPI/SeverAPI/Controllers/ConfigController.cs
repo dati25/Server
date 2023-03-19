@@ -43,22 +43,58 @@ namespace SeverAPI.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] ConfigCommandPost command)
         {
-
-            command.Execute();
-
+            if (command.Execute() == null)
+                return BadRequest();
             return Ok();
         }
 
         // PUT api/<ConfigController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put(int id, [FromBody] ConfigCommandPut command)
         {
+            command.Execute(id);
+
         }
 
         // DELETE api/<ConfigController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+             ConfigCommandDelete command = new ConfigCommandDelete();
+
+            command.Execute(id);
         }
+        [HttpDelete("{id}/{deletedObjectID}/{deleteType}")]
+        public void DeleteSource(int id, int deletedObjectID, char deleteType)
+        {
+            ConfigCommandDelete command = new ConfigCommandDelete();
+
+            switch (deleteType)
+            {
+                case 's':
+                    command.DeleteSource(id, deletedObjectID);
+                    break;
+                case 'd':
+                    command.DeleteDestination(id, deletedObjectID);
+                    break;
+                    case 't':
+                    command.DeleteTask(id, deletedObjectID);
+                    break;
+            }
+        }
+        //[HttpDelete("{id}/{destinationId}")]
+        //public void DeleteDestination(int id, int destinationId)
+        //{
+        //    ConfigCommandDelete command = new ConfigCommandDelete();
+
+        //    command.DeleteDestination(id, destinationId);
+        //}
+        //[HttpDelete("{id}/{taskId}")]
+        //public void DeleteTask(int id, int taskId)
+        //{
+        //    ConfigCommandDelete command = new ConfigCommandDelete();
+
+        //    command.DeleteTask(id, taskId);
+        //}
     }
 }

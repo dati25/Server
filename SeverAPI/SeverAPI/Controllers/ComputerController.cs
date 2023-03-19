@@ -43,7 +43,7 @@ namespace SeverAPI.Controllers
             ComputerCommandPost command = new ComputerCommandPost();
 
             if (command.Execute(computerResult) == null)
-                return NotFound("The object couldn't be created");
+                return BadRequest("The object couldn't be created");
 
             return Ok("Task completed succesfully");
         }

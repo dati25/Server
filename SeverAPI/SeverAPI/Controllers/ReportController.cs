@@ -18,7 +18,7 @@ namespace SeverAPI.Controllers
             List<ReportResultGet> results = command.Execute(count, offset);
 
             if (results == null)
-                return NotFound("No objects found");
+                return BadRequest("No objects found");
 
             return Ok(results);
         }

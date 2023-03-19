@@ -4,13 +4,13 @@ using System.Text.Json.Serialization;
 namespace SeverAPI.Database.Models
 {
     [Table("tbTasks")]
-    public class Task : IModel
+    public class Tasks : IModel
     {
-        public int id { get; set; }
+        [JsonIgnore] public int id { get; set; }
         public int idPC { get; set; }
-        public int idConfig { get; set; }   
+        [JsonIgnore] public int idConfig { get; set; }   
 
-        public Task(int idPC, int idConfig)
+        public Tasks(int idPC, int idConfig)
         {
             this.idPC = idPC;
             this.idConfig = idConfig;

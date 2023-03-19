@@ -10,11 +10,5 @@ namespace SeverAPI.Database.Models
         [JsonIgnore] public int id { get; set; }
         public string Path { get; set; }
         [JsonIgnore] public int idConfig { get; set; }
-        [JsonIgnore] public Config Config { get; set; }
-        public Source(string path, int idConfig)
-        {
-            Path = path;
-            this.idConfig = idConfig;
-        }
     }
 }
