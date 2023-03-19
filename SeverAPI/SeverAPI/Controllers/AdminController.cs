@@ -45,7 +45,7 @@ namespace SeverAPI.Controllers
             if (command.Execute(adminResult) == null)
                 return NotFound("The object couldn't be created");
 
-            return Ok();
+            return Ok("Task completed succesfully");
         }
 
         // PUT api/<AdminsController>/5
