@@ -7,7 +7,7 @@ namespace SeverAPI
     {
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Computer> Computers { get; set; }
-        public DbSet<Tasks> Tasks { get; set; }
+        public DbSet<Database.Models.Task> Tasks { get; set; }
         public DbSet<Report> Reports { get; set; }
         public DbSet<Config> Configs { get; set; }
         public DbSet<Source> Sources { get; set; }

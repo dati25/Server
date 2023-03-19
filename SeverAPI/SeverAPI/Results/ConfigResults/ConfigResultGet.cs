@@ -1,5 +1,7 @@
 ﻿using SeverAPI.Database.Models;
+using SeverAPI.Results.DestinationResults;
 using SeverAPI.Results.SourceResults;
+using SeverAPI.Results.TaskResults;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SeverAPI.Results.ConfigResults
@@ -16,6 +18,8 @@ namespace SeverAPI.Results.ConfigResults
         public int CreatedBy { get; set; }
         public bool Status { get; set; }
         [ForeignKey("idConfig")] public List<SourceResultGet> Sources { get; set; } = new List<SourceResultGet>();
+        [ForeignKey("idConfig")] public List<DestinationResultGet> Destinations { get; set; } = new List<DestinationResultGet>();
+        [ForeignKey("idConfig")] public List<TaskResultGet> Tasks{ get; set; } = new List<TaskResultGet>();
         MyContext context = new MyContext();
 
 
@@ -31,6 +35,8 @@ namespace SeverAPI.Results.ConfigResults
             this.CreatedBy = config.CreatedBy;
             this.Status = config.Status;
             context.Sources.Where(x => x.idConfig == config.id).ToList().ForEach(x => this.Sources.Add(new SourceResultGet(x)));
+            context.Destinations.Where(x => x.idConfig == config.id).ToList().ForEach(x => this.Destinations.Add(new DestinationResultGet(x)));
+            context.Tasks.Where(x => x.idConfig == config.id).ToList().ForEach(x => this.Tasks.Add(new TaskResultGet(x)));
         }
 
     }

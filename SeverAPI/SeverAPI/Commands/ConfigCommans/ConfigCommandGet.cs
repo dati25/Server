@@ -8,8 +8,7 @@ namespace SeverAPI.Commands.ConfigCommans
         public List<ConfigResultGet> Execute()
         {
             List<ConfigResultGet> configResults = new List<ConfigResultGet>();
-            context.Configs.Include(x => x.Sources).ToList().ForEach(x => configResults.Add(new ConfigResultGet(x)));
-
+            context.Configs.Include(x => x.Sources).Include(x => x.Destinations).Include(x => x.Tasks).ToList().ForEach(x => configResults.Add(new ConfigResultGet(x)));
             return configResults;
         }
 
