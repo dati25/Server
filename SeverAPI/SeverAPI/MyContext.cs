@@ -11,6 +11,7 @@ namespace SeverAPI
         public DbSet<Report> Reports { get; set; }
         public DbSet<Config> Configs { get; set; }
         public DbSet<Source> Sources { get; set; }
+        public DbSet<Destination> Destinations { get; set; }
         //public DbSet<Group> Groups { get; set; }
         //public DbSet<PCGroups> PCGroups { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

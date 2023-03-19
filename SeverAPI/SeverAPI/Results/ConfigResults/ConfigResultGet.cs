@@ -1,4 +1,5 @@
 ﻿using SeverAPI.Database.Models;
+using SeverAPI.Results.SourceResults;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SeverAPI.Results.ConfigResults

@@ -1,6 +1,6 @@
 ﻿using SeverAPI.Database.Models;
 
-namespace SeverAPI.Results
+namespace SeverAPI.Results.SourceResults
 {
     public class SourceResultGet
     {
@@ -8,7 +8,7 @@ namespace SeverAPI.Results
 
         public SourceResultGet(Source source)
         {
-            this.Path = source.Path;
+            Path = source.Path;
         }
 
 

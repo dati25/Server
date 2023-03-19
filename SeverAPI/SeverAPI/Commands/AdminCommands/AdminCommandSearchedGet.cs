@@ -1,4 +1,5 @@
-﻿using SeverAPI.Results.AdminResults;
+﻿using SeverAPI.Database.Models;
+using SeverAPI.Results.AdminResults;
 namespace SeverAPI.Commands.AdminsCommands
 {
     public class ReportCommandSearchedGet : Command
@@ -19,7 +20,12 @@ namespace SeverAPI.Commands.AdminsCommands
         //}
         public AdminResultGet Execute(int id)
         {
-            AdminResultGet adminResult = new AdminResultGet(context.Admins.Find(id));
+            Admin admin = context.Admins.Find(id);
+
+            if (admin == null)
+                return null;
+
+            AdminResultGet adminResult = new AdminResultGet(admin);
 
             return adminResult;
 

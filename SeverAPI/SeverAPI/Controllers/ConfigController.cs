@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SeverAPI.Commands.ConfigCommans;
 using SeverAPI.Results.ConfigResults;
+using SeverAPI.Database.Models;
+using SeverAPI.Results.SourceResults;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -25,15 +27,26 @@ namespace SeverAPI.Controllers
 
         // GET api/<ConfigController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult Get(int id)
         {
-            return "value";
+            ConfigCommandSearchedGet command = new ConfigCommandSearchedGet();
+            ConfigResultGet result = command.Execute(id);
+
+            if (result == null)
+                return NotFound("Object not found.");
+
+            return Ok(result);
+
         }
 
         // POST api/<ConfigController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post([FromBody] ConfigCommandPost command)
         {
+
+            command.Execute();
+
+            return Ok();
         }
 
         // PUT api/<ConfigController>/5
