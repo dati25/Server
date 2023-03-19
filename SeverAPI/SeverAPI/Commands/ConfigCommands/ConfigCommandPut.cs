@@ -1,7 +1,6 @@
 ﻿using SeverAPI.Database.Models;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SeverAPI.Commands.ConfigCommans
+namespace SeverAPI.Commands.ConfigCommands
 {
     public class ConfigCommandPut : Command
     {
@@ -17,9 +16,10 @@ namespace SeverAPI.Commands.ConfigCommans
 
         public Config Execute(int id)
         {
-            Config config = context.Configs.Find(id);
+            Config? config = context.Configs.Find(id);
+
             if (config == null)
-                return null;
+                return null!;
 
             config.Type = Type ?? config.Type;
             config.RepeatPeriod = RepeatPeriod ?? config.RepeatPeriod;

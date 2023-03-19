@@ -7,14 +7,10 @@ namespace SeverAPI.Commands.AdminsCommands
     {
         public AdminResultGet Execute(int id)
         {
-            Admin admin = context.Admins.Find(id);
+            if (context.Admins.Find(id) == null)
+                return null!;
 
-            if (admin == null)
-                return null;
-
-            AdminResultGet adminResult = new AdminResultGet(admin);
-
-            return adminResult;
+            Admin? admin = context.Admins.Find(id);
 
             return new AdminResultGet(admin!);
         }

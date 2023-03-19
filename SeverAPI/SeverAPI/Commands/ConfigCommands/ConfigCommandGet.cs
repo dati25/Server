@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SeverAPI.Results.ConfigResults;
 
-namespace SeverAPI.Commands.ConfigCommans
+namespace SeverAPI.Commands.ConfigCommands
 {
     public class ConfigCommandGet : Command
     {
