@@ -12,9 +12,5 @@ namespace SeverAPI.Commands.ConfigCommans
 
             return configResults;
         }
-
-
-
-
     }
 }

@@ -1,4 +1,5 @@
 ﻿using SeverAPI.Database.Models;
+using System.Text.RegularExpressions;
 
 namespace SeverAPI.Commands.AdminsCommands
 {
@@ -9,7 +10,7 @@ namespace SeverAPI.Commands.AdminsCommands
         public string? email { get; set; }
         public string? repeatPeriod { get; set; }
 
-        public AdminCommandPut(string username, string password, string email, string repeatPeriod)
+        public AdminCommandPut(string? username, string? password, string? email, string? repeatPeriod)
         {
             this.username = username;
             this.password = password;
@@ -18,7 +19,7 @@ namespace SeverAPI.Commands.AdminsCommands
         }
         public Admin Execute(int id)
         {
-            Admin? admin  = context.Admins.Find(id);
+            Admin? admin = context.Admins.Find(id);
 
             if (admin == null)
                 return null!;
@@ -28,9 +29,18 @@ namespace SeverAPI.Commands.AdminsCommands
             admin.Email = email ?? admin.Email;
             admin.RepeatPeriod = repeatPeriod ?? admin.RepeatPeriod;
 
+            if (!(IsValidEmail(admin.Email)) && admin.Email != null)
+                return null!;
+
             context.SaveChanges();
 
             return admin;
+        }
+
+        public bool IsValidEmail(string emailAddress)
+        {
+            string pattern = @"^[\w-\.]+@([\w-]+\.)*[\w-]+\.[\w-]{2,4}$";
+            return Regex.IsMatch(emailAddress, pattern);
         }
     }
 }
