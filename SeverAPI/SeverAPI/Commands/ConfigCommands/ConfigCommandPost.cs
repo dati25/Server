@@ -1,7 +1,7 @@
 ﻿using SeverAPI.Database.Models;
 using SeverAPI.Results.SourceResults;
-using SeverAPI.Results.ConfigResults;
-namespace SeverAPI.Commands.ConfigCommans
+
+namespace SeverAPI.Commands.ConfigCommands
 {
     public class ConfigCommandPost : Command
     {
@@ -33,12 +33,12 @@ namespace SeverAPI.Commands.ConfigCommans
 
             Config config = new Config(this.Type, this.RepeatPeriod, this.ExpirationDate, this.Compress, this.Retention,
                 this.PackageSize, this.CreatedBy, this.Status);
-            
+
             context.Configs.Add(config);
 
             context.SaveChanges();
 
-            
+
             foreach (var item in this.Sources)
             {
                 context.Sources.Add(new Source(item.Path, config.id));

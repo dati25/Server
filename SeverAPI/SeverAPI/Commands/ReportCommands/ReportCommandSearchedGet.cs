@@ -7,12 +7,12 @@ namespace SeverAPI.Commands.ReportCommands
     {
         public ReportResultGet Execute(int id)
         {
-            Report? report = context.Reports.Find(id);
-
-            if (report == null)
+            if (context.Reports.Find(id) == null)
                 return null!;
 
-            return new ReportResultGet(report);
+            Report? report = context.Reports.Find(id);
+
+            return new ReportResultGet(report!);
         }
     }
 }

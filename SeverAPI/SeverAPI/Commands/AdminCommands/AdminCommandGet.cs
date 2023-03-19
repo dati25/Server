@@ -13,7 +13,7 @@ namespace SeverAPI.Commands.AdminsCommands
                 return adminsList;
 
             int count = inputCount ?? adminsList.Count;
-            if (count <= 0 || offset > adminsList.Count)
+            if (count <= 0 || offset >= adminsList.Count)
                 return null!;
 
             count = this.CheckCount(adminsList, count);
@@ -24,6 +24,7 @@ namespace SeverAPI.Commands.AdminsCommands
 
             return ResultAdmin!;
         }
+
         public int CheckCount<T>(List<T> list, int count)
         {
             if (list.Count <= count)

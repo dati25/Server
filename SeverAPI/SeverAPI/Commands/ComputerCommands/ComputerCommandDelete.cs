@@ -4,15 +4,17 @@ namespace SeverAPI.Commands.ComputerCommands
 {
     public class ComputerCommandDelete : Command
     {
-        public void Execute(int id)
+        public Computer Execute(int id)
         {
             Computer? computer = context.Computers.Find(id);
 
             if (computer == null)
-                return;
+                return null!;
 
             context.Computers.Remove(computer!);
             context.SaveChanges();
+
+            return computer;
         }
     }
 }

@@ -12,13 +12,13 @@ namespace SeverAPI.Controllers
     {
         // GET: api/<ComputerController>
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Get(int? count, int offset = 0)
         {
             ComputerCommandGet command = new ComputerCommandGet();
-            List<ComputerResultGet> results = command.Execute();
+            List<ComputerResultGet> results = command.Execute(count, offset);
 
             if (results == null)
-                return NotFound("No objects found.");
+                return NotFound("No objects found");
 
             return Ok(results);
         }
@@ -31,7 +31,7 @@ namespace SeverAPI.Controllers
             ComputerResultGet result = command.Execute(id);
 
             if (result == null)
-                return NotFound("Searched object doesn't exist.");
+                return NotFound("Searched object doesn't exist");
 
             return Ok(result);
         }
@@ -43,26 +43,31 @@ namespace SeverAPI.Controllers
             ComputerCommandPost command = new ComputerCommandPost();
 
             if (command.Execute(computerResult) == null)
-                return NotFound("Searched object doesn't exist.");
+                return NotFound("The object couldn't be created");
 
-            return Ok();
+            return Ok("Task completed succesfully");
         }
 
         // PUT api/<ComputerController>/5
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] ComputerCommandPut command)
         {
-            command.Execute(id);
+            if (command.Execute(id) == null)
+                return NotFound("The object couldn't be updated");
+
             return Ok("Task completed succesfully");
         }
 
         // DELETE api/<ComputerController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
             ComputerCommandDelete command = new ComputerCommandDelete();
 
-            command.Execute(id);
+            if (command.Execute(id) == null)
+                return NotFound("The object couldn't be deleted");
+
+            return Ok("Task completed succesfully");
         }
     }
 }

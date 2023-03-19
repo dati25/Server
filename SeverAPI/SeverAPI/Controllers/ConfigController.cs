@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SeverAPI.Commands.ConfigCommans;
+using SeverAPI.Commands.ConfigCommands;
 using SeverAPI.Results.ConfigResults;
 using SeverAPI.Database.Models;
 using SeverAPI.Results.SourceResults;

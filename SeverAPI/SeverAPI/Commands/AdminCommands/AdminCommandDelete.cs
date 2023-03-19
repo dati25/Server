@@ -5,15 +5,17 @@ namespace SeverAPI.Commands.AdminsCommands
     public class AdminCommandDelete : Command
     {
 
-        public void Execute(int id)
+        public Admin Execute(int id)
         {
             Admin? admin = context.Admins.Find(id);
 
             if (admin == null)
-                return;
+                return null!;
 
             context.Admins.Remove(admin!);
             context.SaveChanges();
+
+            return admin;
         }
     }
 }

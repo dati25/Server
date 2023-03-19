@@ -17,8 +17,8 @@ namespace SeverAPI.Controllers
             AdminCommandGet command = new AdminCommandGet();
             List<AdminResultGet> results = command.Execute(count, offset);
 
-            if (results == null )
-                return NotFound("No objects found.");
+            if (results == null)
+                return NotFound("No objects found");
 
             return Ok(results);
         }
@@ -27,11 +27,12 @@ namespace SeverAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            ReportCommandSearchedGet command = new ReportCommandSearchedGet();
+            AdminCommandSearchedGet command = new AdminCommandSearchedGet();
             AdminResultGet result = command.Execute(id);
 
             if (result == null)
-                return NotFound("Searched object doesn't exist.");
+                return NotFound("Searched object doesn't exist");
+
             return Ok(result);
         }
 
@@ -42,26 +43,31 @@ namespace SeverAPI.Controllers
             AdminCommandPost command = new AdminCommandPost();
 
             if (command.Execute(adminResult) == null)
-                return NotFound("The object couldn't be created.");
-            
-            return Ok();
+                return NotFound("The object couldn't be created");
+
+            return Ok("Task completed succesfully");
         }
 
         // PUT api/<AdminsController>/5
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] AdminCommandPut command)
         {
-            command.Execute(id);
+            if (command.Execute(id) == null)
+                return NotFound("The object couldn't be updated");
+
             return Ok("Task completed succesfully");
         }
 
         // DELETE api/<AdminsController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
             AdminCommandDelete command = new AdminCommandDelete();
 
-            command.Execute(id);
+            if (command.Execute(id) == null)
+                return NotFound("The object couldn't be deleted");
+
+            return Ok("Task completed succesfully");
         }
     }
 }

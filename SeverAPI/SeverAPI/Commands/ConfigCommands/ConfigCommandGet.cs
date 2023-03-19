@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SeverAPI.Results.ConfigResults;
 
-namespace SeverAPI.Commands.ConfigCommans
+namespace SeverAPI.Commands.ConfigCommands
 {
     public class ConfigCommandGet : Command
     {
@@ -11,9 +11,5 @@ namespace SeverAPI.Commands.ConfigCommans
             context.Configs.Include(x => x.Sources).Include(x => x.Destinations).Include(x => x.Tasks).ToList().ForEach(x => configResults.Add(new ConfigResultGet(x)));
             return configResults;
         }
-
-
-
-
     }
 }

@@ -7,12 +7,12 @@ namespace SeverAPI.Commands.ComputerCommands
     {
         public ComputerResultGet Execute(int id)
         {
-            Computer? computer = context.Computers.Find(id);
-
-            if (computer == null)
+            if (context.Computers.Find(id) == null)
                 return null!;
 
-            return new ComputerResultGet(computer);
+            Computer? computer = context.Computers.Find(id);
+
+            return new ComputerResultGet(computer!);
         }
     }
 }
