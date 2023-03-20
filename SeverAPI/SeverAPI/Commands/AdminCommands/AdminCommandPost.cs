@@ -11,7 +11,7 @@ namespace SeverAPI.Commands.AdminsCommands
             if (!(IsValidEmail(admin.Email)))
                 return null!;
 
-            this.context.Add(new Admin(admin.Username, admin.Password, admin.Email));
+            this.context.Add(new Admin(admin.Username, admin.Password, admin.Email, null));
             this.context.SaveChanges();
 
             return admin;

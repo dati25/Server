@@ -7,7 +7,7 @@ namespace SeverAPI.Commands.ComputerCommands
     {
         public ComputerResultGet Execute(int id)
         {
-            if (context.Computers.Find(id) == null)
+            if (context.Computers!.Find(id) == null)
                 return null!;
 
             Computer? computer = context.Computers.Find(id);

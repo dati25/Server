@@ -7,7 +7,7 @@ namespace SeverAPI.Commands.ReportCommands
     {
         public ReportResultGet Execute(int id)
         {
-            if (context.Reports.Find(id) == null)
+            if (context.Reports!.Find(id) == null)
                 return null!;
 
             Report? report = context.Reports.Find(id);

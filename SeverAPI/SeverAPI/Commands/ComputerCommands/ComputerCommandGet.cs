@@ -7,7 +7,7 @@ namespace SeverAPI.Commands.ComputerCommands
         public List<ComputerResultGet> Execute(int? inputCount, int offset = 0)
         {
             List<ComputerResultGet>? computersList = new List<ComputerResultGet>();
-            context.Computers.ToList().ForEach(x => computersList.Add(new ComputerResultGet(x)));
+            context.Computers!.ToList().ForEach(x => computersList.Add(new ComputerResultGet(x)));
 
             if (inputCount == null && offset == 0)
                 return computersList;

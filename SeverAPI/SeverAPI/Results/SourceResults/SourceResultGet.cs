@@ -12,7 +12,5 @@ namespace SeverAPI.Results.SourceResults
             this.id = source.id;
             Path = source.Path;
         }
-
-
     }
 }

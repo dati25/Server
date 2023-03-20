@@ -1,18 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SeverAPI.Commands.AdminsCommands;
-using SeverAPI.Results.AdminResults;
+using SeverAPI.Commands.GroupCommands;
+using SeverAPI.Results.GroupResults;
 
 namespace SeverAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AdminController : ControllerBase
+    public class GroupController : ControllerBase
     {
         [HttpGet]
         public IActionResult Get(int? count, int offset = 0)
         {
-            AdminCommandGet command = new AdminCommandGet();
-            List<AdminResultGet> results = command.Execute(count, offset);
+            GroupCommandGet command = new GroupCommandGet();
+            List<GroupResultGet> results = command.Execute(count, offset);
 
             if (results == null)
                 return NotFound("No objects found");
@@ -23,28 +23,27 @@ namespace SeverAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            AdminCommandSearchedGet command = new AdminCommandSearchedGet();
-            AdminResultGet result = command.Execute(id);
+            GroupCommandSearchedGet command = new GroupCommandSearchedGet();
+            GroupResultGet result = command.Execute(id);
 
             if (result == null)
-                return NotFound("Searched object doesn't exist");
+                return NotFound("Object not found.");
 
             return Ok(result);
+
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] AdminResultPost adminResult)
+        public IActionResult Post([FromBody] GroupCommandPost command)
         {
-            AdminCommandPost command = new AdminCommandPost();
-
-            if (command.Execute(adminResult) == null)
+            if (command.Execute() == null)
                 return BadRequest("The object couldn't be created");
 
             return Ok("Task completed succesfully");
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] AdminCommandPut command)
+        public IActionResult Put(int id, [FromBody] GroupCommandPut command)
         {
             if (command.Execute(id) == null)
                 return BadRequest("The object couldn't be updated");
@@ -55,9 +54,20 @@ namespace SeverAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            AdminCommandDelete command = new AdminCommandDelete();
+            GroupCommandDelete command = new GroupCommandDelete();
 
             if (command.Execute(id) == null)
+                return BadRequest("The object couldn't be deleted");
+
+            return Ok("Task completed succesfully");
+        }
+
+        [HttpDelete("{id}/{pcGroupID}")]
+        public IActionResult DeletePCGroups(int id, int pcGroupID)
+        {
+            GroupCommandDelete command = new GroupCommandDelete();
+
+            if (command.DeletePCGroups(id, pcGroupID) == null)
                 return BadRequest("The object couldn't be deleted");
 
             return Ok("Task completed succesfully");

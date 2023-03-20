@@ -9,10 +9,9 @@ namespace SeverAPI.Database.Models
         public string Username { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
-        //public string ProfilePicture { get; set; }
-        public string RepeatPeriod { get; set; }
+        public string? RepeatPeriod { get; set; }
 
-        public Admin(string username, string password, string email, string repeatPeriod = "0 0 1 * *")
+        public Admin(string username, string password, string email, string? repeatPeriod)
         {
             Username = username;
             Password = password;

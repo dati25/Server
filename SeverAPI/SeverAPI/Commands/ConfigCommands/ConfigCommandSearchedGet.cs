@@ -7,7 +7,7 @@ namespace SeverAPI.Commands.ConfigCommands
     {
         public ConfigResultGet Execute(int id)
         {
-            Config? config = context.Configs.Find(id);
+            Config? config = context.Configs!.Find(id);
 
             if (config == null)
                 return null!;

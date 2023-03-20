@@ -1,6 +1,4 @@
-﻿using SeverAPI.Database.Models;
-
-namespace SeverAPI.Commands
+﻿namespace SeverAPI.Commands
 {
     public abstract class Command
     {

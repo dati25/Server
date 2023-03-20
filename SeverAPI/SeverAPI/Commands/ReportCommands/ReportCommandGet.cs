@@ -7,7 +7,7 @@ namespace SeverAPI.Commands.ReportCommands
         public List<ReportResultGet> Execute(int? inputCount, int offset = 0)
         {
             List<ReportResultGet>? reportsList = new List<ReportResultGet>();
-            context.Reports.ToList().ForEach(x => reportsList.Add(new ReportResultGet(x)));
+            context.Reports!.ToList().ForEach(x => reportsList.Add(new ReportResultGet(x)));
 
             if (inputCount == null && offset == 0)
                 return reportsList;

@@ -1,4 +1,6 @@
-﻿namespace SeverAPI.Results.ComputerResults
+﻿using SeverAPI.Database.Models;
+
+namespace SeverAPI.Results.ComputerResults
 {
     public class ComputerResultPost
     {

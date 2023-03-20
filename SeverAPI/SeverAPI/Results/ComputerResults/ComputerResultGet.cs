@@ -2,10 +2,10 @@ using SeverAPI.Database.Models;
 
 namespace SeverAPI.Results.ComputerResults
 {
-    public class ComputerResultGet : IModel
+    public class ComputerResultGet
     {
         public int id { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public string MacAddress { get; set; }
         public string IPAddress { get; set; }
         public bool? Status { get; set; }

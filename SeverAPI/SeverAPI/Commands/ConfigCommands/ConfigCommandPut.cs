@@ -14,11 +14,11 @@ namespace SeverAPI.Commands.ConfigCommands
         public bool? Status { get; set; }
         public List<Source>? Sources { get; set; }
         public List<Destination>? Destinations { get; set; }
-        public List<Database.Models.Tasks> Tasks { get; set; }
+        public List<Tasks>? Tasks { get; set; }
 
         public Config Execute(int id)
         {
-            Config? config = context.Configs.Find(id);
+            Config? config = context.Configs!.Find(id);
 
             if (config == null)
                 return null!;
@@ -39,8 +39,5 @@ namespace SeverAPI.Commands.ConfigCommands
 
             return config;
         }
-
-
-
     }
 }

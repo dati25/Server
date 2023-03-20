@@ -2,15 +2,12 @@
 using SeverAPI.Commands.ReportCommands;
 using SeverAPI.Results.ReportResults;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace SeverAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class ReportController : ControllerBase
     {
-        // GET: api/<ReportController>
         [HttpGet]
         public IActionResult Get(int? count, int offset = 0)
         {
@@ -23,7 +20,6 @@ namespace SeverAPI.Controllers
             return Ok(results);
         }
 
-        // GET api/<ReportController>/5
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
@@ -36,7 +32,6 @@ namespace SeverAPI.Controllers
             return Ok(result);
         }
 
-        // POST api/<ReportController>
         [HttpPost]
         public IActionResult Post([FromBody] ReportResultPost reportResult)
         {
@@ -48,7 +43,6 @@ namespace SeverAPI.Controllers
             return Ok("Task completed succesfully");
         }
 
-        // PUT api/<ReportController>/5
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] ReportCommandPut command)
         {
@@ -58,7 +52,6 @@ namespace SeverAPI.Controllers
             return Ok("Task completed succesfully");
         }
 
-        // DELETE api/<ReportController>/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

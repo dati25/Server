@@ -19,7 +19,7 @@ namespace SeverAPI.Commands.AdminsCommands
         }
         public Admin Execute(int id)
         {
-            Admin? admin = context.Admins.Find(id);
+            Admin? admin = context.Admins!.Find(id);
 
             if (admin == null)
                 return null!;

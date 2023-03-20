@@ -19,7 +19,7 @@ namespace SeverAPI.Commands.ReportCommands
 
         public Report Execute(int id)
         {
-            Report? report = context.Reports.Find(id);
+            Report? report = context.Reports!.Find(id);
 
             if (report == null)
                 return null!;

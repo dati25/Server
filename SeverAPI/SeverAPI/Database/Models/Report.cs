@@ -7,11 +7,11 @@ namespace SeverAPI.Database.Models
     {
         public int id { get; set; }
         public int idPC { get; set; }
-        public bool Status { get; set; }
-        public DateTime? ReportTime { get; set; }
+        public bool? Status { get; set; }
+        public DateTime ReportTime { get; set; }
         public string? Description { get; set; }
 
-        public Report(int idPC, bool status, DateTime? reportTime, string? description)
+        public Report(int idPC, bool? status, DateTime reportTime, string? description)
         {
             this.idPC = idPC;
             Status = status;

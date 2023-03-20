@@ -10,16 +10,16 @@ namespace SeverAPI.Results.ConfigResults
     {
         public int id { get; set; }
         public string Type { get; set; }
-        public string RepeatPeriod { get; set; }
-        public DateTime ExpirationDate { get; set; }
-        public bool Compress { get; set; }
-        public int Retention { get; set; }
-        public int PackageSize { get; set; }
+        public string? RepeatPeriod { get; set; }
+        public DateTime? ExpirationDate { get; set; }
+        public bool? Compress { get; set; }
+        public int? Retention { get; set; }
+        public int? PackageSize { get; set; }
         public int CreatedBy { get; set; }
-        public bool Status { get; set; }
+        public bool? Status { get; set; }
         [ForeignKey("idConfig")] public List<SourceResultGet> Sources { get; set; } = new List<SourceResultGet>();
         [ForeignKey("idConfig")] public List<DestinationResultGet> Destinations { get; set; } = new List<DestinationResultGet>();
-        [ForeignKey("idConfig")] public List<TaskResultGet> Tasks{ get; set; } = new List<TaskResultGet>();
+        [ForeignKey("idConfig")] public List<TaskResultGet> Tasks { get; set; } = new List<TaskResultGet>();
         MyContext context = new MyContext();
 
 
@@ -34,9 +34,9 @@ namespace SeverAPI.Results.ConfigResults
             this.PackageSize = config.PackageSize;
             this.CreatedBy = config.CreatedBy;
             this.Status = config.Status;
-            context.Sources.Where(x => x.idConfig == config.id).ToList().ForEach(x => this.Sources.Add(new SourceResultGet(x)));
-            context.Destinations.Where(x => x.idConfig == config.id).ToList().ForEach(x => this.Destinations.Add(new DestinationResultGet(x)));
-            context.Tasks.Where(x => x.idConfig == config.id).ToList().ForEach(x => this.Tasks.Add(new TaskResultGet(x)));
+            context.Sources!.Where(x => x.idConfig == config.id).ToList().ForEach(x => this.Sources.Add(new SourceResultGet(x)));
+            context.Destinations!.Where(x => x.idConfig == config.id).ToList().ForEach(x => this.Destinations.Add(new DestinationResultGet(x)));
+            context.Tasks!.Where(x => x.idConfig == config.id).ToList().ForEach(x => this.Tasks.Add(new TaskResultGet(x)));
         }
 
     }

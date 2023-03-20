@@ -1,11 +1,13 @@
-﻿namespace SeverAPI.Results.AdminResults
+﻿using SeverAPI.Database.Models;
+
+namespace SeverAPI.Results.AdminResults
 {
     public class AdminResultPost
     {
         public string Username { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
-        //public string ProfilePicture { get; set; }
+
         public AdminResultPost(string username, string password, string email)
         {
             this.Username = username;
