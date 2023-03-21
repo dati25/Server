@@ -1,18 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SeverAPI.Commands;
 using SeverAPI.Commands.ConfigCommands;
 using SeverAPI.Results.ConfigResults;
-
+using SeverAPI.Database.Models;
 namespace SeverAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class ConfigController : ControllerBase
     {
+        private MyContext context = new MyContext();
         [HttpGet]
         public IActionResult Get(int? count, int offset = 0)
         {
-            ConfigCommandGet command = new ConfigCommandGet();
-            List<ConfigResultGet> results = command.Execute(count, offset);
+            CommandsGetDelete command = new CommandsGetDelete();
+            List<ConfigResultGet> list = new List<ConfigResultGet>();
+
+            context.Configs!.ToList().ForEach(x => list.Add(new ConfigResultGet(x)));
+
+            List<ConfigResultGet> results = command.Get(list, count, offset);
 
             if (results == null)
                 return NotFound("No objects found");
@@ -23,14 +29,14 @@ namespace SeverAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            ConfigCommandSearchedGet command = new ConfigCommandSearchedGet();
-            ConfigResultGet result = command.Execute(id);
+            Config? config = context.Configs!.Find(id);
 
-            if (result == null)
-                return NotFound("Searched object doesn't exist");
+            if (config == null)
+                return NotFound("Object doesn't exist.");
+
+            ConfigResultGet result = new ConfigResultGet(config);
 
             return Ok(result);
-
         }
 
         [HttpPost]
@@ -54,36 +60,41 @@ namespace SeverAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            ConfigCommandDelete command = new ConfigCommandDelete();
+            CommandsGetDelete command = new CommandsGetDelete();
+            command.Delete(context.Configs!.Find(id));
 
-            if (command.Execute(id) == null)
-                return BadRequest("The object couldn't be deleted");
-
-            return Ok("Task completed succesfully");
+            return Ok();
         }
 
-        [HttpDelete("{id}/{deletedObjectID}/{deleteType}")]
-        public IActionResult DeleteSource(int id, int deletedObjectID, char deleteType)
+        [HttpDelete("/api/sources/{id}")]
+        public IActionResult DeleteSource(int id)
         {
-            ConfigCommandDelete command = new ConfigCommandDelete();
+            CommandsGetDelete command = new CommandsGetDelete();
 
-            switch (deleteType)
-            {
-                case 's':
-                    if (command.DeleteSource(id, deletedObjectID) == null)
-                        return BadRequest("The object couldn't be deleted");
-                    break;
-                case 'd':
-                    if (command.DeleteDestination(id, deletedObjectID) == null)
-                        return BadRequest("The object couldn't be deleted");
-                    break;
-                case 't':
-                    if (command.DeleteTask(id, deletedObjectID) == null)
-                        return BadRequest("The object couldn't be deleted");
-                    break;
-            }
+            command.Delete(context.Sources!.Find(id));
+            
 
-            return Ok("Task completed succesfully");
+            return Ok();
+        }
+        [HttpDelete("/api/destinations/{id}")]
+        public IActionResult DeleteDestination(int id)
+        {
+            CommandsGetDelete command = new CommandsGetDelete();
+
+            command.Delete(context.Destinations!.Find(id));
+
+
+            return Ok();
+        }
+        [HttpDelete("/api/tasks/{id}")]
+        public IActionResult DeleteTask(int id)
+        {
+            CommandsGetDelete command = new CommandsGetDelete();
+
+            command.Delete(context.Tasks!.Find(id));
+
+
+            return Ok();
         }
     }
 }

@@ -1,18 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SeverAPI.Commands;
 using SeverAPI.Commands.AdminsCommands;
 using SeverAPI.Results.AdminResults;
-
+using SeverAPI.Results.ConfigResults;
+using SeverAPI.Database.Models;
 namespace SeverAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class AdminController : ControllerBase
     {
+        MyContext context = new MyContext();
         [HttpGet]
         public IActionResult Get(int? count, int offset = 0)
         {
-            AdminCommandGet command = new AdminCommandGet();
-            List<AdminResultGet> results = command.Execute(count, offset);
+            CommandsGetDelete command = new CommandsGetDelete();
+            List<AdminResultGet> list = new List<AdminResultGet>();
+
+            context.Admins!.ToList().ForEach(x => list.Add(new AdminResultGet(x)));
+
+            List<AdminResultGet> results = command.Get(list, count, offset);
 
             if (results == null)
                 return NotFound("No objects found");
@@ -23,11 +30,12 @@ namespace SeverAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            AdminCommandSearchedGet command = new AdminCommandSearchedGet();
-            AdminResultGet result = command.Execute(id);
+            Admin? admins = context.Admins!.Find(id);
 
-            if (result == null)
-                return NotFound("Searched object doesn't exist");
+            if (admins == null)
+                return NotFound("Object doesn't exist.");
+
+            AdminResultGet result = new AdminResultGet(admins);
 
             return Ok(result);
         }
@@ -55,12 +63,10 @@ namespace SeverAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            AdminCommandDelete command = new AdminCommandDelete();
+            CommandsGetDelete command = new CommandsGetDelete();
+            command.Delete(context.Admins!.Find(id));
 
-            if (command.Execute(id) == null)
-                return BadRequest("The object couldn't be deleted");
-
-            return Ok("Task completed succesfully");
+            return Ok();
         }
     }
 }

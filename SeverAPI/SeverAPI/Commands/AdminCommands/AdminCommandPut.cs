@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace SeverAPI.Commands.AdminsCommands
 {
-    public class AdminCommandPut : Command
+    public class AdminCommandPut : ICommand
     {
         public string? username { get; set; }
         public string? password { get; set; }

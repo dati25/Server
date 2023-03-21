@@ -1,21 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SeverAPI.Commands;
 using SeverAPI.Commands.ReportCommands;
+using SeverAPI.Results.ConfigResults;
 using SeverAPI.Results.ReportResults;
-
+using SeverAPI.Database.Models;
 namespace SeverAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class ReportController : ControllerBase
     {
+        private MyContext context = new MyContext();
         [HttpGet]
         public IActionResult Get(int? count, int offset = 0)
         {
-            ReportCommandGet command = new ReportCommandGet();
-            List<ReportResultGet> results = command.Execute(count, offset);
+            CommandsGetDelete command = new CommandsGetDelete();
+            List<ReportResultGet> list = new List<ReportResultGet>();
+
+            context.Reports!.ToList().ForEach(x => list.Add(new ReportResultGet(x)));
+
+            List<ReportResultGet> results = command.Get(list, count, offset);
 
             if (results == null)
-                return BadRequest("No objects found");
+                return NotFound("No objects found");
 
             return Ok(results);
         }
@@ -23,13 +30,15 @@ namespace SeverAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            ReportCommandSearchedGet command = new ReportCommandSearchedGet();
-            ReportResultGet result = command.Execute(id);
+            Report? report = context.Reports!.Find(id);
 
-            if (result == null)
-                return NotFound("Searched object doesn't exist");
+            if (report == null)
+                return NotFound("Object doesn't exist.");
+
+            ReportResultGet result = new ReportResultGet(report);
 
             return Ok(result);
+
         }
 
         [HttpPost]
@@ -55,12 +64,10 @@ namespace SeverAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            ReportCommandDelete command = new ReportCommandDelete();
+            CommandsGetDelete command = new CommandsGetDelete();
+            command.Delete(context.Reports!.Find(id));
 
-            if (command.Execute(id) == null)
-                return NotFound("The object couldn't be deleted");
-
-            return Ok("Task completed succesfully");
+            return Ok();
         }
     }
 }

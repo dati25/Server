@@ -3,7 +3,7 @@ using SeverAPI.Results.PCGroupResults;
 
 namespace SeverAPI.Commands.GroupCommands
 {
-    public class GroupCommandPost : Command
+    public class GroupCommandPost : ICommand
     {
         public string Name { get; set; }
         public List<PCGroupResultPost>? PCGroups { get; set; }

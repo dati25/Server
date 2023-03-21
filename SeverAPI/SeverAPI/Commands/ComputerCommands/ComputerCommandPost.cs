@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace SeverAPI.Commands.ComputerCommands
 {
-    public class ComputerCommandPost : Command
+    public class ComputerCommandPost : ICommand
     {
         public ComputerResultPost Execute(ComputerResultPost computer)
         {

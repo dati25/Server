@@ -2,7 +2,7 @@
 
 namespace SeverAPI.Commands.GroupCommands
 {
-    public class GroupCommandPut : Command
+    public class GroupCommandPut : ICommand
     {
         public string? Name { get; set; }
         public List<PCGroups>? PCGroups { get; set; }

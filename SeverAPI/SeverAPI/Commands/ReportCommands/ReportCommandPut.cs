@@ -2,7 +2,7 @@
 
 namespace SeverAPI.Commands.ReportCommands
 {
-    public class ReportCommandPut : Command
+    public class ReportCommandPut : ICommand
     {
         public int? idPC { get; set; }
         public bool? status { get; set; }

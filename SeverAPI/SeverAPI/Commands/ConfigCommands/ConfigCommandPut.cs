@@ -2,7 +2,7 @@
 
 namespace SeverAPI.Commands.ConfigCommands
 {
-    public class ConfigCommandPut : Command
+    public class ConfigCommandPut : ICommand
     {
         public string? Type { get; set; }
         public string? RepeatPeriod { get; set; }

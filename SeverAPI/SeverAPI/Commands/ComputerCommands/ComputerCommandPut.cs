@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace SeverAPI.Commands.ComputerCommands
 {
-    public class ComputerCommandPut : Command
+    public class ComputerCommandPut : ICommand
     {
         public string? name { get; set; }
         public string? macAddress { get; set; }

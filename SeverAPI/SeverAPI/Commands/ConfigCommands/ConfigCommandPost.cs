@@ -5,7 +5,7 @@ using SeverAPI.Results.TaskResults;
 
 namespace SeverAPI.Commands.ConfigCommands
 {
-    public class ConfigCommandPost : Command
+    public class ConfigCommandPost : ICommand
     {
 
         public string Type { get; set; }

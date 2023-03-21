@@ -3,7 +3,7 @@ using SeverAPI.Results.ReportResults;
 
 namespace SeverAPI.Commands.ReportCommands
 {
-    public class ReportCommandPost : Command
+    public class ReportCommandPost : ICommand
     {
         public ReportResultPost Execute(ReportResultPost report)
         {

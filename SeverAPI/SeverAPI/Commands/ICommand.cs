@@ -1,6 +1,6 @@
 ﻿namespace SeverAPI.Commands
 {
-    public abstract class Command
+    public abstract class ICommand
     {
         protected MyContext context = new MyContext();
     }
