@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SeverAPI.Commands;
 using SeverAPI.Commands.GroupCommands;
-using SeverAPI.Results.ConfigResults;
 using SeverAPI.Results.GroupResults;
 using SeverAPI.Database.Models;
+
 namespace SeverAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -63,7 +63,7 @@ namespace SeverAPI.Controllers
         public IActionResult Delete(int id)
         {
             CommandsGetDelete command = new CommandsGetDelete();
-            command.Delete(context.Groups!.Find(id));
+            command.Delete(context.Groups!.Find(id)!);
 
             return Ok();
         }
@@ -71,10 +71,9 @@ namespace SeverAPI.Controllers
         [HttpDelete("{id}/{pcGroupID}")]
         public IActionResult DeletePCGroups(int id, int pcGroupID)
         {
-            GroupCommandDelete command = new GroupCommandDelete();
+            CommandsGetDelete command = new CommandsGetDelete();
 
-            if (command.DeletePCGroups(id, pcGroupID) == null)
-                return BadRequest("The object couldn't be deleted");
+            command.Delete(context.PCGroups!.Find(id)!);
 
             return Ok("Task completed succesfully");
         }

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SeverAPI.Commands;
 using SeverAPI.Commands.ReportCommands;
-using SeverAPI.Results.ConfigResults;
 using SeverAPI.Results.ReportResults;
 using SeverAPI.Database.Models;
+
 namespace SeverAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -65,7 +65,7 @@ namespace SeverAPI.Controllers
         public IActionResult Delete(int id)
         {
             CommandsGetDelete command = new CommandsGetDelete();
-            command.Delete(context.Reports!.Find(id));
+            command.Delete(context.Reports!.Find(id)!);
 
             return Ok();
         }

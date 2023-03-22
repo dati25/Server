@@ -2,8 +2,8 @@
 using SeverAPI.Commands;
 using SeverAPI.Commands.AdminsCommands;
 using SeverAPI.Results.AdminResults;
-using SeverAPI.Results.ConfigResults;
 using SeverAPI.Database.Models;
+
 namespace SeverAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -64,7 +64,7 @@ namespace SeverAPI.Controllers
         public IActionResult Delete(int id)
         {
             CommandsGetDelete command = new CommandsGetDelete();
-            command.Delete(context.Admins!.Find(id));
+            command.Delete(context.Admins!.Find(id)!);
 
             return Ok();
         }

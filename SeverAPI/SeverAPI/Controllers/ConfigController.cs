@@ -3,6 +3,7 @@ using SeverAPI.Commands;
 using SeverAPI.Commands.ConfigCommands;
 using SeverAPI.Results.ConfigResults;
 using SeverAPI.Database.Models;
+
 namespace SeverAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -61,7 +62,7 @@ namespace SeverAPI.Controllers
         public IActionResult Delete(int id)
         {
             CommandsGetDelete command = new CommandsGetDelete();
-            command.Delete(context.Configs!.Find(id));
+            command.Delete(context.Configs!.Find(id)!);
 
             return Ok();
         }
@@ -71,8 +72,8 @@ namespace SeverAPI.Controllers
         {
             CommandsGetDelete command = new CommandsGetDelete();
 
-            command.Delete(context.Sources!.Find(id));
-            
+            command.Delete(context.Sources!.Find(id)!);
+
 
             return Ok();
         }
@@ -81,7 +82,7 @@ namespace SeverAPI.Controllers
         {
             CommandsGetDelete command = new CommandsGetDelete();
 
-            command.Delete(context.Destinations!.Find(id));
+            command.Delete(context.Destinations!.Find(id)!);
 
 
             return Ok();
@@ -91,7 +92,7 @@ namespace SeverAPI.Controllers
         {
             CommandsGetDelete command = new CommandsGetDelete();
 
-            command.Delete(context.Tasks!.Find(id));
+            command.Delete(context.Tasks!.Find(id)!);
 
 
             return Ok();
