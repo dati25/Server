@@ -6,16 +6,16 @@ namespace SeverAPI.Database.Models
     public class Computer : IModel
     {
         public int id { get; set; }
-        public string? Name { get; set; }
         public string MacAddress { get; set; }
         public string IPAddress { get; set; }
+        public string? Name { get; set; }
         public bool? Status { get; set; }
 
-        public Computer(string? name, string macAddress, string iPAddress, bool? status)
+        public Computer(string macAddress, string iPAddress, string? name = null, bool? status = null)
         {
-            Name = name;
             MacAddress = macAddress;
             IPAddress = iPAddress;
+            Name = name;
             Status = status;
         }
     }

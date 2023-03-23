@@ -41,14 +41,16 @@ namespace SeverAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] ComputerResultPost computerResult)
+        public async Task<IActionResult> Post([FromBody] ComputerResultPost computerResult)
         {
             ComputerCommandPost command = new ComputerCommandPost();
 
-            if (command.Execute(computerResult) == null)
+            (Computer?, int?) result = await command.Execute(computerResult);
+
+            if (result.Item1 == null)
                 return BadRequest("The object couldn't be created");
 
-            return Ok("Task completed succesfully");
+            return Ok(new ComputerResult(result.Item1, result.Item2));
         }
 
         [HttpPut("{id}")]
