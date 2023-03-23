@@ -9,8 +9,8 @@ namespace SeverAPI.Commands.ComputerCommands
     {
         public async Task<(Computer?, int?)> Execute(ComputerResultPost computer)
         {
-            if (!(IsValidIP(computer.IPAddress)) || !(IsValidMac(computer.MacAddress)))
-                return (null, null);
+            //if ((!IsValidMac(computer.MacAddress)) || (!this.IsValidStatus(computer.Status)))
+            //    return (null, null);
 
             Computer? c = null;
 
@@ -60,7 +60,10 @@ namespace SeverAPI.Commands.ComputerCommands
             string pattern = @"^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$";
             return Regex.IsMatch(ipAddress, pattern);
         }
-
+        public bool IsValidStatus(char? c)
+        {
+            return c == 't' || c == 'f' || c == 'q';
+        }
         public bool IsValidMac(string macAddress)
         {
             string pattern = @"^[0-9a-fA-F]{12}$";

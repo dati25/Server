@@ -8,9 +8,9 @@ namespace SeverAPI.Commands.ComputerCommands
         public string? name { get; set; }
         public string? macAddress { get; set; }
         public string? iPAddress { get; set; }
-        public bool? status { get; set; }
+        public char? status { get; set; }
 
-        public ComputerCommandPut(string? name, string? macAddress, string? ipAddress, bool? status)
+        public ComputerCommandPut(string? name, string? macAddress, string? ipAddress, char? status)
         {
             this.name = name;
             this.macAddress = macAddress;

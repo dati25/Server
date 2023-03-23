@@ -9,9 +9,9 @@ namespace SeverAPI.Database.Models
         public string MacAddress { get; set; }
         public string IPAddress { get; set; }
         public string? Name { get; set; }
-        public bool? Status { get; set; }
+        public char Status { get; set; }
 
-        public Computer(string macAddress, string iPAddress, string? name = null, bool? status = null)
+        public Computer(string macAddress, string iPAddress, string? name = null, char status = 'q')
         {
             MacAddress = macAddress;
             IPAddress = iPAddress;

@@ -8,7 +8,7 @@ namespace SeverAPI.Results.ComputerResults
         public string MacAddress { get; set; }
         public string IPAddress { get; set; }
         public string? Name { get; set; }
-        public bool? Status { get; set; }
+        public char Status { get; set; }
         public int? idConfig { get; set; }
 
         public ComputerResult(Computer computer, int? idConfig)
