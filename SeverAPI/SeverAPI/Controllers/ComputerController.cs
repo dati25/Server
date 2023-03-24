@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using SeverAPI.Commands;
 using SeverAPI.Commands.ComputerCommands;
 using SeverAPI.Results.ComputerResults;
+using SeverAPI.Results.TaskResults;
 using SeverAPI.Database.Models;
 
 namespace SeverAPI.Controllers
@@ -45,7 +46,7 @@ namespace SeverAPI.Controllers
         {
             ComputerCommandPost command = new ComputerCommandPost();
 
-            (Computer?, int?) result = await command.Execute(computerResult);
+            (int?, List<TaskResult>?) result = await command.Execute(computerResult);
 
             if (result.Item1 == null)
                 return BadRequest("The object couldn't be created");

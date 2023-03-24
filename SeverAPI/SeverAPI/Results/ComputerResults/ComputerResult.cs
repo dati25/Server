@@ -1,25 +1,16 @@
-﻿using SeverAPI.Database.Models;
+﻿using SeverAPI.Results.TaskResults;
 
 namespace SeverAPI.Results.ComputerResults
 {
     public class ComputerResult
     {
-        public int id { get; set; }
-        public string MacAddress { get; set; }
-        public string IPAddress { get; set; }
-        public string? Name { get; set; }
-        public char Status { get; set; }
-        public int? idConfig { get; set; }
+        public int? idPC { get; set; }
+        public List<TaskResult>? Tasks { get; set; }
 
-        public ComputerResult(Computer computer, int? idConfig)
+        public ComputerResult(int? idPC, List<TaskResult>? tasks)
         {
-            id = computer.id;
-            MacAddress = computer.MacAddress;
-            IPAddress = computer.IPAddress;
-            Name = computer.Name;
-            Status = computer.Status;
-
-            this.idConfig = idConfig;
+            this.idPC = idPC;
+            this.Tasks = tasks;
         }
     }
 }

@@ -5,17 +5,17 @@ namespace SeverAPI.Commands.ComputerCommands
 {
     public class ComputerCommandPut : ICommand
     {
-        public string? name { get; set; }
         public string? macAddress { get; set; }
         public string? iPAddress { get; set; }
         public char? status { get; set; }
+        public string? name { get; set; }
 
-        public ComputerCommandPut(string? name, string? macAddress, string? ipAddress, char? status)
+        public ComputerCommandPut(string? macAddress, string? ipAddress, char? status, string? name)
         {
-            this.name = name;
             this.macAddress = macAddress;
             this.iPAddress = ipAddress;
             this.status = status;
+            this.name = name;
         }
 
         public Computer Execute(int id)
@@ -25,10 +25,10 @@ namespace SeverAPI.Commands.ComputerCommands
             if (computer == null)
                 return null!;
 
-            computer.Name = name ?? computer.Name;
             computer.MacAddress = macAddress ?? computer.MacAddress;
             computer.IPAddress = iPAddress ?? computer.IPAddress;
             computer.Status = status ?? computer.Status;
+            computer.Name = name ?? computer.Name;
 
             if (!(IsValidIP(computer.IPAddress)) && computer.IPAddress != null)
                 return null!;

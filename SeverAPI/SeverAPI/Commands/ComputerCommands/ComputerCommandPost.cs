@@ -1,13 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SeverAPI.Database.Models;
 using SeverAPI.Results.ComputerResults;
+using SeverAPI.Results.TaskResults;
 using System.Text.RegularExpressions;
 
 namespace SeverAPI.Commands.ComputerCommands
 {
     public class ComputerCommandPost : ICommand
     {
-        public async Task<(Computer?, int?)> Execute(ComputerResultPost computer)
+        public async Task<(int?, List<TaskResult>?)> Execute(ComputerResultPost computer)
         {
             //if ((!IsValidMac(computer.MacAddress)) || (!this.IsValidStatus(computer.Status)))
             //    return (null, null);
@@ -27,31 +28,39 @@ namespace SeverAPI.Commands.ComputerCommands
 
                 c = await context.Computers!.Where(c => c.MacAddress == computer.MacAddress).FirstAsync();
 
-                Computer output = new Computer(c.MacAddress, c.IPAddress, c.Name, c.Status);
+                Computer output = new Computer(c.MacAddress, c.IPAddress, c.Status, c.Name);
                 output.id = c.id;
 
-                return (output, null);
+                return (output.id, null);
             }
             else
             {
                 c.IPAddress = computer.IPAddress;
                 context.SaveChanges();
 
-                Computer output = new Computer(c.MacAddress, c.IPAddress, c.Name, c.Status);
+                Computer output = new Computer(c.MacAddress, c.IPAddress, c.Status, c.Name);
                 output.id = c.id;
 
-                int? idConfig = null;
+                if (context.Tasks == null)
+                    return (output.id, null);
 
                 try
                 {
-                    if (context.Tasks == null) return (output, idConfig);
+                    List<TaskResult>? configs = new List<TaskResult>();
 
-                    Tasks task = await context.Tasks!.Where(t => t.idPC == c.id).FirstAsync();
-                    idConfig = task.idConfig;
+                    await context.Tasks!.Where(t => t.idPC == c.id).ToListAsync().ContinueWith(t =>
+                    {
+                        foreach (Tasks task in t.Result)
+                        {
+                            configs.Add(new TaskResult(task.idConfig));
+                        }
+                    });
+
+                    return (output.id, configs);
                 }
                 catch (Exception) { }
 
-                return (output, idConfig);
+                return (output.id, null);
             }
         }
 
