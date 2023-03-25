@@ -35,7 +35,17 @@ public class ConfigController : ControllerBase
 
         return Ok(result);
     }
-    []
+    [HttpGet("/api/tasks/{idPC}")]
+    public IActionResult GetConfigsFromPCid(int idPC)
+    {
+        CommandsGetDelete command = new CommandsGetDelete();
+        List<int> results = command.GetConfigsFromidPC(idPC);
+        if (results == null)
+        {
+            return NotFound("No configs found.");
+        }
+        return Ok(results);
+    }
     [HttpPost]
     public IActionResult Post([FromBody] ConfigCommandPost command)
     {
