@@ -23,7 +23,6 @@ public class ConfigController : ControllerBase
 
         return Ok(results);
     }
-
     [HttpGet("{id}")]
     public IActionResult Get(int id)
     {
@@ -36,7 +35,7 @@ public class ConfigController : ControllerBase
 
         return Ok(result);
     }
-
+    []
     [HttpPost]
     public IActionResult Post([FromBody] ConfigCommandPost command)
     {

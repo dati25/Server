@@ -5,11 +5,9 @@ namespace SeverAPI.Results.ComputerResults;
 public class ComputerResult
 {
     public int? IdPc { get; set; }
-    public List<TaskResult>? Tasks { get; set; }
 
-    public ComputerResult(int? idPc, List<TaskResult>? tasks)
+    public ComputerResult(int? idPc)
     {
         IdPc = idPc;
-        Tasks = tasks;
     }
 }

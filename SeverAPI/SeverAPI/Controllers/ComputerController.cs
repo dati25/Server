@@ -43,12 +43,12 @@ public class ComputerController : ControllerBase
     {
         ComputerCommandPost command = new ComputerCommandPost();
 
-        (int?, List<TaskResult>?) result = await command.Execute(computerResult);
+        int? result = await command.Execute(computerResult);
 
-        if (result.Item1 == null)
+        if (result == null)
             return BadRequest("The object couldn't be created");
 
-        return Ok(new ComputerResult(result.Item1, result.Item2));
+        return Ok(new ComputerResult(result));
     }
 
     [HttpPut("{id}")]

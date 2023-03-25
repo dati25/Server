@@ -8,10 +8,10 @@ namespace SeverAPI.Commands.ComputerCommands;
 
 public class ComputerCommandPost : ICommand
 {
-    public async Task<(int?, List<TaskResult>?)> Execute(ComputerResultPost computer)
+    public async Task<int?> Execute(ComputerResultPost computer)
     {
         if (!IsValidMac(computer.MacAddress) || !IsValidIp(computer.IpAddress) || !IsValidStatus(computer.Status))
-            return (null, null);
+            return null;
 
         Computer? c = null;
 
@@ -30,7 +30,7 @@ public class ComputerCommandPost : ICommand
 
             Computer output = new Computer(c.MacAddress, c.IpAddress, c.Name, c.Status) { Id = c.Id };
 
-            return (output.Id, null);
+            return output.Id;
         }
         else
         {
@@ -41,7 +41,7 @@ public class ComputerCommandPost : ICommand
             Computer output = new Computer(c.MacAddress, c.IpAddress, c.Name, c.Status) { Id = c.Id };
 
             if (context.Tasks == null)
-                return (output.Id, null);
+                return output.Id;
 
             List<TaskResult>? configs = new List<TaskResult>();
 
@@ -55,11 +55,11 @@ public class ComputerCommandPost : ICommand
                     }
                 });
 
-                return (output.Id, configs);
+                return output.Id;
             }
             catch (Exception) { }
 
-            return (output.Id, null);
+            return output.Id;
         }
     }
 
