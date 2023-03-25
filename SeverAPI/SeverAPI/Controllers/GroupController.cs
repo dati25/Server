@@ -41,12 +41,18 @@ public class GroupController : ControllerBase
     [HttpPost]
     public IActionResult Post([FromBody] GroupCommandPost command)
     {
+        if (command.Execute() == null)
+            return BadRequest("The object couldn't be created");
+
         return Ok("Task completed succesfully");
     }
 
     [HttpPut("{id}")]
     public IActionResult Put(int id, [FromBody] GroupCommandPut command)
     {
+        if (command.Execute(id) == null)
+            return BadRequest("The object couldn't be updated");
+
         return Ok("Task completed succesfully");
     }
 

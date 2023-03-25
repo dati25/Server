@@ -14,9 +14,9 @@ namespace SeverAPI.Database.Models
         public int? PackageSize { get; set; }
         public int CreatedBy { get; set; }
         public bool? Status { get; set; }
-        [ForeignKey("idConfig")] public List<Source>? Sources { get; set; }
-        [ForeignKey("idConfig")] public List<Destination>? Destinations { get; set; }
-        [ForeignKey("idConfig")] public List<Tasks>? Tasks { get; set; }
+        [ForeignKey("IdConfig")] public List<Source>? Sources { get; set; }
+        [ForeignKey("IdConfig")] public List<Destination>? Destinations { get; set; }
+        [ForeignKey("IdConfig")] public List<Tasks>? Tasks { get; set; }
 
         public Config(string type, string? repeatPeriod, DateTime? expirationDate, bool? compress, int? retention, int? packageSize, int createdBy, bool? status)
         {

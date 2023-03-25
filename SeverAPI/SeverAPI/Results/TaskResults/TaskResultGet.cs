@@ -4,13 +4,13 @@ namespace SeverAPI.Results.TaskResults
 {
     public class TaskResultGet
     {
-        public int id { get; set; }
-        public int idPC { get; set; }
+        public int Id { get; set; }
+        public int IdPC { get; set; }
 
         public TaskResultGet(Tasks task)
         {
-            id = task.Id;
-            this.idPC = task.IdPc;
+            Id = task.Id;
+            IdPC = task.IdPc;
         }
     }
 }

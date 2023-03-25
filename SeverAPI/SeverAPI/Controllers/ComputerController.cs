@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using SeverAPI.Commands;
 using SeverAPI.Commands.ComputerCommands;
 using SeverAPI.Results.ComputerResults;
-using SeverAPI.Results.TaskResults;
 using SeverAPI.Database.Models;
 
 namespace SeverAPI.Controllers;
@@ -54,6 +53,9 @@ public class ComputerController : ControllerBase
     [HttpPut("{id}")]
     public IActionResult Put(int id, [FromBody] ComputerCommandPut command)
     {
+        if (command.Execute(id) == null)
+            return BadRequest("The object couldn't be updated");
+
         return Ok("Task completed succesfully");
     }
 

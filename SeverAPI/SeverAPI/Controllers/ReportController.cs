@@ -40,12 +40,20 @@ public class ReportController : ControllerBase
     [HttpPost]
     public IActionResult Post([FromBody] ReportResultPost reportResult)
     {
+        ReportCommandPost? command = new ReportCommandPost();
+
+        if (command.Execute(reportResult) == null)
+            return BadRequest("The object couldn't be created");
+
         return Ok("Task completed succesfully");
     }
 
     [HttpPut("{id}")]
     public IActionResult Put(int id, [FromBody] ReportCommandPut command)
     {
+        if (command.Execute(id) == null)
+            return BadRequest("The object couldn't be updated");
+
         return Ok("Task completed succesfully");
     }
 
@@ -55,6 +63,6 @@ public class ReportController : ControllerBase
         CommandsGetDelete command = new CommandsGetDelete();
         command.Delete(context.Reports!.Find(id)!);
 
-        return Ok();
+        return Ok("Task completed succesfully");
     }
 }

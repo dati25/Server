@@ -23,6 +23,7 @@ public class ConfigController : ControllerBase
 
         return Ok(results);
     }
+
     [HttpGet("{id}")]
     public IActionResult Get(int id)
     {
@@ -35,26 +36,33 @@ public class ConfigController : ControllerBase
 
         return Ok(result);
     }
+
     [HttpGet("/api/tasks/{idPC}")]
     public IActionResult GetConfigsFromPCid(int idPC)
     {
         CommandsGetDelete command = new CommandsGetDelete();
         List<int> results = command.GetConfigsFromidPC(idPC);
         if (results == null)
-        {
             return NotFound("No configs found.");
-        }
+
         return Ok(results);
     }
+
     [HttpPost]
     public IActionResult Post([FromBody] ConfigCommandPost command)
     {
+        if (command.Execute() == null)
+            return BadRequest("The object couldn't be created");
+
         return Ok("Task completed succesfully");
     }
 
     [HttpPut("{id}")]
     public IActionResult Put(int id, [FromBody] ConfigCommandPut command)
     {
+        if (command.Execute(id) == null)
+            return BadRequest("The object couldn't be updated");
+
         return Ok("Task completed succesfully");
     }
 

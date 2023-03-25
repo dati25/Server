@@ -8,7 +8,7 @@ public class GroupResultGet
 {
     public int Id { get; set; }
     public string Name { get; set; }
-    [ForeignKey("idGroup")] public List<PcGroupResultGet> PcGroups { get; set; } = new List<PcGroupResultGet>();
+    [ForeignKey("IdGroup")] public List<PcGroupResultGet> PcGroups { get; set; } = new List<PcGroupResultGet>();
     MyContext context = new MyContext();
 
     public GroupResultGet(Group group)
