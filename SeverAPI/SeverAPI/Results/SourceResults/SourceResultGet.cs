@@ -1,16 +1,15 @@
-﻿using SeverAPI.Database.Models;
+using SeverAPI.Database.Models;
 
-namespace SeverAPI.Results.SourceResults
+namespace SeverAPI.Results.SourceResults;
+
+public class SourceResultGet
 {
-    public class SourceResultGet
-    {
-        public int id { get; set; }
-        public string Path { get; set; }
+    public int Id { get; set; }
+    public string Path { get; set; }
 
-        public SourceResultGet(Source source)
-        {
-            this.id = source.id;
-            Path = source.Path;
-        }
+    public SourceResultGet(Source source)
+    {
+        Id = source.Id;
+        Path = source.Path;
     }
 }

@@ -1,25 +1,24 @@
 ﻿using SeverAPI.Database.Models;
 
-namespace SeverAPI.Commands.GroupCommands
+namespace SeverAPI.Commands.GroupCommands;
+
+public class GroupCommandPut : ICommand
 {
-    public class GroupCommandPut : ICommand
+    public string? Name { get; set; }
+    public List<PcGroups>? PcGroups { get; set; }
+
+    public Group Execute(int id)
     {
-        public string? Name { get; set; }
-        public List<PCGroups>? PCGroups { get; set; }
+        Group? group = context.Groups!.Find(id);
 
-        public Group Execute(int id)
-        {
-            Group? group = context.Groups!.Find(id);
+        if (group == null)
+            return null!;
 
-            if (group == null)
-                return null!;
+        group.Name = Name ?? group.Name;
+        group.PcGroups = PcGroups ?? group.PcGroups;
 
-            group.Name = Name ?? group.Name;
-            group.PCGroups = PCGroups ?? group.PCGroups;
+        context.SaveChanges();
 
-            context.SaveChanges();
-
-            return group;
-        }
+        return group;
     }
 }

@@ -1,56 +1,52 @@
 ﻿using SeverAPI.Database.Models;
 using System.Text.RegularExpressions;
 
-namespace SeverAPI.Commands.ComputerCommands
+namespace SeverAPI.Commands.ComputerCommands;
+
+public class ComputerCommandPut : ICommand
 {
-    public class ComputerCommandPut : ICommand
+    public string? MacAddress { get; set; }
+    public string? IpAddress { get; set; }
+    public char? Status { get; set; }
+    public string? Name { get; set; }
+
+    public ComputerCommandPut(string? macAddress, string? ipAddress, char? status, string? name)
     {
-        public string? macAddress { get; set; }
-        public string? iPAddress { get; set; }
-        public char? status { get; set; }
-        public string? name { get; set; }
+        MacAddress = macAddress;
+        IpAddress = ipAddress;
+        Status = status;
+        Name = name;
+    }
 
-        public ComputerCommandPut(string? macAddress, string? ipAddress, char? status, string? name)
-        {
-            this.macAddress = macAddress;
-            this.iPAddress = ipAddress;
-            this.status = status;
-            this.name = name;
-        }
+    public Computer Execute(int id)
+    {
+        Computer? computer = context.Computers!.Find(id);
 
-        public Computer Execute(int id)
-        {
-            Computer? computer = context.Computers!.Find(id);
+        if (computer == null)
+            return null!;
 
-            if (computer == null)
-                return null!;
+        computer.MacAddress = MacAddress ?? computer.MacAddress;
+        computer.IpAddress = IpAddress ?? computer.IpAddress;
+        computer.Status = Status ?? computer.Status;
+        computer.Name = Name ?? computer.Name;
 
-            computer.MacAddress = macAddress ?? computer.MacAddress;
-            computer.IPAddress = iPAddress ?? computer.IPAddress;
-            computer.Status = status ?? computer.Status;
-            computer.Name = name ?? computer.Name;
+        if (!IsValidIp(computer.IpAddress) || !IsValidMac(computer.MacAddress))
+            return null!;
 
-            if (!(IsValidIP(computer.IPAddress)) && computer.IPAddress != null)
-                return null!;
+        context.SaveChanges();
 
-            if (!(IsValidMac(computer.MacAddress)) && computer.MacAddress != null)
-                return null!;
+        return computer;
+    }
 
-            context.SaveChanges();
+    public bool IsValidIp(string ipAddress)
+    {
+        string pattern = @"^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$";
+        return Regex.IsMatch(ipAddress, pattern);
+    }
 
-            return computer;
-        }
-
-        public bool IsValidIP(string ipAddress)
-        {
-            string pattern = @"^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$";
-            return Regex.IsMatch(ipAddress, pattern);
-        }
-
-        public bool IsValidMac(string macAddress)
-        {
-            string pattern = @"^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$";
-            return Regex.IsMatch(macAddress, pattern);
-        }
+    public bool IsValidMac(string macAddress)
+    {
+        string pattern = @"^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$";
+        return Regex.IsMatch(macAddress, pattern);
     }
 }

@@ -1,12 +1,11 @@
-﻿namespace SeverAPI.Results.TaskResults
-{
-    public class TaskResultPost
-    {
-        public int idPC { get; set; }
+﻿namespace SeverAPI.Results.TaskResults;
 
-        public TaskResultPost(int idPC)
-        {
-            this.idPC = idPC;
-        }
+public class TaskResultPost
+{
+    public int IdPc { get; set; }
+
+    public TaskResultPost(int idPc)
+    {
+        IdPc = idPc;
     }
 }

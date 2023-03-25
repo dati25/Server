@@ -2,22 +2,24 @@
 using SeverAPI.Results.AdminResults;
 using System.Text.RegularExpressions;
 
-namespace SeverAPI.Commands.AdminsCommands
+namespace SeverAPI.Commands.AdminCommands;
+
+public class AdminCommandPost : ICommand
 {
-    public class AdminCommandPost : ICommand
+    public AdminResultPost? Execute(AdminResultPost admin)
     {
-        public AdminResultPost Execute(AdminResultPost admin)
-        {
-            this.context.Add(new Admin(admin.Username, admin.Password, admin.Email, null));
-            this.context.SaveChanges();
+        if (!IsValidEmail(admin.Email))
+            return null;
 
-            return admin;
-        }
+        context.Add(new Admin(admin.Username, admin.Password, admin.Email, null));
+        context.SaveChanges();
 
-        public bool IsValidEmail(string emailAddress)
-        {
-            string pattern = @"^[\w-\.]+@([\w-]+\.)*[\w-]+\.[\w-]{2,4}$";
-            return Regex.IsMatch(emailAddress, pattern);
-        }
+        return admin;
+    }
+
+    public bool IsValidEmail(string emailAddress)
+    {
+        string pattern = @"^[\w-\.]+@([\w-]+\.)*[\w-]+\.[\w-]{2,4}$";
+        return Regex.IsMatch(emailAddress, pattern);
     }
 }

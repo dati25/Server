@@ -1,31 +1,30 @@
-﻿using SeverAPI.Database.Models;
-using SeverAPI.Results.PCGroupResults;
+using SeverAPI.Database.Models;
+using SeverAPI.Results.PcGroupResults;
 
-namespace SeverAPI.Commands.GroupCommands
+namespace SeverAPI.Commands.GroupCommands;
+
+public class GroupCommandPost : ICommand
 {
-    public class GroupCommandPost : ICommand
+    public string Name { get; set; }
+    public List<PcGroupResultPost>? PcGroups { get; set; }
+
+    public GroupCommandPost(string name, List<PcGroupResultPost>? pcGroups)
     {
-        public string Name { get; set; }
-        public List<PCGroupResultPost>? PCGroups { get; set; }
+        Name = name;
+        PcGroups = pcGroups;
+    }
 
-        public GroupCommandPost(string name, List<PCGroupResultPost>? pcGroups)
-        {
-            Name = name;
-            PCGroups = pcGroups;
-        }
+    public Group Execute()
+    {
+        Group group = new Group(Name);
 
-        public Group Execute()
-        {
-            Group group = new Group(Name);
+        context.Groups!.Add(group);
+        context.SaveChanges();
 
-            context.Groups!.Add(group);
-            context.SaveChanges();
+        foreach (var item in PcGroups!)
+            context.PcGroups!.Add(new PcGroups(item.IdPc, group.Id));
 
-            foreach (var item in PCGroups!)
-                context.PCGroups!.Add(new PCGroups(item.idPC, group.id));
-
-            context.SaveChanges();
-            return group;
-        }
+        context.SaveChanges();
+        return group;
     }
 }

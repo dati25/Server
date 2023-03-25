@@ -1,16 +1,15 @@
-﻿using SeverAPI.Database.Models;
+using SeverAPI.Database.Models;
 
-namespace SeverAPI.Results.PCGroupResults
+namespace SeverAPI.Results.PcGroupResults;
+
+public class PcGroupResultGet
 {
-    public class PCGroupResultGet
-    {
-        public int id { get; set; }
-        public int idPC { get; set; }
+    public int Id { get; set; }
+    public int IdPc { get; set; }
 
-        public PCGroupResultGet(PCGroups pcGroup)
-        {
-            this.id = pcGroup.id;
-            this.idPC = pcGroup.idPC;
-        }
+    public PcGroupResultGet(PcGroups pcGroup)
+    {
+        Id = pcGroup.Id;
+        IdPc = pcGroup.IdPc;
     }
 }

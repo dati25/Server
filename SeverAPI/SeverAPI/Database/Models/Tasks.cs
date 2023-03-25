@@ -1,18 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SeverAPI.Database.Models
-{
-    [Table("tbTasks")]
-    public class Tasks : IModel
-    {
-        public int id { get; set; }
-        public int idPC { get; set; }
-        public int idConfig { get; set; }
+namespace SeverAPI.Database.Models;
 
-        public Tasks(int idPC, int idConfig)
-        {
-            this.idPC = idPC;
-            this.idConfig = idConfig;
-        }
+[Table("tbTasks")]
+public class Tasks : IModel
+{
+    public int Id { get; set; }
+    public int IdPc { get; set; }
+    public int IdConfig { get; set; }
+
+    public Tasks(int idPc, int idConfig)
+    {
+        IdPc = idPc;
+        IdConfig = idConfig;
     }
 }

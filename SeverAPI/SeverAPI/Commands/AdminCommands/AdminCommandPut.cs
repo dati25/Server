@@ -1,46 +1,45 @@
 ﻿using SeverAPI.Database.Models;
 using System.Text.RegularExpressions;
 
-namespace SeverAPI.Commands.AdminsCommands
+namespace SeverAPI.Commands.AdminCommands;
+
+public class AdminCommandPut : ICommand
 {
-    public class AdminCommandPut : ICommand
+    public string? Username { get; set; }
+    public string? Password { get; set; }
+    public string? Email { get; set; }
+    public string? RepeatPeriod { get; set; }
+
+    public AdminCommandPut(string? username, string? password, string? email, string? repeatPeriod)
     {
-        public string? username { get; set; }
-        public string? password { get; set; }
-        public string? email { get; set; }
-        public string? repeatPeriod { get; set; }
+        Username = username;
+        Password = password;
+        Email = email;
+        RepeatPeriod = repeatPeriod;
+    }
+    public Admin? Execute(int id)
+    {
+        Admin? admin = context.Admins!.Find(id);
 
-        public AdminCommandPut(string? username, string? password, string? email, string? repeatPeriod)
-        {
-            this.username = username;
-            this.password = password;
-            this.email = email;
-            this.repeatPeriod = repeatPeriod;
-        }
-        public Admin Execute(int id)
-        {
-            Admin? admin = context.Admins!.Find(id);
+        if (admin == null)
+            return null!;
 
-            if (admin == null)
-                return null!;
+        admin.Username = Username ?? admin.Username;
+        admin.Password = Password ?? admin.Password;
+        admin.Email = Email ?? admin.Email;
+        admin.RepeatPeriod = RepeatPeriod ?? admin.RepeatPeriod;
 
-            admin.Username = username ?? admin.Username;
-            admin.Password = password ?? admin.Password;
-            admin.Email = email ?? admin.Email;
-            admin.RepeatPeriod = repeatPeriod ?? admin.RepeatPeriod;
+        if (!IsValidEmail(admin.Email))
+            return null;
 
-            if (!(IsValidEmail(admin.Email)) && admin.Email != null)
-                return null!;
+        context.SaveChanges();
 
-            context.SaveChanges();
+        return admin;
+    }
 
-            return admin;
-        }
-
-        public bool IsValidEmail(string emailAddress)
-        {
-            string pattern = @"^[\w-\.]+@([\w-]+\.)*[\w-]+\.[\w-]{2,4}$";
-            return Regex.IsMatch(emailAddress, pattern);
-        }
+    public bool IsValidEmail(string emailAddress)
+    {
+        string pattern = @"^[\w-\.]+@([\w-]+\.)*[\w-]+\.[\w-]{2,4}$";
+        return Regex.IsMatch(emailAddress, pattern);
     }
 }

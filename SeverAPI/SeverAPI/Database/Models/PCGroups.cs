@@ -1,18 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SeverAPI.Database.Models
-{
-    [Table("tbPCGroups")]
-    public class PCGroups : IModel
-    {
-        public int id { get; set; }
-        public int idPC { get; set; }
-        public int idGroup { get; set; }
+namespace SeverAPI.Database.Models;
 
-        public PCGroups(int idPC, int idGroup)
-        {
-            this.idPC = idPC;
-            this.idGroup = idGroup;
-        }
+[Table("tbPcGroups")]
+public class PcGroups : IModel
+{
+    public int Id { get; set; }
+    public int IdPc { get; set; }
+    public int IdGroup { get; set; }
+
+    public PcGroups(int idPc, int idGroup)
+    {
+        IdPc = idPc;
+        IdGroup = idGroup;
     }
 }

@@ -5,7 +5,7 @@ namespace SeverAPI.Database.Models
     [Table("tbConfigs")]
     public class Config : IModel
     {
-        public int id { get; set; }
+        public int Id { get; set; }
         public string Type { get; set; }
         public string? RepeatPeriod { get; set; }
         public DateTime? ExpirationDate { get; set; }
@@ -18,16 +18,16 @@ namespace SeverAPI.Database.Models
         [ForeignKey("idConfig")] public List<Destination>? Destinations { get; set; }
         [ForeignKey("idConfig")] public List<Tasks>? Tasks { get; set; }
 
-        public Config(string Type, string? RepeatPeriod, DateTime? ExpirationDate, bool? Compress, int? Retention, int? PackageSize, int CreatedBy, bool? Status)
+        public Config(string type, string? repeatPeriod, DateTime? expirationDate, bool? compress, int? retention, int? packageSize, int createdBy, bool? status)
         {
-            this.Type = Type;
-            this.RepeatPeriod = RepeatPeriod;
-            this.ExpirationDate = ExpirationDate;
-            this.Compress = Compress;
-            this.Retention = Retention;
-            this.PackageSize = PackageSize;
-            this.CreatedBy = CreatedBy;
-            this.Status = Status;
+            Type = type;
+            RepeatPeriod = repeatPeriod;
+            ExpirationDate = expirationDate;
+            Compress = compress;
+            Retention = retention;
+            PackageSize = packageSize;
+            CreatedBy = createdBy;
+            Status = status;
         }
     }
 }

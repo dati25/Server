@@ -1,17 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SeverAPI.Database.Models
-{
-    [Table("tbGroups")]
-    public class Group : IModel
-    {//Incomplete
-        public int id { get; set; }
-        public string Name { get; set; }
-        [ForeignKey("idGroup")] public List<PCGroups>? PCGroups { get; set; }
+namespace SeverAPI.Database.Models;
 
-        public Group(string Name)
-        {
-            this.Name = Name;
-        }
+[Table("tbGroups")]
+public class Group : IModel
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    [ForeignKey("idGroup")] public List<PcGroups>? PcGroups { get; set; }
+
+    public Group(string name)
+    {
+        Name = name;
     }
 }

@@ -5,71 +5,64 @@ using SeverAPI.Results.ComputerResults;
 using SeverAPI.Results.TaskResults;
 using SeverAPI.Database.Models;
 
-namespace SeverAPI.Controllers
+namespace SeverAPI.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class ComputerController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ComputerController : ControllerBase
+    MyContext context = new MyContext();
+    [HttpGet]
+    public IActionResult Get(int? count, int offset = 0)
     {
-        MyContext context = new MyContext();
-        [HttpGet]
-        public IActionResult Get(int? count, int offset = 0)
-        {
-            CommandsGetDelete command = new CommandsGetDelete();
-            List<ComputerResultGet> list = new List<ComputerResultGet>();
+        CommandsGetDelete command = new CommandsGetDelete();
+        List<ComputerResultGet> list = new List<ComputerResultGet>();
 
-            context.Computers!.ToList().ForEach(x => list.Add(new ComputerResultGet(x)));
+        context.Computers!.ToList().ForEach(x => list.Add(new ComputerResultGet(x)));
 
-            List<ComputerResultGet> results = command.Get(list, count, offset);
+        List<ComputerResultGet> results = command.Get(list, count, offset);
 
-            if (results == null)
-                return NotFound("No objects found");
+        return Ok(results);
+    }
 
-            return Ok(results);
-        }
+    [HttpGet("{id}")]
+    public IActionResult Get(int id)
+    {
+        Computer? pc = context.Computers!.Find(id);
 
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
-        {
-            Computer? pc = context.Computers!.Find(id);
+        if (pc == null)
+            return NotFound("Object doesn't exist.");
 
-            if (pc == null)
-                return NotFound("Object doesn't exist.");
+        ComputerResultGet result = new ComputerResultGet(pc);
 
-            ComputerResultGet result = new ComputerResultGet(pc);
+        return Ok(result);
+    }
 
-            return Ok(result);
-        }
+    [HttpPost]
+    public async Task<IActionResult> Post([FromBody] ComputerResultPost computerResult)
+    {
+        ComputerCommandPost command = new ComputerCommandPost();
 
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] ComputerResultPost computerResult)
-        {
-            ComputerCommandPost command = new ComputerCommandPost();
+        (int?, List<TaskResult>?) result = await command.Execute(computerResult);
 
-            (int?, List<TaskResult>?) result = await command.Execute(computerResult);
+        if (result.Item1 == null)
+            return BadRequest("The object couldn't be created");
 
-            if (result.Item1 == null)
-                return BadRequest("The object couldn't be created");
+        return Ok(new ComputerResult(result.Item1, result.Item2));
+    }
 
-            return Ok(new ComputerResult(result.Item1, result.Item2));
-        }
+    [HttpPut("{id}")]
+    public IActionResult Put(int id, [FromBody] ComputerCommandPut command)
+    {
+        return Ok("Task completed succesfully");
+    }
 
-        [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] ComputerCommandPut command)
-        {
-            if (command.Execute(id) == null)
-                return BadRequest("The object couldn't be updated");
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
+    {
+        CommandsGetDelete command = new CommandsGetDelete();
+        command.Delete(context.Computers!.Find(id)!);
 
-            return Ok("Task completed succesfully");
-        }
-
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
-        {
-            CommandsGetDelete command = new CommandsGetDelete();
-            command.Delete(context.Computers!.Find(id)!);
-
-            return Ok();
-        }
+        return Ok("Task completed succesfully");
     }
 }

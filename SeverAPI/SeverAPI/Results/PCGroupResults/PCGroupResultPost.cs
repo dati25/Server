@@ -1,12 +1,11 @@
-﻿namespace SeverAPI.Results.PCGroupResults
-{
-    public class PCGroupResultPost
-    {
-        public int idPC { get; set; }
+﻿namespace SeverAPI.Results.PcGroupResults;
 
-        public PCGroupResultPost(int idPC)
-        {
-            this.idPC = idPC;
-        }
+public class PcGroupResultPost
+{
+    public int IdPc { get; set; }
+
+    public PcGroupResultPost(int idPc)
+    {
+        IdPc = idPc;
     }
 }

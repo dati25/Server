@@ -1,4 +1,4 @@
-﻿using SeverAPI.Database.Models;
+using SeverAPI.Database.Models;
 
 namespace SeverAPI.Results.TaskResults
 {
@@ -9,8 +9,8 @@ namespace SeverAPI.Results.TaskResults
 
         public TaskResultGet(Tasks task)
         {
-            id = task.id;
-            this.idPC = task.idPC;
+            id = task.Id;
+            this.idPC = task.IdPc;
         }
     }
 }

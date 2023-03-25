@@ -1,4 +1,4 @@
-﻿using SeverAPI.Database.Models;
+using SeverAPI.Database.Models;
 
 namespace SeverAPI.Commands.ReportCommands
 {
@@ -24,7 +24,7 @@ namespace SeverAPI.Commands.ReportCommands
             if (report == null)
                 return null!;
 
-            report.idPC = idPC ?? report.idPC;
+            report.IdPc = idPC ?? report.IdPc;
             report.Status = status ?? report.Status;
             report.ReportTime = reportTime ?? report.ReportTime;
             report.Description = description ?? report.Description;

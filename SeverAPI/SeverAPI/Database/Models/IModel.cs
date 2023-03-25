@@ -1,6 +1,5 @@
-﻿namespace SeverAPI.Database.Models
+﻿namespace SeverAPI.Database.Models;
+
+public interface IModel
 {
-    public interface IModel
-    {
-    }
 }
