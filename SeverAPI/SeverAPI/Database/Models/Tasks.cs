@@ -1,13 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace SeverAPI.Database.Models;
 
 [Table("tbTasks")]
 public class Tasks : IModel
 {
-    public int Id { get; set; }
+    [JsonIgnore] public int Id { get; set; }
     public int IdPc { get; set; }
-    public int IdConfig { get; set; }
+    [JsonIgnore] public int IdConfig { get; set; }
 
     public Tasks(int idPc, int idConfig)
     {

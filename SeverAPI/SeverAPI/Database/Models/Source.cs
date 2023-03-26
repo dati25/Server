@@ -1,12 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace SeverAPI.Database.Models;
 
 [Table("tbSources")]
 public class Source : IModel
 {
-    public int Id { get; set; }
-    public int? IdConfig { get; set; }
+    [JsonIgnore] public int Id { get; set; }
+    [JsonIgnore]public int? IdConfig { get; set; }
     public string Path { get; set; }
 
     public Source(int? idConfig, string path)

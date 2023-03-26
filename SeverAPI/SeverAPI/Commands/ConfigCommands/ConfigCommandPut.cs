@@ -1,5 +1,7 @@
 ﻿using SeverAPI.Database.Models;
-
+using SeverAPI.Results.SourceResults;
+using SeverAPI.Results.DestinationResults;
+using SeverAPI.Results.TaskResults;
 namespace SeverAPI.Commands.ConfigCommands;
 
 public class ConfigCommandPut : ICommand

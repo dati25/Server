@@ -1,12 +1,13 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace SeverAPI.Database.Models;
 
 [Table("tbDestinations")]
 public class Destination : IModel
 {
-    public int Id { get; set; }
-    public int? IdConfig { get; set; }
+    [JsonIgnore] public int Id { get; set; }
+    [JsonIgnore] public int? IdConfig { get; set; }
     public bool Type { get; set; } // False - FileSystem; True - FTP server
     public string Path { get; set; }
 

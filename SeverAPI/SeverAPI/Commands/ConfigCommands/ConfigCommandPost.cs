@@ -2,6 +2,7 @@ using SeverAPI.Database.Models;
 using SeverAPI.Results.SourceResults;
 using SeverAPI.Results.DestinationResults;
 using SeverAPI.Results.TaskResults;
+using Microsoft.EntityFrameworkCore.Design;
 
 namespace SeverAPI.Commands.ConfigCommands;
 
@@ -16,9 +17,9 @@ public class ConfigCommandPost : ICommand
     public int? PackageSize { get; set; }
     public int CreatedBy { get; set; }
     public bool? Status { get; set; }
-    public List<SourceResultPost>? SourceResultPosts { get; set; }
-    public List<DestinationResultPost>? DestinationResultPosts { get; set; }
-    public List<TaskResultPost>? TasksResultPost { get; set; }
+    public List<SourceResultPost>? Sources { get; set; }
+    public List<DestinationResultPost>? Destinations { get; set; }
+    public List<TaskResultPost>? Tasks { get; set; }
 
     public ConfigCommandPost(string type, string? repeatPeriod, DateTime? expirationDate, bool? compress, int? retention, int? packageSize, int createdBy, bool? status, List<SourceResultPost>? sources, List<DestinationResultPost>? destinations, List<TaskResultPost>? tasks)
     {
@@ -30,9 +31,9 @@ public class ConfigCommandPost : ICommand
         PackageSize = packageSize;
         CreatedBy = createdBy;
         Status = status;
-        SourceResultPosts = sources;
-        DestinationResultPosts = destinations;
-        TasksResultPost = tasks;
+        Sources = sources;
+        Destinations = destinations;
+        Tasks = tasks;
     }
 
     public Config Execute()
@@ -47,17 +48,25 @@ public class ConfigCommandPost : ICommand
         context.SaveChanges();
 
 
-        foreach (var item in SourceResultPosts!)
+        foreach (var item in Sources!)
             context.Sources!.Add(new Source(config.Id, item.Path));
 
-        foreach (var item in DestinationResultPosts!)
+        foreach (var item in Destinations!)
             context.Destinations!.Add(new Destination(config.Id, item.Type, item.Path));
 
-        foreach (var item in TasksResultPost!)
+        foreach (var item in Tasks!)
             context.Tasks!.Add(new Tasks(item.IdPc, config.Id));
 
 
         context.SaveChanges();
         return config;
     }
+    public string AlterPaths()
+    {
+        this.Sources.ForEach(source => source.Path.Replace(@"\", "/"));
+        this.Destinations.ForEach(destination => destination.Path.Replace(@"\", "/"));
+
+        return "";
+
+    } //Useless asi
 }
