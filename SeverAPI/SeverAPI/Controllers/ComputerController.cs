@@ -36,33 +36,47 @@ public class ComputerController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] ComputerResultPost computerResult)
+    public IActionResult Post([FromBody] ComputerResultPost computerResult)
     {
         ComputerCommandPost command = new ComputerCommandPost();
-
-        int? result = await command.Execute(computerResult);
-
-        if (result == null)
-            return BadRequest("The object couldn't be created");
-
-        return Ok(new ComputerReturnPcID(result));
+        try
+        {
+            int result = command.Execute(computerResult).Id;
+            return Ok(new ComputerReturnPcID(result));
+        }
+        catch (Exception exception)
+        {
+            return BadRequest(exception.Message);
+        }
     }
 
     [HttpPut("{id}")]
     public IActionResult Put(int id, [FromBody] ComputerCommandPut command)
     {
-        if (command.Execute(id) == null)
-            return BadRequest("The object couldn't be updated");
+        try
+        {
+            command.Execute(id);
+            return Ok("Task completed succesfully");
+        }
+        catch (Exception exception)
+        {
+            return BadRequest(exception.Message);
+        }
 
-        return Ok("Task completed succesfully");
     }
 
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
         CommandsGetDelete command = new CommandsGetDelete();
-        command.Delete(context.Computers!.Find(id)!);
-
-        return Ok("Task completed succesfully");
+        try
+        {
+            command.Delete(context.Computers!.Find(id)!);
+            return Ok("Task completed succesfully");
+        }
+        catch (Exception exception)
+        {
+            return BadRequest(exception.Message);
+        }
     }
 }

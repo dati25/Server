@@ -21,20 +21,18 @@ public class ComputerCommandPut : ICommand
     public Computer Execute(int id)
     {
         Computer? computer = context.Computers!.Find(id);
+        ComputerTestCommands tests = new ComputerTestCommands();
 
-        if (computer == null)
-            return null!;
+        this.tester.CheckExistence(computer!);
 
-        computer.MacAddress = MacAddress ?? computer.MacAddress;
+        computer!.MacAddress = MacAddress ?? computer.MacAddress;
         computer.IpAddress = IpAddress ?? computer.IpAddress;
         computer.Status = Status ?? computer.Status;
         computer.Name = Name ?? computer.Name;
 
-        if (!IsValidIp(computer.IpAddress) || !IsValidMac(computer.MacAddress))
-            return null!;
+        tests.CheckAll(computer!);
 
         context.SaveChanges();
-
         return computer;
     }
 

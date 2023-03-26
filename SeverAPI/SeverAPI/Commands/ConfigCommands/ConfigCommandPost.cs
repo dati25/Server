@@ -3,6 +3,7 @@ using SeverAPI.Results.SourceResults;
 using SeverAPI.Results.DestinationResults;
 using SeverAPI.Results.TaskResults;
 using Microsoft.EntityFrameworkCore.Design;
+//using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace SeverAPI.Commands.ConfigCommands;
 
@@ -20,8 +21,9 @@ public class ConfigCommandPost : ICommand
     public List<SourceResultPost>? Sources { get; set; }
     public List<DestinationResultPost>? Destinations { get; set; }
     public List<TaskResultPost>? Tasks { get; set; }
+    public List<int>? groupIDs { get; set; }
 
-    public ConfigCommandPost(string type, string? repeatPeriod, DateTime? expirationDate, bool? compress, int? retention, int? packageSize, int createdBy, bool? status, List<SourceResultPost>? sources, List<DestinationResultPost>? destinations, List<TaskResultPost>? tasks)
+    public ConfigCommandPost(string type, string? repeatPeriod, DateTime? expirationDate, bool? compress, int? retention, int? packageSize, int createdBy, bool? status, List<SourceResultPost>? sources, List<DestinationResultPost>? destinations, List<TaskResultPost>? tasks, List<int> GroupIDs)
     {
         Type = type;
         RepeatPeriod = repeatPeriod;
@@ -33,7 +35,16 @@ public class ConfigCommandPost : ICommand
         Status = status;
         Sources = sources;
         Destinations = destinations;
-        Tasks = tasks;
+        Tasks = tasks ?? new List<TaskResultPost>();
+        
+        if(groupIDs != null)
+        {
+        List<Group> groups = new List<Group>();
+        GroupIDs.ForEach(groupID => groups.AddRange(context.Groups!.ToList().Where(group => group.Id == groupID)));
+        groups.ForEach(group => context.PcGroups!.Where(pcGroup => pcGroup.IdGroup == group.Id).ToList().ForEach(pcGroup => this.Tasks.Add(new TaskResultPost(pcGroup.IdPc))));
+        this.Tasks.Distinct();
+        }
+
     }
 
     public Config Execute()
@@ -47,15 +58,17 @@ public class ConfigCommandPost : ICommand
 
         context.SaveChanges();
 
+        if (this.Sources! != null)
+            foreach (var item in Sources!)
+                context.Sources!.Add(new Source(config.Id, item.Path));
 
-        foreach (var item in Sources!)
-            context.Sources!.Add(new Source(config.Id, item.Path));
+        if (this.Destinations! != null)
+            foreach (var item in Destinations!)
+                context.Destinations!.Add(new Destination(config.Id, item.Type, item.Path));
 
-        foreach (var item in Destinations!)
-            context.Destinations!.Add(new Destination(config.Id, item.Type, item.Path));
-
-        foreach (var item in Tasks!)
-            context.Tasks!.Add(new Tasks(item.IdPc, config.Id));
+        if (this.Tasks! != null)
+            foreach (var item in Tasks!)
+                context.Tasks!.Add(new Tasks(item.IdPc, config.Id));
 
 
         context.SaveChanges();
@@ -63,10 +76,14 @@ public class ConfigCommandPost : ICommand
     }
     public string AlterPaths()
     {
-        this.Sources.ForEach(source => source.Path.Replace(@"\", "/"));
-        this.Destinations.ForEach(destination => destination.Path.Replace(@"\", "/"));
+        this.Sources!.ForEach(source => source.Path.Replace(@"\", "/"));
+        this.Destinations!.ForEach(destination => destination.Path.Replace(@"\", "/"));
 
         return "";
 
     } //Useless asi
+    public bool IsValidStatus(string status)
+    {
+        return status == "full" || status == "full" || status == "incr";
+    }
 }

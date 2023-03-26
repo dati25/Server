@@ -1,25 +1,25 @@
 ﻿using SeverAPI.Database.Models;
 using SeverAPI.Results.AdminResults;
 using System.Text.RegularExpressions;
+using SeverAPI.Commands.TestingCommands;
 
 namespace SeverAPI.Commands.AdminCommands;
 
 public class AdminCommandPost : ICommand
 {
-    public AdminResultPost? Execute(AdminResultPost admin)
+    public Admin? Execute(AdminResultPost adminPost)
     {
-        if (!IsValidEmail(admin.Email))
-            return null;
+        AdminTestCommands tests = new AdminTestCommands();
+        Admin admin = new Admin(adminPost.Username, adminPost.Password, adminPost.Email, null);
+        
+        tests.CheckAll(admin);
 
-        context.Add(new Admin(admin.Username, admin.Password, admin.Email, null));
+        
+        context.Add(admin);
         context.SaveChanges();
 
         return admin;
     }
 
-    public bool IsValidEmail(string emailAddress)
-    {
-        string pattern = @"^[\w-\.]+@([\w-]+\.)*[\w-]+\.[\w-]{2,4}$";
-        return Regex.IsMatch(emailAddress, pattern);
-    }
+
 }

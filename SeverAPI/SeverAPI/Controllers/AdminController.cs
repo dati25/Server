@@ -15,11 +15,16 @@ public class AdminController : ControllerBase
     public IActionResult Get(int? count, int offset = 0)
     {
         CommandsGetDelete command = new CommandsGetDelete();
-        List<Admin> results = new List<Admin>();
+        List<Admin>? results = new List<Admin>();
 
         context.Admins!.ToList().ForEach(x => results.Add(x));
 
         results = command.Get(results, count, offset);
+
+        if (results == null)
+        {
+            return NotFound("No objects found.");
+        }
 
         return Ok(results);
     }
@@ -39,28 +44,46 @@ public class AdminController : ControllerBase
     public IActionResult Post([FromBody] AdminResultPost adminResult)
     {
         AdminCommandPost? command = new AdminCommandPost();
+        try
+        {
 
-        if (command.Execute(adminResult) == null)
-            return BadRequest("The object couldn't be created");
+            command.Execute(adminResult);
+            return Ok("Task completed succesfully");
+        }
+        catch (Exception exception)
+        {
+            return BadRequest(exception.Message);
+        }
 
-        return Ok("Task completed succesfully");
     }
 
     [HttpPut("{id}")]
     public IActionResult Put(int id, [FromBody] AdminCommandPut command)
     {
-        if (command.Execute(id) == null)
-            return BadRequest("The object couldn't be updated");
-
-        return Ok("Task completed succesfully");
+        try
+        {
+            command.Execute(id);
+            return Ok("Task completed succesfully");
+        }
+        catch (Exception exception)
+        {
+            return BadRequest(exception.Message);
+        }
     }
 
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
         CommandsGetDelete command = new CommandsGetDelete();
-        command.Delete(context.Admins!.Find(id)!);
+        try
+        {
+            command.Delete(context.Admins!.Find(id)!);
+            return Ok("Task completed succesfully");
+        }
+        catch (Exception exception)
+        {
+            return BadRequest(exception.Message);
+        }
 
-        return Ok("Task completed succesfully");
     }
 }

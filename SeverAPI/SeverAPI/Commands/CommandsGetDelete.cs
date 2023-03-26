@@ -1,9 +1,10 @@
-﻿namespace SeverAPI.Commands;
+﻿using SeverAPI.Commands.AdminCommands;
+using SeverAPI.Commands.TestingCommands;
 
-public class CommandsGetDelete
+namespace SeverAPI.Commands;
+
+public class CommandsGetDelete : ICommand
 {
-    MyContext context = new MyContext();
-
     public List<T> Get<T>(List<T> list, int? inputCount, int offset = 0) where T : class
     {
         if (inputCount == null && offset == 0)
@@ -29,10 +30,11 @@ public class CommandsGetDelete
 
         return results;
     }
-    public List<>
 
     public void Delete<T>(T deletedObject) where T : class
     {
+        this.tester.CheckExistence(deletedObject);
+
         context.Remove(deletedObject);
         context.SaveChanges();
     }

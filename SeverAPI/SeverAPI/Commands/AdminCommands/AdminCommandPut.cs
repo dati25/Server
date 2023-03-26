@@ -19,21 +19,19 @@ public class AdminCommandPut : ICommand
     }
     public Admin? Execute(int id)
     {
+        AdminTestCommands tests = new AdminTestCommands();
         Admin? admin = context.Admins!.Find(id);
 
-        if (admin == null)
-            return null!;
+        this.tester.CheckExistence(admin!);
 
         admin.Username = Username ?? admin.Username;
         admin.Password = Password ?? admin.Password;
         admin.Email = Email ?? admin.Email;
         admin.RepeatPeriod = RepeatPeriod ?? admin.RepeatPeriod;
 
-        if (!IsValidEmail(admin.Email))
-            return null;
+        tests.CheckAll(admin);
 
         context.SaveChanges();
-
         return admin;
     }
 

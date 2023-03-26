@@ -8,9 +8,10 @@ namespace SeverAPI.Commands.ComputerCommands;
 
 public class ComputerCommandPost : ICommand
 {
-    public async Task<int?> Execute(ComputerResultPost computer)
+    public async Task<int?> ExecuteAsyncOld(ComputerResultPost computer)
     {
-        if (!IsValidMac(computer.MacAddress) || !IsValidIp(computer.IpAddress) || !IsValidStatus(computer.Status))
+        ComputerTestCommands tests = new ComputerTestCommands();
+        if (!tests.IsValidMac(computer.MacAddress) || !tests.IsValidIp(computer.IpAddress) || !tests.IsValidStatus(computer.Status))
             return null;
 
         Computer? c = null;
@@ -62,21 +63,20 @@ public class ComputerCommandPost : ICommand
             return output.Id;
         }
     }
-
-    public bool IsValidMac(string macAddress)
+    public Computer Execute(ComputerResultPost computerPost)
     {
-        string pattern = @"^[0-9a-fA-F]{12}$";
-        return Regex.IsMatch(macAddress, pattern);
+        ComputerTestCommands tests = new ComputerTestCommands();
+        Computer computer = new Computer(computerPost.MacAddress, computerPost.IpAddress, computerPost.Name, computerPost.Status);
+
+        tests.CheckAll(computer);
+
+        context.Add(computer);
+        context.SaveChanges();
+
+        return computer;
+
+
     }
 
-    public bool IsValidIp(string ipAddress)
-    {
-        string pattern = @"^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$";
-        return Regex.IsMatch(ipAddress, pattern);
-    }
 
-    public bool IsValidStatus(char? c)
-    {
-        return c == 't' || c == 'f' || c == 'q';
-    }
 }
