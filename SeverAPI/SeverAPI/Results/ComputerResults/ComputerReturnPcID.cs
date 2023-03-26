@@ -2,11 +2,11 @@
 
 namespace SeverAPI.Results.ComputerResults;
 
-public class ComputerResult
+public class ComputerReturnPcID
 {
     public int? IdPc { get; set; }
 
-    public ComputerResult(int? idPc)
+    public ComputerReturnPcID(int? idPc)
     {
         IdPc = idPc;
     }

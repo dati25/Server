@@ -15,11 +15,11 @@ public class ComputerController : ControllerBase
     public IActionResult Get(int? count, int offset = 0)
     {
         CommandsGetDelete command = new CommandsGetDelete();
-        List<ComputerResultGet> list = new List<ComputerResultGet>();
+        List<Computer> results = new List<Computer>();
 
-        context.Computers!.ToList().ForEach(x => list.Add(new ComputerResultGet(x)));
+        context.Computers!.ToList().ForEach(x => results.Add(x));
 
-        List<ComputerResultGet> results = command.Get(list, count, offset);
+        results = command.Get(results, count, offset);
 
         return Ok(results);
     }
@@ -27,12 +27,10 @@ public class ComputerController : ControllerBase
     [HttpGet("{id}")]
     public IActionResult Get(int id)
     {
-        Computer? pc = context.Computers!.Find(id);
+        Computer? result = context.Computers!.Find(id);
 
-        if (pc == null)
+        if (result == null)
             return NotFound("Object doesn't exist.");
-
-        ComputerResultGet result = new ComputerResultGet(pc);
 
         return Ok(result);
     }
@@ -47,7 +45,7 @@ public class ComputerController : ControllerBase
         if (result == null)
             return BadRequest("The object couldn't be created");
 
-        return Ok(new ComputerResult(result));
+        return Ok(new ComputerReturnPcID(result));
     }
 
     [HttpPut("{id}")]

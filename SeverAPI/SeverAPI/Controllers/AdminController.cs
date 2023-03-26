@@ -15,11 +15,11 @@ public class AdminController : ControllerBase
     public IActionResult Get(int? count, int offset = 0)
     {
         CommandsGetDelete command = new CommandsGetDelete();
-        List<AdminResultGet> list = new List<AdminResultGet>();
+        List<Admin> results = new List<Admin>();
 
-        context.Admins!.ToList().ForEach(x => list.Add(new AdminResultGet(x)));
+        context.Admins!.ToList().ForEach(x => results.Add(x));
 
-        List<AdminResultGet> results = command.Get(list, count, offset);
+        results = command.Get(results, count, offset);
 
         return Ok(results);
     }
@@ -27,12 +27,10 @@ public class AdminController : ControllerBase
     [HttpGet("{id}")]
     public IActionResult Get(int id)
     {
-        Admin? admins = context.Admins!.Find(id);
+        Admin? result = context.Admins!.Find(id);
 
-        if (admins == null)
+        if (result == null)
             return NotFound("Object doesn't exist.");
-
-        AdminResultGet result = new AdminResultGet(admins);
 
         return Ok(result);
     }

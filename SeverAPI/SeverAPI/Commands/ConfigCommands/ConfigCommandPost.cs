@@ -12,7 +12,7 @@ public class ConfigCommandPost : ICommand
     public string Type { get; set; }
     public string? RepeatPeriod { get; set; }
     public DateTime? ExpirationDate { get; set; }
-    public bool? Compress { get; set; }
+    public bool? Compress { get; set; } = false;
     public int? Retention { get; set; }
     public int? PackageSize { get; set; }
     public int CreatedBy { get; set; }

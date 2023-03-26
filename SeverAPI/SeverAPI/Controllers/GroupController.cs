@@ -36,8 +36,14 @@ public class GroupController : ControllerBase
 
         return Ok(result);
     }
+    [HttpGet("/api/groups/{idGroup}")]
+    public IActionResult GetPCsFromGroupID()
+    {
+        CommandsGetDelete command = new CommandsGetDelete();
 
 
+
+    }
     [HttpPost]
     public IActionResult Post([FromBody] GroupCommandPost command)
     {

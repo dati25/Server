@@ -29,6 +29,7 @@ public class CommandsGetDelete
 
         return results;
     }
+    public List<>
 
     public void Delete<T>(T deletedObject) where T : class
     {
