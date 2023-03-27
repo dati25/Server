@@ -36,7 +36,8 @@ public class ConfigCommandPut : ICommand
         config.Sources = Sources ?? config.Sources;
         config.Destinations = Destinations ?? config.Destinations;
         config.Tasks = Tasks ?? config.Tasks;
-
+        
+        //testcommit
         
 
         context.SaveChanges();
