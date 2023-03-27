@@ -37,13 +37,11 @@ public class ConfigCommandPost : ICommand
         Destinations = destinations;
         Tasks = tasks ?? new List<TaskResultPost>();
         
-        if(groupIDs != null)
-        {
+
         List<Group> groups = new List<Group>();
         GroupIDs.ForEach(groupID => groups.AddRange(context.Groups!.ToList().Where(group => group.Id == groupID)));
         groups.ForEach(group => context.PcGroups!.Where(pcGroup => pcGroup.IdGroup == group.Id).ToList().ForEach(pcGroup => this.Tasks.Add(new TaskResultPost(pcGroup.IdPc))));
-        this.Tasks.Distinct();
-        }
+
 
     }
 
@@ -84,6 +82,6 @@ public class ConfigCommandPost : ICommand
     } //Useless asi
     public bool IsValidStatus(string status)
     {
-        return status == "full" || status == "full" || status == "incr";
+        return status == "full" || status == "diff" || status == "incr";
     }
 }

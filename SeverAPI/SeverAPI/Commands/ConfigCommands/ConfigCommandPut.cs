@@ -37,6 +37,8 @@ public class ConfigCommandPut : ICommand
         config.Destinations = Destinations ?? config.Destinations;
         config.Tasks = Tasks ?? config.Tasks;
 
+        
+
         context.SaveChanges();
 
         return config;
