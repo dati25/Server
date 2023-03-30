@@ -6,9 +6,9 @@ namespace SeverAPI.Commands.GroupCommands;
 public class GroupCommandPost : ICommand
 {
     public string Name { get; set; }
-    public List<PcGroupResultPost>? PcGroups { get; set; }
+    public List<PCGroupResultPut>? PcGroups { get; set; }
 
-    public GroupCommandPost(string name, List<PcGroupResultPost>? pcGroups)
+    public GroupCommandPost(string name, List<PCGroupResultPut>? pcGroups)
     {
         Name = name;
         PcGroups = pcGroups;

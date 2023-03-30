@@ -2,6 +2,8 @@
 using SeverAPI.Results.SourceResults;
 using SeverAPI.Results.DestinationResults;
 using SeverAPI.Results.TaskResults;
+using SeverAPI.Results.GroupResults;
+
 namespace SeverAPI.Commands.ConfigCommands;
 
 public class ConfigCommandPut : ICommand
@@ -17,6 +19,8 @@ public class ConfigCommandPut : ICommand
     public List<Source>? Sources { get; set; }
     public List<Destination>? Destinations { get; set; }
     public List<Tasks>? Tasks { get; set; }
+    public List<GroupResultConfigPost>? groupIDs { get; set; }
+
 
     public Config Execute(int id)
     {
@@ -36,9 +40,16 @@ public class ConfigCommandPut : ICommand
         config.Sources = Sources ?? config.Sources;
         config.Destinations = Destinations ?? config.Destinations;
         config.Tasks = Tasks ?? config.Tasks;
-        
-        //testcommit
-        
+
+        if (groupIDs != null)
+        {
+            config.Tasks = config.Tasks ?? new List<Tasks>();
+            List<Group> groups = new List<Group>();
+            groupIDs.ForEach(groupID => groups.AddRange(context.Groups!.ToList().Where(group => group.Id == groupID.id)));
+            groups.ForEach(group => context.PcGroups!.Where(pcGroup => pcGroup.IdGroup == group.Id).ToList().ForEach(pcGroup => config.Tasks!.Add(new Tasks(pcGroup.IdPc, id))));
+        }
+
+        this.Tasks!.DistinctBy(x => x.IdPc);
 
         context.SaveChanges();
 

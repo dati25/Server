@@ -38,7 +38,7 @@ public class CommandsGetDelete : ICommand
         context.Remove(deletedObject);
         context.SaveChanges();
     }
-
+    
     public int CheckCount<T>(List<T> list, int count)
     {
         if (count >= list.Count)

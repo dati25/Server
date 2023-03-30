@@ -21,7 +21,7 @@ public class ConfigResultGet
     [ForeignKey("IdConfig")] public List<SourceResultGet> Sources { get; set; } = new List<SourceResultGet>();
     [ForeignKey("IdConfig")] public List<DestinationResultGet> Destinations { get; set; } = new List<DestinationResultGet>();
     [ForeignKey("IdConfig")] public List<TaskResultGet> Tasks { get; set; } = new List<TaskResultGet>();
-    public List<SeverAPI.Database.Models.Group> Groups { get; set; } = new List<SeverAPI.Database.Models.Group>();
+    //public List<SeverAPI.Database.Models.Group> Groups { get; set; } = new List<SeverAPI.Database.Models.Group>();
     MyContext context = new MyContext();
     
 

@@ -3,6 +3,7 @@ using SeverAPI.Results.SourceResults;
 using SeverAPI.Results.DestinationResults;
 using SeverAPI.Results.TaskResults;
 using Microsoft.EntityFrameworkCore.Design;
+using SeverAPI.Results.GroupResults;
 //using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace SeverAPI.Commands.ConfigCommands;
@@ -21,9 +22,9 @@ public class ConfigCommandPost : ICommand
     public List<SourceResultPost>? Sources { get; set; }
     public List<DestinationResultPost>? Destinations { get; set; }
     public List<TaskResultPost>? Tasks { get; set; }
-    public List<int>? groupIDs { get; set; }
+    public List<GroupResultConfigPost>? groupIDs { get; set; }
 
-    public ConfigCommandPost(string type, string? repeatPeriod, DateTime? expirationDate, bool? compress, int? retention, int? packageSize, int createdBy, bool? status, List<SourceResultPost>? sources, List<DestinationResultPost>? destinations, List<TaskResultPost>? tasks, List<int> GroupIDs)
+    public ConfigCommandPost(string type, string? repeatPeriod, DateTime? expirationDate, bool? compress, int? retention, int? packageSize, int createdBy, bool? status, List<SourceResultPost>? sources, List<DestinationResultPost>? destinations, List<TaskResultPost>? tasks, List<GroupResultConfigPost> groupIDs)
     {
         Type = type;
         RepeatPeriod = repeatPeriod;
@@ -35,14 +36,15 @@ public class ConfigCommandPost : ICommand
         Status = status;
         Sources = sources;
         Destinations = destinations;
-        Tasks = tasks ?? new List<TaskResultPost>();
-        
+        Tasks = tasks;
 
-        List<Group> groups = new List<Group>();
-        GroupIDs.ForEach(groupID => groups.AddRange(context.Groups!.ToList().Where(group => group.Id == groupID)));
-        groups.ForEach(group => context.PcGroups!.Where(pcGroup => pcGroup.IdGroup == group.Id).ToList().ForEach(pcGroup => this.Tasks.Add(new TaskResultPost(pcGroup.IdPc))));
-
-
+        if (groupIDs != null)
+        {
+            this.Tasks = this.Tasks ?? new List<TaskResultPost>();
+            List<Group> groups = new List<Group>();
+            groupIDs.ForEach(groupID => groups.AddRange(context.Groups!.ToList().Where(group => group.Id == groupID.id)));
+            groups.ForEach(group => context.PcGroups!.Where(pcGroup => pcGroup.IdGroup == group.Id).ToList().ForEach(pcGroup => this.Tasks.Add(new TaskResultPost(pcGroup.IdPc))));
+        }
     }
 
     public Config Execute()

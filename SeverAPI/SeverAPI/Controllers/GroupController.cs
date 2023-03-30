@@ -3,6 +3,7 @@ using SeverAPI.Commands;
 using SeverAPI.Commands.GroupCommands;
 using SeverAPI.Results.GroupResults;
 using SeverAPI.Database.Models;
+using SeverAPI.Commands.TestingCommands;
 
 namespace SeverAPI.Controllers;
 
@@ -36,14 +37,6 @@ public class GroupController : ControllerBase
 
         return Ok(result);
     }
-    //[HttpGet("/api/groups/{idGroup}")]
-    //public IActionResult GetPCsFromGroupID()
-    //{
-    //    CommandsGetDelete command = new CommandsGetDelete();
-
-
-
-    //}
     [HttpPost]
     public IActionResult Post([FromBody] GroupCommandPost command)
     {
@@ -71,12 +64,12 @@ public class GroupController : ControllerBase
         return Ok("Task completed succesfully");
     }
 
-    [HttpDelete("{id}/{pcGroupId}")]
-    public IActionResult DeletePcGroups(int id, int pcGroupId)
+    [HttpDelete("{idGroup}/{idPC}")]
+    public IActionResult DeletePcGroups(int idGroup, int idPC)
     {
         CommandsGetDelete command = new CommandsGetDelete();
 
-        command.Delete(context.PcGroups!.Find(id)!);
+        command.Delete(context.PcGroups!.Where(x => x.IdGroup == idGroup && x.IdPc == idPC).First()!);
 
         return Ok("Task completed succesfully");
     }

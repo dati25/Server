@@ -1,10 +1,10 @@
 ﻿namespace SeverAPI.Results.PcGroupResults;
 
-public class PcGroupResultPost
+public class PCGroupResultPut
 {
     public int IdPc { get; set; }
 
-    public PcGroupResultPost(int idPc)
+    public PCGroupResultPut(int idPc)
     {
         IdPc = idPc;
     }
