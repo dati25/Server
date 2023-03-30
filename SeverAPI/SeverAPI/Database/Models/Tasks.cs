@@ -9,7 +9,7 @@ public class Tasks : IModel
     [JsonIgnore] public int Id { get; set; }
     public int IdPc { get; set; }
     [JsonIgnore] public int IdConfig { get; set; }
-
+    public string? Snapshot { get; set; }
     public Tasks(int idPc, int idConfig)
     {
         IdPc = idPc;

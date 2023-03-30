@@ -32,11 +32,11 @@ namespace SeverAPI.Commands.TestingCommands
             if (tested == null)
                 throw new ArgumentNullException("Object doesn't exist.");
         }
-        //public void CheckMoreParametres(TestingString[] testStrings)
+        //public Dictionary<string, string> IsLongerThan(Dictionary<string,string> dic,int mustBeLonger, string s, string paramname)
         //{
-        //    var arguments = this.NoSpecialLetters(testStrings[0].Value);
-        //    if (!arguments.Item1)
-        //        throw new Exception($"{testStrings[arguments.Item2].ParamName} cannot contain any special characters.");
+
+
+
         //}
     }
 }

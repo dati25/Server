@@ -3,6 +3,7 @@ using SeverAPI.Results.DestinationResults;
 using SeverAPI.Results.SourceResults;
 using SeverAPI.Results.TaskResults;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.RegularExpressions;
 
 namespace SeverAPI.Results.ConfigResults;
 
@@ -20,8 +21,9 @@ public class ConfigResultGet
     [ForeignKey("IdConfig")] public List<SourceResultGet> Sources { get; set; } = new List<SourceResultGet>();
     [ForeignKey("IdConfig")] public List<DestinationResultGet> Destinations { get; set; } = new List<DestinationResultGet>();
     [ForeignKey("IdConfig")] public List<TaskResultGet> Tasks { get; set; } = new List<TaskResultGet>();
+    public List<SeverAPI.Database.Models.Group> Groups { get; set; } = new List<SeverAPI.Database.Models.Group>();
     MyContext context = new MyContext();
-
+    
 
     public ConfigResultGet(Config config)
     {
