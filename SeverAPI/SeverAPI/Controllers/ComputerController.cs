@@ -3,6 +3,8 @@ using SeverAPI.Commands;
 using SeverAPI.Commands.ComputerCommands;
 using SeverAPI.Results.ComputerResults;
 using SeverAPI.Database.Models;
+using SeverAPI.Commands.TestingCommands;
+using Microsoft.AspNetCore.Routing.Template;
 
 namespace SeverAPI.Controllers;
 
@@ -38,45 +40,40 @@ public class ComputerController : ControllerBase
     [HttpPost]
     public IActionResult Post([FromBody] ComputerResultPost computerResult)
     {
-        ComputerCommandPost command = new ComputerCommandPost();
-        try
-        {
-            int result = command.Execute(computerResult).Id;
-            return Ok(new ComputerReturnPcID(result));
-        }
-        catch (Exception exception)
-        {
-            return BadRequest(exception.Message);
-        }
+        ComputerTestCommands testCommands = new ComputerTestCommands();
+        Computer pc = new(computerResult.MacAddress, computerResult.IpAddress, computerResult.Name, computerResult.Status);
+
+        var exceptions = testCommands.CheckAll(pc);
+        if(exceptions.Count > 0)
+            return BadRequest(exceptions);
+
+        context.Add(pc);
+        context.SaveChanges();
+        return Ok("Task completed succesfully");
     }
 
     [HttpPut("{id}")]
     public IActionResult Put(int id, [FromBody] ComputerCommandPut command)
     {
-        try
-        {
-            command.Execute(id);
-            return Ok("Task completed succesfully");
-        }
-        catch (Exception exception)
-        {
-            return BadRequest(exception.Message);
-        }
+        Computer? pc = command.Execute(id);
+        ComputerTestCommands testCommands = new ComputerTestCommands();
 
+        var exceptions = testCommands.CheckAll(pc!);
+        if (exceptions.Count > 0)
+            return BadRequest(exceptions);
+
+        context.SaveChanges();
+        return Ok("Task completed succesfully");
     }
 
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
         CommandsGetDelete command = new CommandsGetDelete();
-        try
-        {
-            command.Delete(context.Computers!.Find(id)!);
-            return Ok("Task completed succesfully");
-        }
-        catch (Exception exception)
-        {
-            return BadRequest(exception.Message);
-        }
+
+        if (!command.Delete(this.context.Computers!.Find(id)!))
+            return BadRequest("Object doesn't exist");
+
+        return Ok("Task completed succesfully");
     }
 }

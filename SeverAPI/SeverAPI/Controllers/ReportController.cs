@@ -3,6 +3,7 @@ using SeverAPI.Commands;
 using SeverAPI.Commands.ReportCommands;
 using SeverAPI.Results.ReportResults;
 using SeverAPI.Database.Models;
+using SeverAPI.Commands.ComputerCommands;
 
 namespace SeverAPI.Controllers;
 
@@ -40,28 +41,37 @@ public class ReportController : ControllerBase
     [HttpPost]
     public IActionResult Post([FromBody] ReportResultPost reportResult)
     {
-        ReportCommandPost? command = new ReportCommandPost();
+        ReportTestCommands testCommands = new ReportTestCommands();
+        Report? report = new Report(reportResult.IdPc, reportResult.Status, DateTime.Now, reportResult.Description);
+        var exceptions = testCommands.CheckAll(report);
+        
+        if (exceptions.Count > 0)
+            return BadRequest(exceptions);
 
-        if (command.Execute(reportResult) == null)
-            return BadRequest("The object couldn't be created");
-
+        this.context.Add(report);
+        this.context.SaveChanges();
         return Ok("Task completed succesfully");
     }
-
     [HttpPut("{id}")]
     public IActionResult Put(int id, [FromBody] ReportCommandPut command)
     {
-        if (command.Execute(id) == null)
-            return BadRequest("The object couldn't be updated");
+        Report? report = command.Execute(id);
+        ReportTestCommands testCommands = new ReportTestCommands();
 
+        var exceptions = testCommands.CheckAll(report!);
+        if (exceptions.Count > 0)
+            return BadRequest(exceptions);
+
+        context.SaveChanges();
         return Ok("Task completed succesfully");
     }
-
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
         CommandsGetDelete command = new CommandsGetDelete();
-        command.Delete(context.Reports!.Find(id)!);
+
+        if (!command.Delete(this.context.Reports!.Find(id)!))
+            return BadRequest("Object doesn't exist");
 
         return Ok("Task completed succesfully");
     }

@@ -3,6 +3,9 @@ using SeverAPI.Commands;
 using SeverAPI.Commands.AdminCommands;
 using SeverAPI.Results.AdminResults;
 using SeverAPI.Database.Models;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+using SeverAPI.Commands.TestingCommands;
 
 namespace SeverAPI.Controllers;
 
@@ -36,54 +39,48 @@ public class AdminController : ControllerBase
 
         if (result == null)
             return NotFound("Object doesn't exist.");
-
-        return Ok(result);
+        string s = "Hello, \nhello";
+        s = JsonConvert.SerializeObject(s);
+        return Ok(s);
     }
 
     [HttpPost]
-    public IActionResult Post([FromBody] AdminResultPost adminResult)
+    public IActionResult Post([FromBody] AdminResultPost adminPost)
     {
-        AdminCommandPost? command = new AdminCommandPost();
-        try
-        {
+        AdminTestCommands testCommands = new AdminTestCommands();
+        Admin admin = new Admin(adminPost.Username, adminPost.Password, adminPost.Email, null);
 
-            command.Execute(adminResult);
-            return Ok("Task completed succesfully");
-        }
-        catch (Exception exception)
-        {
-            return BadRequest(exception.Message);
-        }
+        var exceptions = testCommands.CheckAll(admin);
+        if (exceptions.Count > 0)
+            return BadRequest(exceptions);
+
+        context.Add(admin);
+        context.SaveChanges();
+        return Ok("Task completed succesfully");
 
     }
 
     [HttpPut("{id}")]
     public IActionResult Put(int id, [FromBody] AdminCommandPut command)
     {
-        try
-        {
-            command.Execute(id);
-            return Ok("Task completed succesfully");
-        }
-        catch (Exception exception)
-        {
-            return BadRequest(exception.Message);
-        }
+        Admin? admin = command.Execute(id);
+        AdminTestCommands testCommands = new AdminTestCommands();
+
+        var exceptions = testCommands.CheckAll(admin!);
+        if (exceptions.Count > 0)
+            return BadRequest(exceptions);
+
+        context.SaveChanges();
+        return Ok("Task completed succesfully");
     }
 
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
         CommandsGetDelete command = new CommandsGetDelete();
-        try
-        {
-            command.Delete(context.Admins!.Find(id)!);
-            return Ok("Task completed succesfully");
-        }
-        catch (Exception exception)
-        {
-            return BadRequest(exception.Message);
-        }
+        if (!command.Delete(this.context.Admins!.Find(id)!))
+            return BadRequest("Object doesn't exist");
 
+        return Ok("Task completed succesfully");
     }
 }

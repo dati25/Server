@@ -30,7 +30,6 @@ namespace SeverAPI.Commands.ReportCommands
             report.Description = description ?? report.Description;
 
             context.SaveChanges();
-
             return report;
         }
     }

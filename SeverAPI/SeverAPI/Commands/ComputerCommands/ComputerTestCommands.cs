@@ -6,43 +6,35 @@ namespace SeverAPI.Commands.ComputerCommands
 {
     public class ComputerTestCommands : ICommand
     {
-        public void CheckAll(Computer computer)
+        public Dictionary<string, string> CheckAll(Computer computer)
         {
-            if (computer == null)
-                throw new ArgumentNullException("Computer doesn't exist.");
+            Dictionary<string, string> expections = new Dictionary<string, string>(); 
+            if (!this.tester.CheckExistence(computer))
+                return this.tester.AddOrApend(expections, "Computer: ", "doesn't exist");
+            if (!this.tester.CheckExistence(computer))
+                return this.tester.AddOrApend(expections, "Computer: ", "doesn't exist");
 
-            TestingString[] testStrings = { new TestingString("Name", computer.Name) };
-
-            var arguments = this.tester.NoSpecialLetters(testStrings[0].Value);
-            if (!arguments.Item1)
-                throw new Exception($"{testStrings[arguments.Item2].ParamName} cannot contain any special characters.");
-
-            if (!IsValidMac(computer.MacAddress))
-                throw new Exception("Invalid MacAdress.");
-
-            if (!IsValidIp(computer.IpAddress))
-                throw new Exception("Invalid IPAdress");
-
-            if (!IsValidStatus(computer.Status))
-                throw new Exception("Invalid Status");
+            this.tester.IsLongerThan(expections, "Name", computer.Name, 3);
+            this.IsValidMac(expections, "MacAdress", computer.MacAddress);
+            this.IsValidIp(expections, "IPAdress", computer.IpAddress);
+            this.IsValidStatus(expections, "Status", computer.Status);
+            return expections;
         }
-
-        public bool IsValidMac(string macAddress)
-        {   
-            string pattern = @"^[0-9a-f]{12}$";
-            return Regex.IsMatch(macAddress.ToLower().Replace("-", string.Empty).Replace(":", string.Empty), pattern);
-        }
-
-        public bool IsValidIp(string ipAddress)
+        public Dictionary<string, string> IsValidMac(Dictionary<string, string> dic, string key, string value)
         {
-            string pattern = @"^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$";
-            return Regex.IsMatch(ipAddress, pattern);
+            return this.tester.IsValid(dic, key, value.ToLower().Replace("-", string.Empty).Replace(":", string.Empty), @"^[0-9a-f]{12}$", "format isn't valid");
         }
-
-        public bool IsValidStatus(char? c)
+        public Dictionary<string, string> IsValidIp(Dictionary<string, string> dic, string key, string value)
         {
-            return c == 't' || c == 'f' || c == 'q';
+            return this.tester.IsValid(dic, key, value, @"^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$", "format isn't valid");
         }
-
+        public Dictionary<string, string> IsValidStatus(Dictionary<string, string> dic, string key, char? value)
+        {
+            if (!(value == 't' || value == 'f' || value == 'q'))
+            {
+                return this.tester.AddOrApend(dic, key, "must be either't' - true, 'f' - false or 'q' - waiting for approval");
+            }
+            return dic;
+        }
     }
 }

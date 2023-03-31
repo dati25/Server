@@ -82,8 +82,4 @@ public class ConfigCommandPost : ICommand
         return "";
 
     } //Useless asi
-    public bool IsValidStatus(string status)
-    {
-        return status == "full" || status == "diff" || status == "incr";
-    }
 }

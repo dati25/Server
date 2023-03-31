@@ -31,12 +31,14 @@ public class CommandsGetDelete : ICommand
         return results;
     }
 
-    public void Delete<T>(T deletedObject) where T : class
+    public bool Delete<T>(T deletedObject) where T : class
     {
-        this.tester.CheckExistence(deletedObject);
+        if (!this.tester.CheckExistence(deletedObject))
+            return false;
 
         context.Remove(deletedObject);
         context.SaveChanges();
+        return true;
     }
     
     public int CheckCount<T>(List<T> list, int count)
