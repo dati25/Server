@@ -53,9 +53,6 @@ public class ConfigCommandPost : ICommand
 
         context.Configs!.Add(config);
 
-        if (context.Admins!.Find(CreatedBy) == null)
-            return null!;
-
         context.SaveChanges();
 
         if (this.Sources! != null)

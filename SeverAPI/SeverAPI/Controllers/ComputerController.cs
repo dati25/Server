@@ -49,7 +49,8 @@ public class ComputerController : ControllerBase
 
         context.Add(pc);
         context.SaveChanges();
-        return Ok("Task completed succesfully");
+
+        return Ok(pc.Id);
     }
 
     [HttpPut("{id}")]

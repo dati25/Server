@@ -9,7 +9,7 @@ namespace SeverAPI.Commands
     {
         public string RegexEmailPattern = @"^[\w-\.]+@([\w-]+\.)*[\w-]+\.[\w-]{2,4}$"; //asi useless
         public string RegexNoSpecialCharsPattern = @"^[a-zA-Z0-9\-_]*$";
-        public bool CheckExistence<T>(T tested) where T : class
+        public bool CheckExistence<T>(T tested)
         {
             return tested != null;
         }
@@ -41,7 +41,7 @@ namespace SeverAPI.Commands
         }
         public Dictionary<string, string> TestCronExpression(Dictionary<string, string> dic, string key, string value)
         {
-
+            return IsValid(dic, key, value, @"^((\d+,)*\d+|(\d+(\/|-)\d+)|\*|\*\/\d+|\d+(\/|-)\*|\?)( ((\d+,)*\d+|(\d+(\/|-)\d+)|\*|\*\/\d+|\d+(\/|-)\*|\?)){4}$", "cron value not valid");
         }
     }
 }

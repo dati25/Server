@@ -3,6 +3,8 @@ using SeverAPI.Commands;
 using SeverAPI.Commands.ConfigCommands;
 using SeverAPI.Results.ConfigResults;
 using SeverAPI.Database.Models;
+using ZstdNet;
+using SeverAPI.Commands.AdminCommands;
 
 namespace SeverAPI.Controllers;
 
@@ -50,18 +52,28 @@ public class ConfigController : ControllerBase
     [HttpPost]
     public IActionResult Post([FromBody] ConfigCommandPost command)
     {
-        if (command.Execute() == null)
-            return BadRequest("The object couldn't be created");
+        ConfigTestCommands testCommands = new ConfigTestCommands();
 
-        return Ok("Task completed succesfully");
+        var exceptions = testCommands.CheckConfig(command);
+
+        if (exceptions != null)
+            return BadRequest(exceptions);
+
+        command.Execute();
+        return Ok("Task completed succesfully.");
     }
 
     [HttpPut("{id}")]
     public IActionResult Put(int id, [FromBody] ConfigCommandPut command)
     {
-        if (command.Execute(id) == null)
-            return BadRequest("The object couldn't be updated");
+        Config config = command.Execute(id);
+        ConfigTestCommands testCommands = new ConfigTestCommands();
 
+        var exceptions = testCommands.CheckConfig(command);
+        if (exceptions.Count > 0)
+            return BadRequest(exceptions);
+
+        context.SaveChanges();
         return Ok("Task completed succesfully");
     }
 
@@ -69,7 +81,8 @@ public class ConfigController : ControllerBase
     public IActionResult Delete(int id)
     {
         CommandsGetDelete command = new CommandsGetDelete();
-        command.Delete(context.Configs!.Find(id)!);
+        if (!command.Delete(this.context.Configs!.Find(id)!))
+            return BadRequest("Object doesn't exist");
 
         return Ok("Task completed succesfully");
     }
@@ -78,8 +91,8 @@ public class ConfigController : ControllerBase
     public IActionResult DeleteSource(int id)
     {
         CommandsGetDelete command = new CommandsGetDelete();
-
-        command.Delete(context.Sources!.Find(id)!);
+        if (!command.Delete(this.context.Sources!.Find(id)!))
+            return BadRequest("Object doesn't exist");
 
         return Ok("Task completed succesfully");
     }
@@ -88,18 +101,18 @@ public class ConfigController : ControllerBase
     public IActionResult DeleteDestination(int id)
     {
         CommandsGetDelete command = new CommandsGetDelete();
-
-        command.Delete(context.Destinations!.Find(id)!);
+        if (!command.Delete(this.context.Destinations!.Find(id)!))
+            return BadRequest("Object doesn't exist");
 
         return Ok("Task completed succesfully");
     }
 
-    [HttpDelete("/api/tasks/{id}")]
-    public IActionResult DeleteTask(int id)
+    [HttpDelete("/api/{idConfig}/{idPC}")]
+    public IActionResult DeleteTask(int idConfig, int idPC)
     {
         CommandsGetDelete command = new CommandsGetDelete();
 
-        command.Delete(context.Tasks!.Find(id)!);
+        command.Delete(context.Tasks!.Where(x => x.IdConfig == idConfig && x.IdPc == idPC).First()!);
 
         return Ok("Task completed succesfully");
     }

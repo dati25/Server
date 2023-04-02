@@ -26,10 +26,7 @@ public class ConfigCommandPut : ICommand
     {
         Config? config = context.Configs!.Find(id);
 
-        if (config == null)
-            return null!;
-
-        config.Type = Type ?? config.Type;
+        config!.Type = Type ?? config.Type;
         config.RepeatPeriod = RepeatPeriod ?? config.RepeatPeriod;
         config.ExpirationDate = ExpirationDate ?? config.ExpirationDate;
         config.Compress = Compress ?? config.Compress;
@@ -50,8 +47,6 @@ public class ConfigCommandPut : ICommand
         }
 
         this.Tasks!.DistinctBy(x => x.IdPc);
-
-        context.SaveChanges();
 
         return config;
     }

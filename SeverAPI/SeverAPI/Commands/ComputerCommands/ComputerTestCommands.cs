@@ -11,8 +11,6 @@ namespace SeverAPI.Commands.ComputerCommands
             Dictionary<string, string> expections = new Dictionary<string, string>(); 
             if (!this.tester.CheckExistence(computer))
                 return this.tester.AddOrApend(expections, "Computer: ", "doesn't exist");
-            if (!this.tester.CheckExistence(computer))
-                return this.tester.AddOrApend(expections, "Computer: ", "doesn't exist");
 
             this.tester.IsLongerThan(expections, "Name", computer.Name, 3);
             this.IsValidMac(expections, "MacAdress", computer.MacAddress);
