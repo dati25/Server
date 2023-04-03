@@ -1,5 +1,4 @@
-﻿using SeverAPI.Commands.TestingCommands;
-using SeverAPI.Database.Models;
+﻿using SeverAPI.Database.Models;
 using System.Runtime.InteropServices;
 using Newtonsoft.Json;
 namespace SeverAPI.Commands.AdminCommands

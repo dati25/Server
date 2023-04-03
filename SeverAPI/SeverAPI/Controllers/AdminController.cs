@@ -5,7 +5,6 @@ using SeverAPI.Results.AdminResults;
 using SeverAPI.Database.Models;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
-using SeverAPI.Commands.TestingCommands;
 
 namespace SeverAPI.Controllers;
 

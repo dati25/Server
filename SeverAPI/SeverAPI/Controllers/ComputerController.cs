@@ -3,7 +3,6 @@ using SeverAPI.Commands;
 using SeverAPI.Commands.ComputerCommands;
 using SeverAPI.Results.ComputerResults;
 using SeverAPI.Database.Models;
-using SeverAPI.Commands.TestingCommands;
 using Microsoft.AspNetCore.Routing.Template;
 
 namespace SeverAPI.Controllers;

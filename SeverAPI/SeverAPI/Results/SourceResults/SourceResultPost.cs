@@ -1,6 +1,6 @@
 ﻿namespace SeverAPI.Results.SourceResults;
 
-public class SourceResultPost
+public class SourceResultPost : ISource
 {
     public string Path { get; set; }
 

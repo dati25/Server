@@ -1,5 +1,4 @@
 ﻿using SeverAPI.Commands.AdminCommands;
-using SeverAPI.Commands.TestingCommands;
 
 namespace SeverAPI.Commands;
 

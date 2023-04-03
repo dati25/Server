@@ -1,6 +1,8 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using SeverAPI.Database.Models;
+using SeverAPI.Results.SourceResults;
+
 namespace SeverAPI.Commands.ConfigCommands
 {
     public class ConfigTestCommands : ICommand
@@ -8,7 +10,7 @@ namespace SeverAPI.Commands.ConfigCommands
         public Dictionary<string, string> CheckConfig(ConfigCommandPost config)
         {
             Dictionary<string, string> expections = new Dictionary<string, string>();
-            if (this.tester.CheckExistence(config))
+            if (!this.tester.CheckExistence(config))
                 this.tester.AddOrApend(expections, "Config: ", "doesn't exist");
 
             if (context.Admins!.Find(config.CreatedBy) == null)
@@ -30,15 +32,15 @@ namespace SeverAPI.Commands.ConfigCommands
             }
             return expections;
         }
-        public Dictionary<string, string> CheckConfig(ConfigCommandPut config)
+        public Dictionary<string, string> CheckConfig(Config config)
         {
             Dictionary<string, string> expections = new Dictionary<string, string>();
-            if (this.tester.CheckExistence(config))
+            if (!this.tester.CheckExistence(config))
                 this.tester.AddOrApend(expections, "Config: ", "doesn't exist");
 
             if (context.Admins!.Find(config.CreatedBy) == null)
                 this.tester.AddOrApend(expections, "CreatedBy: ", "Admin doesn't exist");
-
+            
             if (config.Sources != null)
             {
                 for (int i = 0; i < config.Sources!.Count; i++)

@@ -69,7 +69,7 @@ public class ConfigController : ControllerBase
         Config config = command.Execute(id);
         ConfigTestCommands testCommands = new ConfigTestCommands();
 
-        var exceptions = testCommands.CheckConfig(command);
+        var exceptions = testCommands.CheckConfig(config);
         if (exceptions.Count > 0)
             return BadRequest(exceptions);
 

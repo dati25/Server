@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
-using SeverAPI.Commands.TestingCommands;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
@@ -7,8 +6,6 @@ namespace SeverAPI.Commands
 {
     public class Tester
     {
-        public string RegexEmailPattern = @"^[\w-\.]+@([\w-]+\.)*[\w-]+\.[\w-]{2,4}$"; //asi useless
-        public string RegexNoSpecialCharsPattern = @"^[a-zA-Z0-9\-_]*$";
         public bool CheckExistence<T>(T tested)
         {
             return tested != null;

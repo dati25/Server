@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace SeverAPI.Database.Models;
 
 [Table("tbTasks")]
-[PrimaryKey("IdPc","IdConfig")]
+[PrimaryKey("IdPc", "IdConfig")]
 public class Tasks : IModel
 {
     public int IdPc { get; set; }
@@ -15,5 +15,9 @@ public class Tasks : IModel
     {
         IdPc = idPc;
         IdConfig = idConfig;
+    }
+    public Tasks(int idPC, int idConfig, string snapshot) : this(idPC, idConfig)
+    {
+        this.Snapshot = snapshot;
     }
 }

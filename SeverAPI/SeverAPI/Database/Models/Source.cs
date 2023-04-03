@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using SeverAPI.Results.SourceResults;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace SeverAPI.Database.Models;
 
 [Table("tbSources")]
-public class Source : IModel
+public class Source : IModel, ISource
 {
     [JsonIgnore] public int Id { get; set; }
     [JsonIgnore]public int? IdConfig { get; set; }

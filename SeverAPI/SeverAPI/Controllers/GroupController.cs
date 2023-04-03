@@ -3,7 +3,6 @@ using SeverAPI.Commands;
 using SeverAPI.Commands.GroupCommands;
 using SeverAPI.Results.GroupResults;
 using SeverAPI.Database.Models;
-using SeverAPI.Commands.TestingCommands;
 
 namespace SeverAPI.Controllers;
 

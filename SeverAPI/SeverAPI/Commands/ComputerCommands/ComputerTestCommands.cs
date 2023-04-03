@@ -1,5 +1,4 @@
-﻿using SeverAPI.Commands.TestingCommands;
-using SeverAPI.Database.Models;
+﻿using SeverAPI.Database.Models;
 using System.Text.RegularExpressions;
 
 namespace SeverAPI.Commands.ComputerCommands
