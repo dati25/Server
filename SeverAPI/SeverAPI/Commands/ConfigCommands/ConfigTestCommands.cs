@@ -59,8 +59,7 @@ namespace SeverAPI.Commands.ConfigCommands
         }
         public Dictionary<string, string> IsValidFilePath(Dictionary<string, string> dic, string key, string value)
         {
-            Regex.IsMatch(value.Trim(), @"^[a-zA-Z@""^[a-zA-Z]:([\\\/]|\\\\)(?:[^\\\/:*?""""<>|]+([\\\/]|\\\\))*[^\\\/:*?""""<>|]*$");
-            return this.tester.IsValid(dic, key, value, @"^[a-zA-Z@""^[a-zA-Z]:([\\\/]|\\\\)(?:[^\\\/:*?""""<>|]+([\\\/]|\\\\))*[^\\\/:*?""""<>|]*$", "path is not valid");
+return this.tester.IsValid(dic, key, value, @"^[a-zA-Z@""^[a-zA-Z]:([\\\/]|\\\\)(?:[^\\\/:*?""""<>|]+([\\\/]|\\\\))*[^\\\/:*?""""<>|]*$", "path is not valid");
         }
         public Dictionary<string, string> IsValidStatus(Dictionary<string, string> dic, string key, string value)
         {

@@ -3,9 +3,8 @@
 public class TaskResultPost
 {
     public int IdPc { get; set; }
-
-    public TaskResultPost(int idPc)
+    public TaskResultPost(int IdPc)
     {
-        IdPc = idPc;
+        this.IdPc = IdPc;
     }
 }

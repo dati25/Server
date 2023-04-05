@@ -5,6 +5,7 @@ using SeverAPI.Results.ConfigResults;
 using SeverAPI.Database.Models;
 using ZstdNet;
 using SeverAPI.Commands.AdminCommands;
+using SeverAPI.Results.TaskResults;
 
 namespace SeverAPI.Controllers;
 
@@ -13,6 +14,7 @@ namespace SeverAPI.Controllers;
 public class ConfigController : ControllerBase
 {
     private MyContext context = new MyContext();
+    
     [HttpGet]
     public IActionResult Get(int? count, int offset = 0)
     {
@@ -25,6 +27,7 @@ public class ConfigController : ControllerBase
 
         return Ok(results);
     }
+
     [HttpGet("{id}")]
     public IActionResult Get(int id)
     {
@@ -74,6 +77,15 @@ public class ConfigController : ControllerBase
             return BadRequest(exceptions);
 
         context.SaveChanges();
+        return Ok("Task completed succesfully");
+    }
+
+    [HttpPut("/api/{idConfig}/{idPC}")]
+    public IActionResult UploadSnapshot(int idConfig, int idPC, [FromBody] TaskResultPut Snapshot)
+    {
+        Tasks task = this.context.Tasks!.Where(x => x.IdConfig == idConfig && x.IdPc == idPC).First();
+        task.Snapshot = Snapshot.Snapshot;
+        this.context.SaveChanges();
         return Ok("Task completed succesfully");
     }
 
