@@ -4,9 +4,9 @@ namespace Server.Commands.ReportCommands
 {
     public class ReportTestCommands : ICommand
     {
-        public Dictionary<string, string> CheckAll(Report report)
+        public Dictionary<string, List<string>> CheckAll(Report report)
         {
-            Dictionary<string, string> expections = new Dictionary<string, string>();
+            Dictionary<string, List<string>> expections = new Dictionary<string, List<string>>();
 
             if (!this.tester.CheckExistence(report))
                 return this.tester.AddOrApend(expections, "Computer", "doesn't exist");

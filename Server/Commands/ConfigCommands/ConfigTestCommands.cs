@@ -7,61 +7,44 @@ namespace Server.Commands.ConfigCommands
 {
     public class ConfigTestCommands : ICommand
     {
-        public Dictionary<string, string> CheckConfig(ConfigCommandPost config)
+        public Dictionary<string, List<string>> CheckConfig(ConfigCommandPost config)
         {
-            Dictionary<string, string> expections = new Dictionary<string, string>();
+            Dictionary<string, List<string>> exceptions = new Dictionary<string, List<string>>();
             if (!this.tester.CheckExistence(config))
-                this.tester.AddOrApend(expections, "Config: ", "doesn't exist");
+                this.tester.AddOrApend(exceptions, "Config", "doesn't exist");
 
             if (context.Admins!.Find(config.CreatedBy) == null)
-                this.tester.AddOrApend(expections, "CreatedBy: ", "Admin doesn't exist");
+                this.tester.AddOrApend(exceptions, "CreatedBy", "Admin doesn't exist");
+
+            if (config.RepeatPeriod != null)
+                this.tester.TestCronExpression(exceptions, "RepeatPeriod", config.RepeatPeriod);
 
             if (config.Sources != null)
             {
-                for (int i = 0; i < config.Sources!.Count; i++)
+                for (int i = 1; i <= config.Sources!.Count; i++)
                 {
-                    this.IsValidFilePath(expections, $"Source({config.Sources[i]}.)", config.Sources[i].Path);
+                    this.IsValidFilePath(exceptions, $"Source({i})", config.Sources[i].Path);
                 }
             }
             if (config.Destinations != null)
             {
                 for (int i = 0; i < config.Destinations!.Count; i++)
                 {
-                    this.IsValidFilePath(expections, $"Destination({config.Destinations[i]}.)", config.Destinations[i].Path);
+                    this.IsValidFilePath(exceptions, $"Destination({i})", config.Destinations[i].Path);
                 }
             }
-            return expections;
+            return exceptions;
         }
-        public Dictionary<string, string> CheckConfig(Config config)
+        public Dictionary<string, List<string>> CheckConfig(Config config)
         {
-            Dictionary<string, string> expections = new Dictionary<string, string>();
-            if (!this.tester.CheckExistence(config))
-                this.tester.AddOrApend(expections, "Config: ", "doesn't exist");
-
-            if (context.Admins!.Find(config.CreatedBy) == null)
-                this.tester.AddOrApend(expections, "CreatedBy: ", "Admin doesn't exist");
-
-            if (config.Sources != null)
-            {
-                for (int i = 0; i < config.Sources!.Count; i++)
-                {
-                    this.IsValidFilePath(expections, $"Source({config.Sources[i]}.)", config.Sources[i].Path);
-                }
-            }
-            if (config.Destinations != null)
-            {
-                for (int i = 0; i < config.Destinations!.Count; i++)
-                {
-                    this.IsValidFilePath(expections, $"Destination({config.Destinations[i]}.)", config.Destinations[i].Path);
-                }
-            }
-            return expections;
+            ConfigCommandPost configCommand = new ConfigCommandPost(config);
+            return this.CheckConfig(configCommand);
         }
-        public Dictionary<string, string> IsValidFilePath(Dictionary<string, string> dic, string key, string value)
+        public Dictionary<string, List<string>> IsValidFilePath(Dictionary<string, List<string>> dic, string key, string value)
         {
-            return this.tester.IsValid(dic, key, value, @"^[a-zA-Z@""^[a-zA-Z]:([\\\/]|\\\\)(?:[^\\\/:*?""""<>|]+([\\\/]|\\\\))*[^\\\/:*?""""<>|]*$", "path is not valid");
+            return this.tester.IsValid(dic, key, value, @"@""(^[a-zA-Z]:[\\\/]{1,2}$)|(^([a-zA-Z]:([\\\/]{1,2}[^\\\/:\*\?""""<>\|]+)+)$)", "path is not valid");
         }
-        public Dictionary<string, string> IsValidStatus(Dictionary<string, string> dic, string key, string value)
+        public Dictionary<string, List<string>> IsValidStatus(Dictionary<string, List<string>> dic, string key, string value)
         {
             if (!(value == "full" || value == "incr" || value == "incr"))
             {
@@ -69,7 +52,7 @@ namespace Server.Commands.ConfigCommands
             }
             return dic;
         }
-        public Dictionary<string, string> CheckDestination(Dictionary<string, string> dic, string key, string value, bool type)
+        public Dictionary<string, List<string>> CheckDestination(Dictionary<string, List<string>> dic, string key, string value, bool type)
         {
             if (type)
             {
