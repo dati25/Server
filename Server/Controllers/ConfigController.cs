@@ -3,8 +3,6 @@ using Server.Commands;
 using Server.Commands.ConfigCommands;
 using Server.Results.ConfigResults;
 using Server.Database.Models;
-using ZstdNet;
-using Server.Commands.AdminCommands;
 using Server.Results.TaskResults;
 
 namespace Server.Controllers;
@@ -59,7 +57,7 @@ public class ConfigController : ControllerBase
 
         var exceptions = testCommands.CheckConfig(command);
 
-        if (exceptions != null)
+        if (exceptions.Count > 0)
             return BadRequest(exceptions);
 
         command.Execute();
