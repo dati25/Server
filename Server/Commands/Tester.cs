@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Org.BouncyCastle.Bcpg;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
@@ -71,7 +72,7 @@ namespace Server.Commands
 
                 List<int> ints = new List<int>();
                 int i = canBeZero ? 1 : 0;
-                value.Split('-', '/').ToList().ForEach(x => ints.Add(int.Parse(x)));
+                value.Split('-', '/', ',').ToList().ForEach(x => ints.Add(int.Parse(x)));
 
                 if (ints.Count > 1 && (ints[0] < ints[1] && value.Contains('-')))
                 {
@@ -88,6 +89,10 @@ namespace Server.Commands
                             this.failed = true;
                     }
                 }
+                if (ints.Distinct().Count() == ints.Count() && value.Contains(","))
+                {
+                    tester.AddOrApend(dic, key, $"{valueType}: there are duplicate values");
+                }
                 return dic;
             }
             public Dictionary<string, List<string>> DayMonthCheck(Dictionary<string, List<string>> dic, string key, string value, string month, string valueType)
@@ -97,15 +102,22 @@ namespace Server.Commands
                 int highestDayCount = 0;
                 List<int> months = new List<int>();
 
-                month.Split('-', '/').ToList().ForEach(x => months.Add(int.Parse(x)));
+                month.Split('-', '/', ',').ToList().ForEach(x => months.Add(int.Parse(x)));
                 int[] dayCount = new int[] { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-                if (months.Count > 1 && month.Contains('-'))
+                if (months.Count == 2 && month.Contains('-'))
                 {
                     for (int i = months[0]; i <= months[1]; i++)
                         highestDayCount = Math.Max(highestDayCount, dayCount[i]);
                 }
-                //else if (months.Count > 1 && )
-                //Nedodelane / a ,
+                else if (months.Count == 2 && month.Contains('/'))
+                {
+                    for (int i = month[0]; i <= dayCount.Length; i += month[1])
+                    {
+                        highestDayCount = Math.Max(highestDayCount, dayCount[i]);
+                    }
+                }
+                else if (months.Count > 1 && month.Contains(','))
+                    months.ForEach(x => highestDayCount = Math.Max(highestDayCount, dayCount[x]));
                 else
                 {
                     highestDayCount = month[months[0]];
