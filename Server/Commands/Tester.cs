@@ -46,7 +46,6 @@ namespace Server.Commands
         public class CronExpression
         {
             private Tester tester = new Tester();
-            //private string regexPattern = @"^(?<minute>((\d+,)*\d+|(\d+(\/|-)\d+)|\*|\*\/\d+|\d+(\/|-)\*|\?)) (?<hour>((\d+,)*\d+|(\d+(\/|-)\d+)|\*|\*\/\d+|\d+(\/|-)\*|\?)) (?<dayMonth>((\d+,)*\d+|(\d+(\/|-)\d+)|\*|\*\/\d+|\d+(\/|-)\*|\?)) (?<month>((\d+,)*\d+|(\d+(\/|-)\d+)|\*|\*\/\d+|\d+(\/|-)\*|\?)) (?<dayWeek>((\d+,)*\d+|(\d+(\/|-)\d+)|\*|\*\/\d+|\d+(\/|-)\*|\?))$";
             private string regexPattern = @"^(?<minute>((\d{1,2},)*\d{1,2}|(\d{1,2}(\/|-)\d{1,2})|\*|\*\/\d{1,2}|\d{1,2}(\/|-)\*|\?)) (?<hour>((\d{1,2},)*\d{1,2}|(\d{1,2}(\/|-)\d{1,2})|\*|\*\/\d{1,2}|\d{1,2}(\/|-)\*|\?)) (?<dayMonth>((\d{1,2},)*\d{1,2}|(\d{1,2}(\/|-)\d{1,2})|\*|\*\/\d{1,2}|\d{1,2}(\/|-)\*|\?)) (?<month>((\d{1,2},)*\d{1,2}|(\d{1,2}(\/|-)\d{1,2})|\*|\*\/\d{1,2}|\d{1,2}(\/|-)\*|\?)) (?<dayWeek>((\d{1,2},)*\d{1,2}|(\d{1,2}(\/|-)\d{1,2})|\*|\*\/\d{1,2}|\d{1,2}(\/|-)\*|\?))$";
             private bool failed = false;
             public Dictionary<string, List<string>> TestCronExpression(Dictionary<string, List<string>> dic, string key, string value)

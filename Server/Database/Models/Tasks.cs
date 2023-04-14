@@ -5,19 +5,15 @@ using System.Text.Json.Serialization;
 namespace Server.Database.Models;
 
 [Table("tbTasks")]
-[PrimaryKey("IdPc", "IdConfig")]
+[PrimaryKey("IdGroup", "IdConfig")]
 public class Tasks : IModel
 {
-    public int IdPc { get; set; }
-    [JsonIgnore] public int IdConfig { get; set; }
-    public string? Snapshot { get; set; }
-    public Tasks(int idPc, int idConfig)
+    public int IdGroup { get; set; }
+    [JsonIgnore] 
+    public int IdConfig { get; set; }
+    public Tasks(int idGroup, int idConfig)
     {
-        IdPc = idPc;
-        IdConfig = idConfig;
-    }
-    public Tasks(int idPC, int idConfig, string snapshot) : this(idPC, idConfig)
-    {
-        this.Snapshot = snapshot;
+        this.IdGroup = idGroup;
+        this.IdConfig = idConfig;
     }
 }

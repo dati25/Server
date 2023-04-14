@@ -24,9 +24,8 @@ public class ConfigCommandPost : ICommand
     public List<SourceResultPost>? Sources { get; set; }
     public List<DestinationResultPost>? Destinations { get; set; }
     public List<TaskResultPost>? Tasks { get; set; }
-    //public List<GroupResultConfigPost>? groupIDs { get; set; }
 
-    public ConfigCommandPost(string type, string? repeatPeriod, DateTime? expirationDate, bool? compress, int? retention, int? packageSize, int createdBy, bool? status, List<SourceResultPost>? sources, List<DestinationResultPost>? destinations, List<TaskResultPost>? tasks/*, List<GroupResultConfigPost> groupIDs*/)
+    public ConfigCommandPost(string type, string? repeatPeriod, DateTime? expirationDate, bool? compress, int? retention, int? packageSize, int createdBy, bool? status, List<SourceResultPost>? sources, List<DestinationResultPost>? destinations, List<TaskResultPost>? tasks)
     {
         this.Type = type;
         this.RepeatPeriod = repeatPeriod;

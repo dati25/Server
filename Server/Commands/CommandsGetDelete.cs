@@ -25,7 +25,7 @@ public class CommandsGetDelete : ICommand
     {
         List<int> results = new List<int>();
 
-        this.context.Tasks!.Where(x => x.IdPc == idPC).ToList().ForEach(task => results.Add(task.IdConfig));
+        //this.context.Tasks!.Where(x => x.IdPc == idPC).ToList().ForEach(task => results.Add(task.IdConfig));
 
         return results;
     }

@@ -19,7 +19,7 @@ public class ConfigController : ControllerBase
         CommandsGetDelete command = new CommandsGetDelete();
         List<ConfigResultGet> list = new List<ConfigResultGet>();
 
-        context.Configs!.ToList().ForEach(x => list.Add(new ConfigResultGet(x)));
+        context.Configs!.ToList().ForEach(x => list.Add(new ConfigResultGet(x, context)));
 
         List<ConfigResultGet> results = command.Get(list, count, offset);
 
@@ -34,7 +34,7 @@ public class ConfigController : ControllerBase
         if (config == null)
             return NotFound("Object doesn't exist.");
 
-        ConfigResultGet result = new ConfigResultGet(config);
+        ConfigResultGet result = new ConfigResultGet(config,context);
 
         return Ok(result);
     }
@@ -78,15 +78,6 @@ public class ConfigController : ControllerBase
         return Ok("Task completed succesfully");
     }
 
-    [HttpPut("/api/{idConfig}/{idPC}")]
-    public IActionResult UploadSnapshot(int idConfig, int idPC, [FromBody] TaskResultPut Snapshot)
-    {
-        Tasks task = this.context.Tasks!.Where(x => x.IdConfig == idConfig && x.IdPc == idPC).First();
-        task.Snapshot = Snapshot.Snapshot;
-        this.context.SaveChanges();
-        return Ok("Task completed succesfully");
-    }
-
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
@@ -122,7 +113,7 @@ public class ConfigController : ControllerBase
     {
         CommandsGetDelete command = new CommandsGetDelete();
 
-        command.Delete(context.Tasks!.Where(x => x.IdConfig == idConfig && x.IdPc == idPC).First()!);
+        //command.Delete(context.Tasks!.Where(x => x.IdConfig == idConfig && x.IdPc == idPC).First()!);
 
         return Ok("Task completed succesfully");
     }

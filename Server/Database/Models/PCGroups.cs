@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Server.Database.Models;
 
-[Table("tbPcGroups")]
+[Table("tbPCGroups")]
 [PrimaryKey("IdPc", "IdGroup")]
 public class PcGroups : IModel
 {

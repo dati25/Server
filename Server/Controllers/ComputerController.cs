@@ -76,4 +76,9 @@ public class ComputerController : ControllerBase
 
         return Ok("Task completed succesfully");
     }
+    //[HttpGet("{idPC}/{idConfig}")]
+    //public IActionResult GetSnapshot(int idPC, int idConfig)
+    //{
+        
+    //}
 }

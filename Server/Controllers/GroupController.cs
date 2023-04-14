@@ -3,6 +3,7 @@ using Server.Commands;
 using Server.Commands.GroupCommands;
 using Server.Results.GroupResults;
 using Server.Database.Models;
+using Google.Protobuf.WellKnownTypes;
 
 namespace Server.Controllers;
 
@@ -12,14 +13,16 @@ public class GroupController : ControllerBase
 {
     private MyContext context = new MyContext();
     [HttpGet]
-    public IActionResult Get(int? count, int offset = 0)
+    public IActionResult Get(int? count, int offset = 0, bool rootGroups = false)
     {
         CommandsGetDelete command = new CommandsGetDelete();
-        List<GroupResultGet> list = new List<GroupResultGet>();
+        List<GroupResultGet> results = new List<GroupResultGet>();
 
-        context.Groups!.ToList().ForEach(x => list.Add(new GroupResultGet(x)));
 
-        List<GroupResultGet> results = command.Get(list, count, offset);
+        context.Groups!.ToList().ForEach(x=> results.Add(new GroupResultGet(x, context)));
+        if (!rootGroups)
+            results = results.Where(group => !group.Name.StartsWith("pc_")).ToList();
+
 
         return Ok(results);
     }
@@ -32,7 +35,7 @@ public class GroupController : ControllerBase
         if (group == null)
             return NotFound("Object doesn't exist.");
 
-        GroupResultGet result = new GroupResultGet(group);
+        GroupResultGet result = new GroupResultGet(group, context);
 
         return Ok(result);
     }

@@ -1,10 +1,11 @@
 using Server.Database.Models;
 using Server.Results.DestinationResults;
+using Server.Results.GroupResults;
 using Server.Results.SourceResults;
 using Server.Results.TaskResults;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.RegularExpressions;
-
+using Newtonsoft.Json;
 namespace Server.Results.ConfigResults;
 
 public class ConfigResultGet
@@ -20,13 +21,12 @@ public class ConfigResultGet
     public bool? Status { get; set; }
     [ForeignKey("IdConfig")] public List<SourceResultGet> Sources { get; set; } = new List<SourceResultGet>();
     [ForeignKey("IdConfig")] public List<DestinationResultGet> Destinations { get; set; } = new List<DestinationResultGet>();
-    [ForeignKey("IdConfig")] public List<TaskResultGet> Tasks { get; set; } = new List<TaskResultGet>();
-    //public List<Server.Database.Models.Group> Groups { get; set; } = new List<Server.Database.Models.Group>();
-    MyContext context = new MyContext();
+    public List<string> Tasks = new List<string>();
 
 
-    public ConfigResultGet(Config config)
+    public ConfigResultGet(Config config, MyContext context)
     {
+        List<ITaskResultGet> Tasks = new List<ITaskResultGet>();
         Id = config.Id;
         Type = config.Type;
         RepeatPeriod = config.RepeatPeriod;
@@ -38,7 +38,23 @@ public class ConfigResultGet
         Status = config.Status;
         context.Sources!.Where(x => x.IdConfig == config.Id).ToList().ForEach(x => Sources.Add(new SourceResultGet(x)));
         context.Destinations!.Where(x => x.IdConfig == config.Id).ToList().ForEach(x => Destinations.Add(new DestinationResultGet(x)));
-        context.Tasks!.Where(x => x.IdConfig == config.Id).ToList().ForEach(x => Tasks.Add(new TaskResultGet(x)));
+        context.Tasks!.Where(x => x.IdConfig == config.Id).ToList().ForEach(task => context.Groups!.ToList().ForEach(group =>
+        {
+            if (task.IdGroup == group.Id)
+            {
+                if (!group.Name.StartsWith("pc_"))
+                {
+                    Tasks.Add(new GroupResultGet(group, context));
+                    return;
+                }
+                Tasks.Add(new TaskResultComputerGet(group, context));
+            }
+        }));
+        Tasks.ForEach(task =>
+        {
+            string s = JsonConvert.SerializeObject(task);
+            this.Tasks.Add(s);
+        });
     }
 
 }

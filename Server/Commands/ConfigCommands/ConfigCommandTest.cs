@@ -35,7 +35,7 @@ namespace Server.Commands.ConfigCommands
 
             config.Sources!.ForEach(x => this.Sources!.Add(new SourceResultPost(x.Path)));
             config.Destinations!.ForEach(x => this.Destinations!.Add(new DestinationResultPost(x.Type, x.Path)));
-            config.Tasks!.ForEach(x => this.Tasks!.Add(new TaskResultPost(x.IdPc)));
+            //config.Tasks!.ForEach(x => this.Tasks!.Add(new TaskResultPost(x.IdPc)));
         }
         public ConfigCommandTest(ConfigCommandPost config)
         {
