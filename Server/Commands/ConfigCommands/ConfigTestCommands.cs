@@ -1,10 +1,8 @@
-﻿using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
+﻿using System;
 using Newtonsoft.Json;
 using Server.Database.Models;
 using Server.Results.ConfigResults;
-using Server.Results.SourceResults;
-using Server.Results.TaskResults;
+
 
 namespace Server.Commands.ConfigCommands
 {
@@ -39,24 +37,8 @@ namespace Server.Commands.ConfigCommands
                 }
             }
             if (config.Groups!.Count > 0)
-            {
-                List<int> idPCs = new List<int>();
-                //for (int i = 0; i < config.Groups!.Count; i++)
-                //{
-                //    idPCs.AddRange(this.AddPCs(config.Groups[i]));
-                //}
-                config.Groups!.ForEach(group => idPCs.AddRange(this.AddPCs(group)));
-                if (idConfig != null)
-                    context.Tasks!.Where(task => task.IdConfig == idConfig).ToList().ForEach(task => idPCs.AddRange(this.AddPCs(task.IdGroup)));
-                if (config.Computers!.Count > 0)
-                    config.Computers.ForEach(x => idPCs.Add(x));
+                this.CheckGroups(exceptions, config, idConfig);
 
-                if (idPCs.Distinct().Count() != idPCs.Count())
-                {
-                    this.tester.AddOrApend(exceptions, "Task", "There is one or more computers assigned to one config twice");
-                }
-
-            }
             return exceptions;
         }
         public Dictionary<string, List<string>> CheckConfig(Config config, int idConfig)
@@ -111,6 +93,40 @@ namespace Server.Commands.ConfigCommands
             group.PcGroups = context.PcGroups!.Where(x => x.IdGroup == groupId).ToList();
             group.PcGroups!.ForEach(pcGroup => list.Add(pcGroup.IdPc));
             return list;
+        }
+        private Dictionary<string, List<string>> CheckGroups(Dictionary<string, List<string>> dic, ConfigCommandTest config, int? configId)
+        {
+            bool next = true;
+
+            List<Server.Database.Models.Group> groups = new List<Server.Database.Models.Group>();
+
+            config.Groups!.ForEach(groupId => groups.AddRange(context.Groups!.Where(group => group.Id == groupId)));
+
+            for (int i = 0; i < groups.Count; i++)
+                if (groups[i].Name.StartsWith("pc_"))
+                {
+                    this.tester.AddOrApend(dic, $"Group({groups[i].Id})", "Group doesn't exist");
+                    next = false;
+                }
+            if (next)
+                this.CheckDuplicatePCs(dic, config, configId);
+            return dic;
+        }
+        private Dictionary<string, List<string>> CheckDuplicatePCs(Dictionary<string, List<string>> dic, ConfigCommandTest config, int? idConfig)
+        {
+            List<int> idPCs = new List<int>();
+
+            config.Groups!.ForEach(group => idPCs.AddRange(this.AddPCs(group)));
+            if (idConfig != null)
+                context.Tasks!.Where(task => task.IdConfig == idConfig).ToList().ForEach(task => idPCs.AddRange(this.AddPCs(task.IdGroup)));
+            if (config.Computers!.Count > 0)
+                config.Computers.ForEach(x => idPCs.Add(x));
+
+            if (idPCs.Distinct().Count() != idPCs.Count())
+            {
+                this.tester.AddOrApend(dic, "Task", "There is one or more computers assigned to one config twice");
+            }
+            return dic;
         }
     }
 }

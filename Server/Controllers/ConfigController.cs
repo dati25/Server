@@ -108,13 +108,13 @@ public class ConfigController : ControllerBase
         return Ok("Task completed succesfully");
     }
 
-    [HttpDelete("/api/{idConfig}/{idPC}")]
-    public IActionResult DeleteTask(int idConfig, int idPC)
+    [HttpDelete("/api/{idConfig}/{idGroup}")]
+    public IActionResult DeleteTask(int idConfig, int idGroup)
     {
         CommandsGetDelete command = new CommandsGetDelete();
 
         //command.Delete(context.Tasks!.Where(x => x.IdConfig == idConfig && x.IdPc == idPC).First()!);
-
+        command.Delete(this.context.Tasks!.Where(x => x.IdConfig == idConfig && x.IdGroup == idGroup).First()!);
         return Ok("Task completed succesfully");
     }
 }

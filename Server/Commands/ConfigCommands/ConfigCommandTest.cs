@@ -17,7 +17,6 @@ namespace Server.Commands.ConfigCommands
         public bool? Status { get; set; }
         public List<SourceResultPost>? Sources { get; set; }
         public List<DestinationResultPost>? Destinations { get; set; }
-        //public List<TaskResultPost>? Tasks { get; set; }
         public List<int>? Computers { get; set; } = new List<int>();
         public List<int>? Groups { get; set; } = new List<int>();
         public ConfigCommandTest(Config config)

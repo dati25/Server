@@ -56,15 +56,13 @@ public class ConfigCommandPost : ICommand
         if (this.Groups! != null)
             this.Groups.ForEach(group => context.Tasks!.Add(new Tasks(group.IdGroup, config.Id)));
 
-        if (this.Computers! != null)
-            this.Computers.ForEach(pc => {
+        if (this.Computers!.Count > 0)
+            this.Computers.ForEach(pc =>
+            {
                 var groups = context.Groups!.ToList();
                 Group group = groups.Where(group => group.Name.Substring(3) == context.Computers!.Find(pc.IdPc)!.Name && group.Name.StartsWith("pc_")).First();
                 context.Tasks!.Add(new Tasks(group.Id, config.Id));
-                }) ;
-        
-
-
+            });
 
         context.SaveChanges();
         return config;

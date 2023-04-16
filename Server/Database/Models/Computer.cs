@@ -11,7 +11,6 @@ public class Computer : IModel
     public string IpAddress { get; set; }
     public string Name { get; set; }
     public char Status { get; set; }
-    [JsonIgnore][ForeignKey ("IdPC")] public List<Snapshots> Snapshots { get; set; }
 
     public Computer(string macAddress, string ipAddress, string name, char status = 'q')
     {
