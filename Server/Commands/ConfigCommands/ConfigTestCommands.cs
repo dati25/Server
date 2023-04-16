@@ -10,12 +10,12 @@ namespace Server.Commands.ConfigCommands
 {
     public class ConfigTestCommands : ICommand
     {
-        public Dictionary<string, List<string>> CheckConfig(ConfigCommandTest config)
+        public Dictionary<string, List<string>> CheckConfig(ConfigCommandTest config, int? idConfig)
         {
             Dictionary<string, List<string>> exceptions = new Dictionary<string, List<string>>();
             if (!this.tester.CheckExistence(config))
                 this.tester.AddOrApend(exceptions, "Config", "doesn't exist");
-            
+
             if (context.Admins!.Find(config.CreatedBy) == null)
                 this.tester.AddOrApend(exceptions, "CreatedBy", "Admin doesn't exist");
 
@@ -28,7 +28,7 @@ namespace Server.Commands.ConfigCommands
             {
                 for (int i = 0; i < config.Sources!.Count; i++)
                 {
-                    this.IsValidFilePath(exceptions, $"Source({i+1})", config.Sources[i].Path);
+                    this.IsValidFilePath(exceptions, $"Source({i + 1})", config.Sources[i].Path);
                 }
             }
             if (config.Destinations!.Count > 0)
@@ -41,12 +41,15 @@ namespace Server.Commands.ConfigCommands
             if (config.Groups!.Count > 0)
             {
                 List<int> idPCs = new List<int>();
-                for (int i = 0; i < config.Groups!.Count; i++)
-                {
-                    idPCs.AddRange(this.AddPCs(config.Groups[i]));
-                }
-                if(config.Computers!.Count > 0)
-                    config.Computers.ForEach(x=> idPCs.Add(x));
+                //for (int i = 0; i < config.Groups!.Count; i++)
+                //{
+                //    idPCs.AddRange(this.AddPCs(config.Groups[i]));
+                //}
+                config.Groups!.ForEach(group => idPCs.AddRange(this.AddPCs(group)));
+                if (idConfig != null)
+                    context.Tasks!.Where(task => task.IdConfig == idConfig).ToList().ForEach(task => idPCs.AddRange(this.AddPCs(task.IdGroup)));
+                if (config.Computers!.Count > 0)
+                    config.Computers.ForEach(x => idPCs.Add(x));
 
                 if (idPCs.Distinct().Count() != idPCs.Count())
                 {
@@ -56,15 +59,15 @@ namespace Server.Commands.ConfigCommands
             }
             return exceptions;
         }
-        public Dictionary<string, List<string>> CheckConfig(Config config)
+        public Dictionary<string, List<string>> CheckConfig(Config config, int idConfig)
         {
             ConfigCommandTest configCommand = new ConfigCommandTest(config);
-            return this.CheckConfig(configCommand);
+            return this.CheckConfig(configCommand, idConfig);
         }
         public Dictionary<string, List<string>> CheckConfig(ConfigCommandPost config)
         {
             ConfigCommandTest configCommand = new ConfigCommandTest(config);
-            return this.CheckConfig(configCommand);
+            return this.CheckConfig(configCommand, null);
         }
         public Dictionary<string, List<string>> IsValidFilePath(Dictionary<string, List<string>> dic, string key, string value)
         {
@@ -86,7 +89,7 @@ namespace Server.Commands.ConfigCommands
 
                 this.tester.NoSpecialChars(dic, key, ftp.Username);
                 this.tester.IsValid(dic, key, ftp.Host, @"^((https://)?((www\.)?[\w\-]+(\.[\w\-]+)+)$", "Host adress ins't valid");
-                
+
                 return dic;
             }
             return this.IsValidFilePath(dic, key, value);
