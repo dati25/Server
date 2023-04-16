@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Server.Database.Models;
 using Server.Results.ConfigResults;
 using Server.Results.SourceResults;
+using Server.Results.TaskResults;
 
 namespace Server.Commands.ConfigCommands
 {
@@ -14,7 +15,7 @@ namespace Server.Commands.ConfigCommands
             Dictionary<string, List<string>> exceptions = new Dictionary<string, List<string>>();
             if (!this.tester.CheckExistence(config))
                 this.tester.AddOrApend(exceptions, "Config", "doesn't exist");
-
+            
             if (context.Admins!.Find(config.CreatedBy) == null)
                 this.tester.AddOrApend(exceptions, "CreatedBy", "Admin doesn't exist");
 
@@ -23,19 +24,35 @@ namespace Server.Commands.ConfigCommands
             if (config.RepeatPeriod != null)
                 this.tester.TestCronExpression(exceptions, "RepeatPeriod", config.RepeatPeriod);
 
-            if (config.Sources != null)
+            if (config.Sources!.Count > 0)
             {
                 for (int i = 0; i < config.Sources!.Count; i++)
                 {
                     this.IsValidFilePath(exceptions, $"Source({i+1})", config.Sources[i].Path);
                 }
             }
-            if (config.Destinations != null)
+            if (config.Destinations!.Count > 0)
             {
                 for (int i = 0; i < config.Destinations!.Count; i++)
                 {
                     this.IsValidFilePath(exceptions, $"Destination({i})", config.Destinations[i].Path);
                 }
+            }
+            if (config.Groups!.Count > 0)
+            {
+                List<int> idPCs = new List<int>();
+                for (int i = 0; i < config.Groups!.Count; i++)
+                {
+                    idPCs.AddRange(this.AddPCs(config.Groups[i]));
+                }
+                if(config.Computers!.Count > 0)
+                    config.Computers.ForEach(x=> idPCs.Add(x));
+
+                if (idPCs.Distinct().Count() != idPCs.Count())
+                {
+                    this.tester.AddOrApend(exceptions, "Task", "There is one or more computers assigned to one config twice");
+                }
+
             }
             return exceptions;
         }
@@ -55,7 +72,7 @@ namespace Server.Commands.ConfigCommands
         }
         public Dictionary<string, List<string>> IsValidType(Dictionary<string, List<string>> dic, string key, string value)
         {
-            if (!(value == "full" || value == "incr" || value == "incr"))
+            if (!(value == "full" || value == "incr" || value == "diff"))
             {
                 return this.tester.AddOrApend(dic, key, "must be either \"full\",\"diff\" or \"incr\"");
             }
@@ -83,6 +100,14 @@ namespace Server.Commands.ConfigCommands
                 return this.tester.AddOrApend(dic, "path", "incorrect port");
 
             return dic;
+        }
+        private List<int> AddPCs(int groupId)
+        {
+            List<int> list = new List<int>();
+            Server.Database.Models.Group group = context.Groups!.Find(groupId)!;
+            group.PcGroups = context.PcGroups!.Where(x => x.IdGroup == groupId).ToList();
+            group.PcGroups!.ForEach(pcGroup => list.Add(pcGroup.IdPc));
+            return list;
         }
     }
 }

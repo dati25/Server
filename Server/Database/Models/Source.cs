@@ -8,10 +8,10 @@ namespace Server.Database.Models;
 public class Source : IModel, ISource
 {
     [JsonIgnore] public int Id { get; set; }
-    [JsonIgnore] public int? IdConfig { get; set; }
+    [JsonIgnore] public int IdConfig { get; set; }
     public string Path { get; set; }
 
-    public Source(int? idConfig, string path)
+    public Source(int idConfig, string path)
     {
         IdConfig = idConfig;
         Path = path;

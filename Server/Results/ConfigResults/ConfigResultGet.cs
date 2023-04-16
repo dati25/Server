@@ -11,6 +11,7 @@ namespace Server.Results.ConfigResults;
 public class ConfigResultGet
 {
     public int Id { get; set; }
+    public string Name { get; set; }
     public string Type { get; set; }
     public string? RepeatPeriod { get; set; }
     public DateTime? ExpirationDate { get; set; }
@@ -21,13 +22,16 @@ public class ConfigResultGet
     public bool? Status { get; set; }
     [ForeignKey("IdConfig")] public List<SourceResultGet> Sources { get; set; } = new List<SourceResultGet>();
     [ForeignKey("IdConfig")] public List<DestinationResultGet> Destinations { get; set; } = new List<DestinationResultGet>();
-    public List<string> Tasks = new List<string>();
+    [ForeignKey("idConfig")] public List<TaskResultGet> Tasks { get; set; } = new List<TaskResultGet>();
+    //public List<string> Tasks = new List<string>();
+    //public List<GroupResultGet> Tasks = new List<GroupResultGet>();
 
 
     public ConfigResultGet(Config config, MyContext context)
     {
-        List<ITaskResultGet> Tasks = new List<ITaskResultGet>();
+        //List<ITaskResultGet> Tasks = new List<ITaskResultGet>();
         Id = config.Id;
+        Name = config.Name;
         Type = config.Type;
         RepeatPeriod = config.RepeatPeriod;
         ExpirationDate = config.ExpirationDate;
@@ -36,25 +40,27 @@ public class ConfigResultGet
         PackageSize = config.PackageSize;
         CreatedBy = config.CreatedBy;
         Status = config.Status;
-        context.Sources!.Where(x => x.IdConfig == config.Id).ToList().ForEach(x => Sources.Add(new SourceResultGet(x)));
-        context.Destinations!.Where(x => x.IdConfig == config.Id).ToList().ForEach(x => Destinations.Add(new DestinationResultGet(x)));
-        context.Tasks!.Where(x => x.IdConfig == config.Id).ToList().ForEach(task => context.Groups!.ToList().ForEach(group =>
-        {
-            if (task.IdGroup == group.Id)
-            {
-                if (!group.Name.StartsWith("pc_"))
-                {
-                    Tasks.Add(new GroupResultGet(group, context));
-                    return;
-                }
-                Tasks.Add(new TaskResultComputerGet(group, context));
-            }
-        }));
-        Tasks.ForEach(task =>
-        {
-            string s = JsonConvert.SerializeObject(task);
-            this.Tasks.Add(s);
-        });
+        context.Sources!.Where(x => x.IdConfig == config.Id).ToList().ForEach(x => this.Sources.Add(new SourceResultGet(x)));
+        context.Destinations!.Where(x => x.IdConfig == config.Id).ToList().ForEach(x => this.Destinations.Add(new DestinationResultGet(x)));
+        context.Tasks!.Where(x => x.IdConfig == config.Id).ToList().ForEach(x => this.Tasks.Add(new TaskResultGet(x, context)));
+
+        //context.Tasks!.Where(x => x.IdConfig == config.Id).ToList().ForEach(task => context.Groups!.ToList().ForEach(group =>
+        //{
+        //    if (task.IdGroup == group.Id)
+        //    {
+        //        //if (!group.Name.StartsWith("pc_"))
+        //        //{
+        //        Tasks.Add(new GroupResultGet(group, context));
+        //        //    return;
+        //        //}
+        //        //this.Tasks.Add(new TaskResultComputerGet(group, context));
+        //    }
+        //}));
+        //Tasks.ForEach(task =>
+        //{
+        //    string s = JsonConvert.SerializeObject(task);
+        //    this.Tasks.Add(s);
+        //});
     }
 
 }

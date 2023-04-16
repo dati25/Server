@@ -20,11 +20,11 @@ public class ConfigController : ControllerBase
         List<ConfigResultGet> list = new List<ConfigResultGet>();
 
         context.Configs!.ToList().ForEach(x => list.Add(new ConfigResultGet(x, context)));
-
         List<ConfigResultGet> results = command.Get(list, count, offset);
 
         return Ok(results);
     }
+
 
     [HttpGet("{id}")]
     public IActionResult Get(int id)
@@ -67,7 +67,7 @@ public class ConfigController : ControllerBase
     [HttpPut("{id}")]
     public IActionResult Put(int id, [FromBody] ConfigCommandPut command)
     {
-        Config config = command.Execute(id);
+        Config config = command.Execute(id, context);
         ConfigTestCommands testCommands = new ConfigTestCommands();
 
         var exceptions = testCommands.CheckConfig(config);
