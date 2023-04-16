@@ -10,7 +10,19 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-        var app = builder.Build();
+		builder.Services.AddCors(options =>
+		{
+			options.AddDefaultPolicy(
+				builder =>
+				{
+					builder.AllowAnyOrigin()
+						   .AllowAnyHeader()
+						   .AllowAnyMethod();
+				}
+			);
+		});
+
+		var app = builder.Build();
 
         if (app.Environment.IsDevelopment())
         {
@@ -20,8 +32,9 @@ public class Program
 
         app.UseAuthorization();
 
+		app.UseCors();
 
-        app.MapControllers();
+		app.MapControllers();
 
         app.Run();
     }
