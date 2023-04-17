@@ -2,6 +2,7 @@
 using Org.BouncyCastle.Bcpg;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 
 namespace Server.Commands
@@ -42,6 +43,19 @@ namespace Server.Commands
         {
             CronExpression cron = new CronExpression();
             return cron.TestCronExpression(dic, key, value);
+        }
+        public class PasswordHashes
+        {
+            //private int keySize = 64;
+            //private int iterations = 350000;
+            //HashAlgorithmName hashName = HashAlgorithmName.SHA512;
+            //public string GetHash(string password, out byte[] salt)
+            //{
+            //    salt = RandomNumberGenerator.GetBytes(keySize);
+
+            //    var hash = Rfc2898DeriveBytes.Pbkdf2()
+
+            //}
         }
         public class CronExpression
         {
