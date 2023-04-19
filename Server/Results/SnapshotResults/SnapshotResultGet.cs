@@ -1,11 +1,13 @@
-﻿namespace Server.Results.SnapshotResults
+﻿using Server.Database.Models;
+
+namespace Server.Results.SnapshotResults
 {
     public class SnapshotResultGet
     {
        public string? Snapshot { get; set; }
-        public SnapshotResultGet(string? snapshot)
+        public SnapshotResultGet(Snapshots snapshot)
         {
-            this.Snapshot = snapshot;
+            this.Snapshot = snapshot.Snapshot;
         }
     }
 }

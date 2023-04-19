@@ -23,13 +23,10 @@ public class ConfigResultGet
     [ForeignKey("IdConfig")] public List<SourceResultGet> Sources { get; set; } = new List<SourceResultGet>();
     [ForeignKey("IdConfig")] public List<DestinationResultGet> Destinations { get; set; } = new List<DestinationResultGet>();
     [ForeignKey("idConfig")] public List<TaskResultGet> Tasks { get; set; } = new List<TaskResultGet>();
-    //public List<string> Tasks = new List<string>();
-    //public List<GroupResultGet> Tasks = new List<GroupResultGet>();
 
 
     public ConfigResultGet(Config config, MyContext context)
     {
-        //List<ITaskResultGet> Tasks = new List<ITaskResultGet>();
         Id = config.Id;
         Name = config.Name;
         Type = config.Type;
@@ -44,23 +41,6 @@ public class ConfigResultGet
         context.Destinations!.Where(x => x.IdConfig == config.Id).ToList().ForEach(x => this.Destinations.Add(new DestinationResultGet(x)));
         context.Tasks!.Where(x => x.IdConfig == config.Id).ToList().ForEach(x => this.Tasks.Add(new TaskResultGet(x, context)));
 
-        //context.Tasks!.Where(x => x.IdConfig == config.Id).ToList().ForEach(task => context.Groups!.ToList().ForEach(group =>
-        //{
-        //    if (task.IdGroup == group.Id)
-        //    {
-        //        //if (!group.Name.StartsWith("pc_"))
-        //        //{
-        //        Tasks.Add(new GroupResultGet(group, context));
-        //        //    return;
-        //        //}
-        //        //this.Tasks.Add(new TaskResultComputerGet(group, context));
-        //    }
-        //}));
-        //Tasks.ForEach(task =>
-        //{
-        //    string s = JsonConvert.SerializeObject(task);
-        //    this.Tasks.Add(s);
-        //});
     }
 
 }

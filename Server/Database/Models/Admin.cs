@@ -11,7 +11,6 @@ public class Admin : IModel
     [JsonIgnore] public string Password { get; set; }
     public string Email { get; set; }
     public string? RepeatPeriod { get; set; } // Null = monthly
-
     public Admin(string username, string password, string email, string? repeatPeriod)
     {
         Username = username;
