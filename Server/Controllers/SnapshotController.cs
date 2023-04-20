@@ -28,7 +28,7 @@ namespace Server.Controllers
             Snapshots snapshot = this.context.Snapshots!.Where(x => x.IdPC == idPC && x.IdConfig == idConfig).ToList().First();
             if (snapshot == null)
                 return NotFound();
-            SnapshotResultGet result = new SnapshotResultGet(snapshot.Snapshot);
+            SnapshotResultGet result = new SnapshotResultGet(snapshot);
             return Ok(result);
         }
 
