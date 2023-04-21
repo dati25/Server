@@ -75,7 +75,7 @@ public class ConfigController : ControllerBase
             return BadRequest(exceptions);
 
         context.SaveChanges();
-        return Ok("Task completed succesfully");
+        return Ok(true);
     }
 
     [HttpDelete("{id}")]
@@ -85,7 +85,7 @@ public class ConfigController : ControllerBase
         if (!command.Delete(this.context.Configs!.Find(id)!))
             return BadRequest("Object doesn't exist");
 
-        return Ok("Task completed succesfully");
+        return Ok(true);
     }
 
     [HttpDelete("/api/sources/{id}")]
@@ -95,7 +95,7 @@ public class ConfigController : ControllerBase
         if (!command.Delete(this.context.Sources!.Find(id)!))
             return BadRequest("Object doesn't exist");
 
-        return Ok("Task completed succesfully");
+        return Ok(true);
     }
 
     [HttpDelete("/api/destinations/{id}")]
@@ -105,7 +105,7 @@ public class ConfigController : ControllerBase
         if (!command.Delete(this.context.Destinations!.Find(id)!))
             return BadRequest("Object doesn't exist");
 
-        return Ok("Task completed succesfully");
+        return Ok(true);
     }
 
     [HttpDelete("/api/{idConfig}/{idGroup}")]
@@ -115,6 +115,6 @@ public class ConfigController : ControllerBase
 
         //command.Delete(context.Tasks!.Where(x => x.IdConfig == idConfig && x.IdPc == idPC).First()!);
         command.Delete(this.context.Tasks!.Where(x => x.IdConfig == idConfig && x.IdGroup == idGroup).First()!);
-        return Ok("Task completed succesfully");
+        return Ok(true);
     }
 }

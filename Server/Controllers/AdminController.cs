@@ -38,9 +38,8 @@ public class AdminController : ControllerBase
 
         if (result == null)
             return NotFound("Object doesn't exist.");
-        string s = "Hello, \nhello";
-        s = JsonConvert.SerializeObject(s);
-        return Ok(s);
+
+        return Ok(result);
     }
 
     [HttpPost]
@@ -62,7 +61,7 @@ public class AdminController : ControllerBase
     [HttpPut("{id}")]
     public IActionResult Put(int id, [FromBody] AdminCommandPut command)
     {
-        Admin? admin = command.Execute(id);
+        Admin? admin = command.Execute(id, context);
         AdminTestCommands testCommands = new AdminTestCommands();
 
         var exceptions = testCommands.CheckAll(admin!);
@@ -70,7 +69,7 @@ public class AdminController : ControllerBase
             return BadRequest(exceptions);
 
         context.SaveChanges();
-        return Ok("Task completed succesfully");
+        return Ok(true);
     }
 
     [HttpDelete("{id}")]
