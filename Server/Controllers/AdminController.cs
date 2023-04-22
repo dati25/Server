@@ -55,7 +55,7 @@ public class AdminController : ControllerBase
 
         context.Add(admin);
         context.SaveChanges();
-        return Ok("Task completed succesfully");
+        return Ok(true);
 
     }
 
@@ -70,7 +70,7 @@ public class AdminController : ControllerBase
             return BadRequest(exceptions);
 
         context.SaveChanges();
-        return Ok("Task completed succesfully");
+        return Ok(true);
     }
 
     [HttpDelete("{id}")]
@@ -80,6 +80,6 @@ public class AdminController : ControllerBase
         if (!command.Delete(this.context.Admins!.Find(id)!))
             return BadRequest("Object doesn't exist");
 
-        return Ok("Task completed succesfully");
+        return Ok(true);
     }
 }

@@ -45,7 +45,7 @@ public class GroupController : ControllerBase
         if (command.Execute() == null)
             return BadRequest("The object couldn't be created");
 
-        return Ok("Task completed succesfully");
+        return Ok(true);
     }
 
     [HttpPut("{id}")]
@@ -54,7 +54,7 @@ public class GroupController : ControllerBase
         if (command.Execute(id) == null)
             return BadRequest("The object couldn't be updated");
 
-        return Ok("Task completed succesfully");
+        return Ok(true);
     }
 
     [HttpDelete("{id}")]
@@ -63,7 +63,7 @@ public class GroupController : ControllerBase
         CommandsGetDelete command = new CommandsGetDelete();
         command.Delete(context.Groups!.Find(id)!);
 
-        return Ok("Task completed succesfully");
+        return Ok(true);
     }
 
     [HttpDelete("{idGroup}/{idPC}")]
@@ -73,6 +73,6 @@ public class GroupController : ControllerBase
 
         command.Delete(context.PcGroups!.Where(x => x.IdGroup == idGroup && x.IdPc == idPC).First()!);
 
-        return Ok("Task completed succesfully");
+        return Ok(true);
     }
 }

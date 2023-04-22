@@ -50,7 +50,7 @@ public class ReportController : ControllerBase
 
         this.context.Add(report);
         this.context.SaveChanges();
-        return Ok("Task completed succesfully");
+        return Ok(true);
     }
     [HttpPut("{id}")]
     public IActionResult Put(int id, [FromBody] ReportCommandPut command)
@@ -63,7 +63,7 @@ public class ReportController : ControllerBase
             return BadRequest(exceptions);
 
         context.SaveChanges();
-        return Ok("Task completed succesfully");
+        return Ok(true);
     }
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
@@ -73,6 +73,6 @@ public class ReportController : ControllerBase
         if (!command.Delete(this.context.Reports!.Find(id)!))
             return BadRequest("Object doesn't exist");
 
-        return Ok("Task completed succesfully");
+        return Ok(true);
     }
 }
