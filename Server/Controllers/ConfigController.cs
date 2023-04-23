@@ -34,7 +34,7 @@ public class ConfigController : ControllerBase
         if (config == null)
             return NotFound("Object doesn't exist.");
 
-        ConfigResultGet result = new ConfigResultGet(config,context);
+        ConfigResultGet result = new ConfigResultGet(config, context);
 
         return Ok(result);
     }
@@ -109,12 +109,25 @@ public class ConfigController : ControllerBase
     }
 
     [HttpDelete("/api/{idConfig}/{idGroup}")]
-    public IActionResult DeleteTask(int idConfig, int idGroup)
+    public IActionResult DeleteTask(int idConfig, int idObject, bool isGroup)
     {
         CommandsGetDelete command = new CommandsGetDelete();
+        if (isGroup)
+        {
+            command.Delete(this.context.Tasks!.Where(x => x.IdConfig == idConfig && x.IdGroup == idObject).First()!);
+        }
+        else
+        {
+            Computer? pc = this.context.Computers!.Find(idObject);
+            if (pc != null)
+                return NotFound();
 
-        //command.Delete(context.Tasks!.Where(x => x.IdConfig == idConfig && x.IdPc == idPC).First()!);
-        command.Delete(this.context.Tasks!.Where(x => x.IdConfig == idConfig && x.IdGroup == idGroup).First()!);
+            Group? group = this.context.Groups!.Find("pc_" + pc!.Name);
+            if (pc != null)
+                return NotFound();
+
+            command.Delete(this.context.Tasks!.Where(x => x.IdConfig == idConfig && x.IdGroup == group!.Id).First()!);
+        }
         return Ok(true);
     }
 }

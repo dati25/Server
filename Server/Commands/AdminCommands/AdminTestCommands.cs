@@ -1,6 +1,8 @@
 ﻿using Server.Database.Models;
 using System.Runtime.InteropServices;
 using Newtonsoft.Json;
+using Google.Protobuf;
+
 namespace Server.Commands.AdminCommands
 {
     public class AdminTestCommands : ICommand
@@ -15,6 +17,7 @@ namespace Server.Commands.AdminCommands
             this.tester.IsLongerThan(expections, "Password", admin.Password, 3);
             this.tester.NoSpecialChars(expections, "Username", admin.Username);
             this.IsValidEmail(expections, "Email", admin.Email);
+                this.tester.TestCronExpression(expections, "RepeatPeriod", admin.RepeatPeriod!);
             return expections;
         }
         public Dictionary<string, List<string>> IsValidEmail(Dictionary<string, List<string>> dic, string key, string value)

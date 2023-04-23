@@ -71,9 +71,9 @@ namespace Server.Commands
 
                 this.ValuesCheck(dic, key, col.Groups["minute"].Value, 59, "minute", true, false);
                 this.ValuesCheck(dic, key, col.Groups["hour"].Value, 23, "hour", true, false);
-                //this.ValuesCheck(dic, key, col.Groups["dayWeek"].Value, 59, "day(week)", false, false);
+                this.ValuesCheck(dic, key, col.Groups["dayWeek"].Value, 59, "day(week)", false, false);
                 this.ValuesCheck(dic, key, col.Groups["month"].Value, 12, "month", false, true);
-                if (!failed)
+                if (!this.failed)
                     this.DayMonthCheck(dic, key, col.Groups["dayMonth"].Value, col.Groups["month"].Value, "day(month)");
 
                 return dic;
@@ -114,9 +114,14 @@ namespace Server.Commands
                     return dic;
                 int highestDayCount = 0;
                 List<int> months = new List<int>();
-
+                if(month == "*")
+                {
+                    this.ValuesCheck(dic, key, value, 31, value, false, false);
+                    return dic;
+                }
                 month.Split('-', '/', ',').ToList().ForEach(x => months.Add(int.Parse(x)));
                 int[] dayCount = new int[] { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
                 if (months.Count == 2 && month.Contains('-'))
                 {
                     for (int i = months[0]; i <= months[1]; i++)

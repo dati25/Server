@@ -5,11 +5,17 @@ using Server.Results.AdminResults;
 using Server.Database.Models;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
+using Server.Controllers.Attributes;
+using BCrypt;
+using BCrypt.Net;
+using Org.BouncyCastle.Crypto.Generators;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 
 namespace Server.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class AdminController : ControllerBase
 {
     MyContext context = new MyContext();
@@ -38,23 +44,25 @@ public class AdminController : ControllerBase
 
         if (result == null)
             return NotFound("Object doesn't exist.");
-
+        
         return Ok(result);
+        
     }
 
     [HttpPost]
     public IActionResult Post([FromBody] AdminResultPost adminPost)
     {
         AdminTestCommands testCommands = new AdminTestCommands();
-        Admin admin = new Admin(adminPost.Username, adminPost.Password, adminPost.Email, null);
+        var hashedPassword = BCrypt.Net.BCrypt.EnhancedHashPassword(adminPost.Password, workFactor: 13);
 
+        Admin admin = new Admin(adminPost.Username, hashedPassword, adminPost.Email, null);
         var exceptions = testCommands.CheckAll(admin);
         if (exceptions.Count > 0)
             return BadRequest(exceptions);
 
         context.Add(admin);
         context.SaveChanges();
-        return Ok("Task completed succesfully");
+        return Ok(true);
 
     }
 
@@ -79,6 +87,6 @@ public class AdminController : ControllerBase
         if (!command.Delete(this.context.Admins!.Find(id)!))
             return BadRequest("Object doesn't exist");
 
-        return Ok("Task completed succesfully");
+        return Ok(true);
     }
 }
