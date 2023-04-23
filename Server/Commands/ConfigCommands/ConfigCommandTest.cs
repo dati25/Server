@@ -3,6 +3,8 @@ using Server.Results.GroupResults;
 using Server.Results.SourceResults;
 using Server.Results.TaskResults;
 using Server.Database.Models;
+using MySqlX.XDevAPI.Common;
+
 namespace Server.Commands.ConfigCommands
 {
     public class ConfigCommandTest
@@ -19,7 +21,7 @@ namespace Server.Commands.ConfigCommands
         public List<DestinationResultPost>? Destinations { get; set; }
         public List<int>? Computers { get; set; } = new List<int>();
         public List<int>? Groups { get; set; } = new List<int>();
-        public ConfigCommandTest(Config config)
+        public ConfigCommandTest(Config config, MyContext context)
         {
             this.Type = config.Type;
             this.RepeatPeriod = config.RepeatPeriod;
@@ -36,7 +38,15 @@ namespace Server.Commands.ConfigCommands
             if (config.Destinations != null)
                 config.Destinations!.ForEach(x => this.Destinations!.Add(new DestinationResultPost(x.Type, x.Path)));
             if (config.Tasks != null)
-                config.Tasks!.ForEach(x => this.Groups!.Add(x.IdGroup));
+            {
+                List<Group> groups = context.Groups!.ToList().Where(group => config.Tasks.Any(task => task.IdGroup.Equals(group.Id)) && !group.Name.StartsWith("pc_")).ToList();
+                groups.ForEach(x => this.Groups!.Add(x.Id));
+
+                //IEnumerable<Group> pcGroups = context.Groups!.ToList().Where(group => !groups.Any(confGroups => confGroups.Id == group.Id));
+                List<Group> pcGroups = context.Groups!.ToList().Where(group => config.Tasks.Any(task => task.IdGroup == group.Id) && group.Name.StartsWith("pc_")).ToList();
+                pcGroups.ToList().ForEach(group => this.Computers.Add(context.Computers!.ToList().Where(pc => pc.Name == group.Name.Substring(3))!.First().Id));
+
+            }
         }
         public ConfigCommandTest(ConfigCommandPost config)
         {

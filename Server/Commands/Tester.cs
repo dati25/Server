@@ -102,7 +102,7 @@ namespace Server.Commands
                             this.failed = true;
                     }
                 }
-                if (ints.Distinct().Count() == ints.Count() && value.Contains(","))
+                if (ints.Distinct().Count() != ints.Count() && value.Contains(","))
                 {
                     tester.AddOrApend(dic, key, $"{valueType}: there are duplicate values");
                 }

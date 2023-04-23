@@ -47,7 +47,7 @@ namespace Server.Commands.ConfigCommands
         }
         public Dictionary<string, List<string>> CheckConfig(Config config, MyContext myContext, int idConfig)
         {
-            ConfigCommandTest configCommand = new ConfigCommandTest(config);
+            ConfigCommandTest configCommand = new ConfigCommandTest(config, myContext);
             return this.CheckConfig(configCommand, myContext, idConfig);
         }
         public Dictionary<string, List<string>> CheckConfig(ConfigCommandPost config, MyContext myContext)

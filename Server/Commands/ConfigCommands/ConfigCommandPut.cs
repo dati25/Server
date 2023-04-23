@@ -26,8 +26,11 @@ public class ConfigCommandPut
     public Config Execute(int id, MyContext context)
     {
         Config? config = context.Configs!.Find(id);
-
-        config!.Name = Name ?? config.Name;
+        if (config == null)
+        {
+            return null!;
+        }
+        config.Name = Name ?? config.Name;
         config.Type = Type ?? config.Type;
         config.RepeatPeriod = RepeatPeriod ?? config.RepeatPeriod;
         config.ExpirationDate = ExpirationDate ?? config.ExpirationDate;
