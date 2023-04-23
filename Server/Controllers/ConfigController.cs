@@ -60,8 +60,9 @@ public class ConfigController : ControllerBase
         if (exceptions.Count > 0)
             return BadRequest(exceptions);
 
-        command.Execute();
-        return Ok("Task completed succesfully.");
+        command.Execute(context);
+        context.SaveChanges();
+        return Ok(true);
     }
 
     [HttpPut("{id}")]

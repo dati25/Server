@@ -22,21 +22,21 @@ namespace Server.Commands.ConfigCommands
             if (config.RepeatPeriod != null)
                 this.tester.TestCronExpression(exceptions, "RepeatPeriod", config.RepeatPeriod);
 
-            if (config.Sources!.Count > 0)
+            if (config.Sources != null)
             {
                 for (int i = 0; i < config.Sources!.Count; i++)
                 {
                     this.IsValidFilePath(exceptions, $"Source({i + 1})", config.Sources[i].Path);
                 }
             }
-            if (config.Destinations!.Count > 0)
+            if (config.Destinations! != null)
             {
                 for (int i = 0; i < config.Destinations!.Count; i++)
                 {
                     this.IsValidFilePath(exceptions, $"Destination({i})", config.Destinations[i].Path);
                 }
             }
-            if (config.Groups!.Count > 0)
+            if (config.Groups != null)
                 this.CheckGroups(exceptions, config, idConfig);
 
             return exceptions;

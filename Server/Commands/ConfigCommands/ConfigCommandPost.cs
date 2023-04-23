@@ -39,32 +39,31 @@ public class ConfigCommandPost : ICommand
     }
 
 
-    public Config Execute()
+    public Config Execute(MyContext myContext)
     {
         Config config = new Config(Name, Type, RepeatPeriod, ExpirationDate, Compress, Retention, PackageSize, CreatedBy, Status);
 
-        context.Configs!.Add(config);
+        myContext.Configs!.Add(config);
 
-        context.SaveChanges();
+        myContext.SaveChanges();
 
         if (this.Sources! != null)
-            this.Sources!.ForEach(source => context.Sources!.Add(new Source(config.Id, source.Path)));
+            this.Sources!.ForEach(source => myContext.Sources!.Add(new Source(config.Id, source.Path)));
 
         if (this.Destinations! != null)
-            this.Destinations.ForEach(dest => context.Destinations!.Add(new Destination(config.Id, dest.Type, dest.Path)));
+            this.Destinations.ForEach(dest => myContext.Destinations!.Add(new Destination(config.Id, dest.Type, dest.Path)));
 
         if (this.Groups! != null)
-            this.Groups.ForEach(group => context.Tasks!.Add(new Tasks(group.IdGroup, config.Id)));
+            this.Groups.ForEach(group => myContext.Tasks!.Add(new Tasks(group.IdGroup, config.Id)));
 
-        if (this.Computers!.Count > 0)
+        if (Computers != null)
             this.Computers.ForEach(pc =>
             {
-                var groups = context.Groups!.ToList();
-                Group group = groups.Where(group => group.Name.Substring(3) == context.Computers!.Find(pc.IdPc)!.Name && group.Name.StartsWith("pc_")).First();
-                context.Tasks!.Add(new Tasks(group.Id, config.Id));
+                var groups = myContext.Groups!.ToList();
+                Group group = groups.Where(group => group.Name.Substring(3) == myContext.Computers!.Find(pc.IdPc)!.Name && group.Name.StartsWith("pc_")).First();
+                myContext.Tasks!.Add(new Tasks(group.Id, config.Id));
             });
 
-        context.SaveChanges();
         return config;
     }
 }

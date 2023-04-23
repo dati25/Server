@@ -138,7 +138,7 @@ namespace Server.Commands
                     months.ForEach(x => highestDayCount = Math.Max(highestDayCount, dayCount[x]));
                 else
                 {
-                    highestDayCount = month[months[0]];
+                    highestDayCount = dayCount[months[0]];
                 }
 
                 this.ValuesCheck(dic, key, value, highestDayCount, value, false, false);
