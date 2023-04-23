@@ -21,8 +21,11 @@ public class GroupCommandPost : ICommand
         context.Groups!.Add(group);
         context.SaveChanges();
 
-        foreach (var item in PcGroups!)
-            context.PcGroups!.Add(new PcGroups(item.IdPc, group.Id));
+        if (PcGroups != null)
+        {
+            foreach (var item in PcGroups!)
+                context.PcGroups!.Add(new PcGroups(item.IdPc, group.Id));
+        }
 
         context.SaveChanges();
         return group;
