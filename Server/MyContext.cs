@@ -15,9 +15,9 @@ public class MyContext : DbContext
     public DbSet<Destination>? Destinations { get; set; }
     public DbSet<Group>? Groups { get; set; }
     public DbSet<PcGroups>? PcGroups { get; set; }
-
+    public DbSet<Snapshots>? Snapshots { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseMySQL("server=mysqlstudenti.litv.sssvt.cz;database=3b1_veseckylukas_db2;user=veseckylukas;password=123456;SslMode=none");
+        optionsBuilder.UseMySQL("server=mysqlstudenti.litv.sssvt.cz;database=3b1_veseckylukas_db1;user=veseckylukas;password=123456;SslMode=none");
     }
 }

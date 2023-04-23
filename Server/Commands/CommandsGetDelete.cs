@@ -1,5 +1,5 @@
 ﻿using Server.Commands.AdminCommands;
-
+using Server.Database.Models;
 namespace Server.Commands;
 
 public class CommandsGetDelete : ICommand
@@ -25,8 +25,19 @@ public class CommandsGetDelete : ICommand
     {
         List<int> results = new List<int>();
 
-        this.context.Tasks!.Where(x => x.IdPc == idPC).ToList().ForEach(task => results.Add(task.IdConfig));
+        
+        Computer pc = this.context.Computers!.Find(idPC)!;
+        if (pc == null)
+            return null!;
 
+        List<PcGroups> psg = this.context.PcGroups!.Where(psg => psg.IdPc == idPC).ToList();
+
+        List<Group> groups = new List<Group>();
+        psg.ForEach(psg => groups.AddRange(this.context.Groups!.Where(group => group.Id == psg.IdGroup)));
+        List<Tasks> tasks = new List<Tasks>();
+        groups.ForEach(group => tasks.AddRange(this.context.Tasks!.Where(task => task.IdGroup == group.Id)));
+        tasks.ForEach(task=> results.Add(task.IdConfig));
+        results = results.Distinct().ToList();
         return results;
     }
 

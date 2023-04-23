@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace Server.Commands.AdminCommands;
 
-public class AdminCommandPut : ICommand
+public class AdminCommandPut
 {
     public string? Username { get; set; }
     public string? Password { get; set; }
@@ -17,7 +17,7 @@ public class AdminCommandPut : ICommand
         Email = email;
         RepeatPeriod = repeatPeriod;
     }
-    public Admin? Execute(int id)
+    public Admin? Execute(int id, MyContext context)
     {
         AdminTestCommands tests = new AdminTestCommands();
         Admin? admin = context.Admins!.Find(id);
@@ -26,6 +26,7 @@ public class AdminCommandPut : ICommand
         admin.Password = Password ?? admin.Password;
         admin.Email = Email ?? admin.Email;
         admin.RepeatPeriod = RepeatPeriod ?? admin.RepeatPeriod;
+
 
         return admin!;
     }

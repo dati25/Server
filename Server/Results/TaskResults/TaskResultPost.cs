@@ -2,9 +2,9 @@
 
 public class TaskResultPost
 {
-    public int IdPc { get; set; }
-    public TaskResultPost(int IdPc)
+    public int IdGroup { get; set; }
+    public TaskResultPost(int IdGroup)
     {
-        this.IdPc = IdPc;
+        this.IdGroup = IdGroup;
     }
 }

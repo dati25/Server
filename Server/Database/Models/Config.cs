@@ -6,6 +6,7 @@ namespace Server.Database.Models
     public class Config : IModel
     {
         public int Id { get; set; }
+        public string Name { get; set; }
         public string Type { get; set; }
         public string? RepeatPeriod { get; set; } // Null = once
         public DateTime? ExpirationDate { get; set; } // Null = never
@@ -18,8 +19,9 @@ namespace Server.Database.Models
         [ForeignKey("IdConfig")] public List<Destination>? Destinations { get; set; }
         [ForeignKey("IdConfig")] public List<Tasks>? Tasks { get; set; }
 
-        public Config(string type, string? repeatPeriod, DateTime? expirationDate, bool? compress, int? retention, int? packageSize, int createdBy, bool? status)
+        public Config(string name, string type, string? repeatPeriod, DateTime? expirationDate, bool? compress, int? retention, int? packageSize, int createdBy, bool? status)
         {
+            Name = name;
             Type = type;
             RepeatPeriod = repeatPeriod;
             ExpirationDate = expirationDate;

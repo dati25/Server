@@ -3,6 +3,7 @@ using Server.Commands;
 using Server.Commands.GroupCommands;
 using Server.Results.GroupResults;
 using Server.Database.Models;
+using Google.Protobuf.WellKnownTypes;
 
 namespace Server.Controllers;
 
@@ -12,14 +13,16 @@ public class GroupController : ControllerBase
 {
     private MyContext context = new MyContext();
     [HttpGet]
-    public IActionResult Get(int? count, int offset = 0)
+    public IActionResult Get(int? count, int offset = 0, bool rootGroups = false)
     {
         CommandsGetDelete command = new CommandsGetDelete();
-        List<GroupResultGet> list = new List<GroupResultGet>();
+        List<GroupResultGet> results = new List<GroupResultGet>();
 
-        context.Groups!.ToList().ForEach(x => list.Add(new GroupResultGet(x)));
 
-        List<GroupResultGet> results = command.Get(list, count, offset);
+        context.Groups!.ToList().ForEach(x=> results.Add(new GroupResultGet(x, context)));
+        if (!rootGroups)
+            results = results.Where(group => !group.Name.StartsWith("pc_")).ToList();
+
 
         return Ok(results);
     }
@@ -30,9 +33,9 @@ public class GroupController : ControllerBase
         Group? group = context.Groups!.Find(id);
 
         if (group == null)
-            return NotFound("Object doesn't exist.");
+            return NotFound(new {message = "Object not found."});
 
-        GroupResultGet result = new GroupResultGet(group);
+        GroupResultGet result = new GroupResultGet(group, context);
 
         return Ok(result);
     }
@@ -40,18 +43,18 @@ public class GroupController : ControllerBase
     public IActionResult Post([FromBody] GroupCommandPost command)
     {
         if (command.Execute() == null)
-            return BadRequest("The object couldn't be created");
+            return BadRequest(new { message = "The object couldn't be created" });
 
-        return Ok("Task completed succesfully");
+        return Ok(true);
     }
 
     [HttpPut("{id}")]
     public IActionResult Put(int id, [FromBody] GroupCommandPut command)
     {
         if (command.Execute(id) == null)
-            return BadRequest("The object couldn't be updated");
+            return BadRequest(new { message = "The object couldn't be updated" });
 
-        return Ok("Task completed succesfully");
+        return Ok(true);
     }
 
     [HttpDelete("{id}")]
@@ -60,7 +63,7 @@ public class GroupController : ControllerBase
         CommandsGetDelete command = new CommandsGetDelete();
         command.Delete(context.Groups!.Find(id)!);
 
-        return Ok("Task completed succesfully");
+        return Ok(true);
     }
 
     [HttpDelete("{idGroup}/{idPC}")]
@@ -70,6 +73,6 @@ public class GroupController : ControllerBase
 
         command.Delete(context.PcGroups!.Where(x => x.IdGroup == idGroup && x.IdPc == idPC).First()!);
 
-        return Ok("Task completed succesfully");
+        return Ok(true);
     }
 }

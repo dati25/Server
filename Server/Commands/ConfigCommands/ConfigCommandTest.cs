@@ -17,8 +17,8 @@ namespace Server.Commands.ConfigCommands
         public bool? Status { get; set; }
         public List<SourceResultPost>? Sources { get; set; }
         public List<DestinationResultPost>? Destinations { get; set; }
-        public List<TaskResultPost>? Tasks { get; set; }
-        public List<GroupResultConfigPost>? groupIDs { get; set; }
+        public List<int>? Computers { get; set; } = new List<int>();
+        public List<int>? Groups { get; set; } = new List<int>();
         public ConfigCommandTest(Config config)
         {
             this.Type = config.Type;
@@ -31,11 +31,12 @@ namespace Server.Commands.ConfigCommands
             this.Status = config.Status;
             this.Sources = new List<SourceResultPost>();
             this.Destinations = new List<DestinationResultPost>();
-            this.Tasks = new List<TaskResultPost>();
-
-            config.Sources!.ForEach(x => this.Sources!.Add(new SourceResultPost(x.Path)));
-            config.Destinations!.ForEach(x => this.Destinations!.Add(new DestinationResultPost(x.Type, x.Path)));
-            config.Tasks!.ForEach(x => this.Tasks!.Add(new TaskResultPost(x.IdPc)));
+            if (config.Sources != null)
+                config.Sources!.ForEach(x => this.Sources!.Add(new SourceResultPost(x.Path)));
+            if (config.Destinations != null)
+                config.Destinations!.ForEach(x => this.Destinations!.Add(new DestinationResultPost(x.Type, x.Path)));
+            if (config.Tasks != null)
+                config.Tasks!.ForEach(x => this.Groups!.Add(x.IdGroup));
         }
         public ConfigCommandTest(ConfigCommandPost config)
         {
@@ -58,11 +59,13 @@ namespace Server.Commands.ConfigCommands
                 this.Destinations = new List<DestinationResultPost>();
                 config.Destinations!.ForEach(x => this.Destinations!.Add(new DestinationResultPost(x.Type, x.Path)));
             }
-            if (config.Compress != null)
-            {
-                this.Tasks = new List<TaskResultPost>();
-                config.Tasks!.ForEach(x => this.Tasks!.Add(new TaskResultPost(x.IdPc)));
-            }
+
+            if (config.Groups != null)
+                config.Groups.ForEach(x => this.Groups!.Add(x.IdGroup));
+
+            if (config.Computers != null)
+                config.Computers.ForEach(x => this.Computers!.Add(x.IdPc));
+
         }
     }
 }
