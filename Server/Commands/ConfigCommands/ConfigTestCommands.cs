@@ -1,4 +1,5 @@
 ﻿using System;
+using Google.Protobuf.WellKnownTypes;
 using Newtonsoft.Json;
 using Server.Database.Models;
 using Server.Results.ConfigResults;
@@ -8,13 +9,13 @@ namespace Server.Commands.ConfigCommands
 {
     public class ConfigTestCommands : ICommand
     {
-        public Dictionary<string, List<string>> CheckConfig(ConfigCommandTest config, int? idConfig)
+        public Dictionary<string, List<string>> CheckConfig(ConfigCommandTest config, MyContext myContext, int? idConfig)
         {
             Dictionary<string, List<string>> exceptions = new Dictionary<string, List<string>>();
             if (!this.tester.CheckExistence(config))
                 this.tester.AddOrApend(exceptions, "Config", "doesn't exist");
 
-            if (context.Admins!.Find(config.CreatedBy) == null)
+            if (myContext.Admins!.Find(config.CreatedBy) == null)
                 this.tester.AddOrApend(exceptions, "CreatedBy", "Admin doesn't exist");
 
             this.IsValidType(exceptions, "Status", config.Type);
@@ -39,17 +40,20 @@ namespace Server.Commands.ConfigCommands
             if (config.Groups != null)
                 this.CheckGroups(exceptions, config, idConfig);
 
+            if (config.Computers!.Any(x => myContext.Computers!.Find(x) == null))
+                this.tester.AddOrApend(exceptions, "Computers", "One of the computers doesn't exist");
+
             return exceptions;
         }
-        public Dictionary<string, List<string>> CheckConfig(Config config, int idConfig)
+        public Dictionary<string, List<string>> CheckConfig(Config config, MyContext myContext, int idConfig)
         {
             ConfigCommandTest configCommand = new ConfigCommandTest(config);
-            return this.CheckConfig(configCommand, idConfig);
+            return this.CheckConfig(configCommand, myContext, idConfig);
         }
-        public Dictionary<string, List<string>> CheckConfig(ConfigCommandPost config)
+        public Dictionary<string, List<string>> CheckConfig(ConfigCommandPost config, MyContext myContext)
         {
             ConfigCommandTest configCommand = new ConfigCommandTest(config);
-            return this.CheckConfig(configCommand, null);
+            return this.CheckConfig(configCommand, myContext, null);
         }
         public Dictionary<string, List<string>> IsValidFilePath(Dictionary<string, List<string>> dic, string key, string value)
         {
