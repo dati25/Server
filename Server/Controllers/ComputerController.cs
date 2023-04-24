@@ -31,7 +31,7 @@ public class ComputerController : ControllerBase
         Computer? result = context.Computers!.Find(id);
 
         if (result == null)
-            return NotFound("Object doesn't exist.");
+            return NotFound(new { message = "Object doesn't exist." });
 
         return Ok(result);
     }
@@ -72,7 +72,7 @@ public class ComputerController : ControllerBase
         CommandsGetDelete command = new CommandsGetDelete();
 
         if (!command.Delete(this.context.Computers!.Find(id)!))
-            return BadRequest("Object doesn't exist");
+            return BadRequest(new { message = "Object doesn't exist" });
 
         return Ok(true);
     }

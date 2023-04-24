@@ -31,7 +31,7 @@ public class AdminController : ControllerBase
 
         if (results == null)
         {
-            return NotFound("No objects found.");
+            return NotFound(new { message = "No objects found." });
         }
 
         return Ok(results);
@@ -43,7 +43,7 @@ public class AdminController : ControllerBase
         Admin? result = context.Admins!.Find(id);
 
         if (result == null)
-            return NotFound("Object doesn't exist.");
+            return NotFound(new { message = "Object doesn't exist." });
         
         return Ok(result);
         
@@ -85,7 +85,7 @@ public class AdminController : ControllerBase
     {
         CommandsGetDelete command = new CommandsGetDelete();
         if (!command.Delete(this.context.Admins!.Find(id)!))
-            return BadRequest("Object doesn't exist");
+            return BadRequest(new {message = "Object doesn't exist."});
 
         return Ok(true);
     }

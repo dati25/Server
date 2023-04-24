@@ -32,7 +32,7 @@ public class ConfigController : ControllerBase
         Config? config = context.Configs!.Find(id);
 
         if (config == null)
-            return NotFound("Object doesn't exist.");
+            return NotFound(new { message = "Object doesn't exist." });
 
         ConfigResultGet result = new ConfigResultGet(config, context);
 
@@ -45,7 +45,7 @@ public class ConfigController : ControllerBase
         CommandsGetDelete command = new CommandsGetDelete();
         List<int> results = command.GetConfigsFromidPC(idPC);
         if (results == null)
-            return NotFound("No configs found.");
+            return NotFound(new { message = "No configs found." });
 
         return Ok(results);
     }
@@ -84,7 +84,7 @@ public class ConfigController : ControllerBase
     {
         CommandsGetDelete command = new CommandsGetDelete();
         if (!command.Delete(this.context.Configs!.Find(id)!))
-            return BadRequest("Object doesn't exist");
+            return BadRequest(new { message = "Object doesn't exist" });
 
         return Ok(true);
     }
@@ -94,7 +94,7 @@ public class ConfigController : ControllerBase
     {
         CommandsGetDelete command = new CommandsGetDelete();
         if (!command.Delete(this.context.Sources!.Find(id)!))
-            return BadRequest("Object doesn't exist");
+            return BadRequest(new { message = "Object doesn't exist" });
 
         return Ok(true);
     }
@@ -104,7 +104,7 @@ public class ConfigController : ControllerBase
     {
         CommandsGetDelete command = new CommandsGetDelete();
         if (!command.Delete(this.context.Destinations!.Find(id)!))
-            return BadRequest("Object doesn't exist");
+            return BadRequest(new { message = "Object doesn't exist" });
 
         return Ok(true);
     }

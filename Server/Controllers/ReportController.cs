@@ -31,7 +31,7 @@ public class ReportController : ControllerBase
         Report? report = context.Reports!.Find(id);
 
         if (report == null)
-            return NotFound("Object doesn't exist.");
+            return NotFound(new { message = "Object doesn't exist." });
 
         ReportResultGet result = new ReportResultGet(report);
 
@@ -71,7 +71,7 @@ public class ReportController : ControllerBase
         CommandsGetDelete command = new CommandsGetDelete();
 
         if (!command.Delete(this.context.Reports!.Find(id)!))
-            return BadRequest("Object doesn't exist");
+            return BadRequest(new { message = "Object doesn't exist" });
 
         return Ok(true);
     }

@@ -18,7 +18,7 @@ namespace Server.Controllers
             List<SnapshotResultGetWithId> snaps = new List<SnapshotResultGetWithId>();
             this.context.Snapshots!.Where(x => x.IdPC == idPC).ToList().ForEach(x => snaps.Add(new SnapshotResultGetWithId(x.IdConfig, x.Snapshot)));
             if (snaps.Count <= 0)
-                return NotFound();
+                return NotFound(new { message = "Object doesn't exist" });
             return Ok(snaps);
         }
 
@@ -27,7 +27,7 @@ namespace Server.Controllers
         {
             Snapshots snapshot = this.context.Snapshots!.Where(x => x.IdPC == idPC && x.IdConfig == idConfig).ToList().First();
             if (snapshot == null)
-                return NotFound();
+                return NotFound(new {message = "Object doesn't exist"});
             SnapshotResultGet result = new SnapshotResultGet(snapshot);
             return Ok(result);
         }
@@ -37,7 +37,7 @@ namespace Server.Controllers
         {
             Snapshots snapshot = this.context.Snapshots!.Where(x => x.IdPC == idPC && x.IdConfig == idConfig).First();
             if (snapshot == null)
-                return NotFound();
+                return NotFound(new {message = "Object doesn't exist"});
             snapshot.Snapshot = value;
             this.context.SaveChanges();
             return Ok(snapshot);
