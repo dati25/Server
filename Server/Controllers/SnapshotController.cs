@@ -22,16 +22,6 @@ namespace Server.Controllers
             return Ok(snaps);
         }
 
-        [HttpGet("{idPC}/{idConfig}")]
-        public IActionResult Get(int idPC, int idConfig)
-        {
-            Snapshots snapshot = this.context.Snapshots!.Where(x => x.IdPC == idPC && x.IdConfig == idConfig).ToList().First();
-            if (snapshot == null)
-                return NotFound(new {message = "Object doesn't exist"});
-            SnapshotResultGet result = new SnapshotResultGet(snapshot);
-            return Ok(result);
-        }
-
         [HttpPut("{idPC}/{idConfig}")]
         public IActionResult Put(int idPC, int idConfig, [FromBody] string value)
         {

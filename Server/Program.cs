@@ -11,7 +11,8 @@ public class Program
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
-        /*builder.Services.AddSwaggerGen(c => {
+        builder.Services.AddSwaggerGen(c =>
+        {
             c.SwaggerDoc("v1", new OpenApiInfo
             {
                 Title = "JWTToken_Auth_API",
@@ -37,7 +38,7 @@ public class Program
             new string[] {}
         }
     });
-        });*/
+        });
 
         builder.Services.AddCors(options =>
         {
