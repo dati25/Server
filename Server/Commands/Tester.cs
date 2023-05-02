@@ -39,23 +39,23 @@ namespace Server.Commands
         {
             return IsValid(dic, key, value, @"^[a-zA-Z0-9\-_]*$", "cannot contain any special characters");
         }
+        public Dictionary<string, List<string>> IsValidFilePath(Dictionary<string, List<string>> dic, string key, string value)
+        {
+            return this.IsValid(dic, key, value, @"@""(^[a-zA-Z]:[\\\/]{1,2}$)|(^([a-zA-Z]:([\\\/]{1,2}[^\\\/:\*\?""""<>\|]+)+)$)", "path is not valid");
+        }
+        public Dictionary<string, List<string>> IsValidIp(Dictionary<string, List<string>> dic, string key, string value, string errormessage)
+        {
+            return this.IsValid(dic, key, value, @"^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$", errormessage);
+        }
         public Dictionary<string, List<string>> TestCronExpression(Dictionary<string, List<string>> dic, string key, string value)
         {
             CronExpression cron = new CronExpression();
             return cron.TestCronExpression(dic, key, value);
         }
-        public class PasswordHashes
+        public Dictionary<string, List<string>> TestFtpConfig(Dictionary<string, List<string>> dic, string destKey, string value)
         {
-            //private int keySize = 64;
-            //private int iterations = 350000;
-            //HashAlgorithmName hashName = HashAlgorithmName.SHA512;
-            //public string GetHash(string password, out byte[] salt)
-            //{
-            //    salt = RandomNumberGenerator.GetBytes(keySize);
-
-            //    var hash = Rfc2898DeriveBytes.Pbkdf2()
-
-            //}
+            FtpConfig ftp = new FtpConfig(value, destKey);
+            return ftp.CheckAll(dic);
         }
         public class CronExpression
         {
@@ -143,6 +143,38 @@ namespace Server.Commands
 
                 this.ValuesCheck(dic, key, value, highestDayCount, value, false, false);
                 return dic;
+            }
+        }
+        public class FtpConfig
+        {
+            private Tester tester = new Tester();
+            private Match match { get; set; }
+            private string destKey { get; set; }
+            public FtpConfig(string ftpConfig, string destKey)
+            {
+                //this.match = Regex.Match(ftpConfig, @"^ftp://(?<user>[a-zA-Z\.\-_]+):(?<password>.[^@]+)
+                //                                                \@(?<host>[1-9\.]{7,15}):(?<port>\d{1,5})
+                //                                                //(?<filePath>[^\\\/:\*\?""""<>\|]{2,})$");
+                this.match = Regex.Match(ftpConfig, @"^ftp://(?<user>[a-zA-Z\.\-_]+):(?<password>.[^@]+)\@(?<host>[1-9\.]+):(?<port>\d+)//(?<filePath>.+)$");
+                this.destKey = destKey;
+            }
+            public Dictionary<string, List<string>> CheckAll(Dictionary<string, List<string>> dic)
+            {
+                if (!this.match.Success)
+                    return this.tester.AddOrApend(dic, destKey, "format isn't valid");
+
+                this.tester.IsValidIp(dic, destKey, match.Groups["host"].Value,"host adress isn't valid");
+
+                if (this.CheckFtpPort(int.Parse(this.match.Groups["port"].Value)))
+                    this.tester.AddOrApend(dic, destKey, "incorrect port value");
+
+                this.tester.IsValidFilePath(dic, destKey, match.Groups["filePath"].Value);
+
+                return dic;
+            }
+            public bool CheckFtpPort(int port)
+            {
+                return port == 20 || port == 21 || (port >= 1024 && port <= 65535);
             }
         }
     }
