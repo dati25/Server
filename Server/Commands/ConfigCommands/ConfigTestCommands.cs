@@ -27,14 +27,19 @@ namespace Server.Commands.ConfigCommands
             {
                 for (int i = 0; i < config.Sources!.Count; i++)
                 {
-                    this.IsValidFilePath(exceptions, $"Source({i + 1})", config.Sources[i].Path);
+                    this.tester.IsValidFilePath(exceptions, $"Source({i + 1})", config.Sources[i].Path);
                 }
             }
             if (config.Destinations! != null)
             {
                 for (int i = 0; i < config.Destinations!.Count; i++)
                 {
-                    this.IsValidFilePath(exceptions, $"Destination({i})", config.Destinations[i].Path);
+                    //if (config.Destinations[i].Type == false)
+                    //{
+                    //    this.IsValidFilePath(exceptions, $"Destination({i})", config.Destinations[i].Path);
+                    //    continue;
+                    //}
+                    this.CheckDestination(exceptions, $"Destination({i})", config.Destinations[i].Path, config.Destinations[i].Type);
                 }
             }
             if (config.Groups != null)
@@ -55,10 +60,7 @@ namespace Server.Commands.ConfigCommands
             ConfigCommandTest configCommand = new ConfigCommandTest(config);
             return this.CheckConfig(configCommand, myContext, null);
         }
-        public Dictionary<string, List<string>> IsValidFilePath(Dictionary<string, List<string>> dic, string key, string value)
-        {
-            return this.tester.IsValid(dic, key, value, @"@""(^[a-zA-Z]:[\\\/]{1,2}$)|(^([a-zA-Z]:([\\\/]{1,2}[^\\\/:\*\?""""<>\|]+)+)$)", "path is not valid");
-        }
+
         public Dictionary<string, List<string>> IsValidType(Dictionary<string, List<string>> dic, string key, string value)
         {
             if (!(value == "full" || value == "incr" || value == "diff"))
@@ -71,24 +73,12 @@ namespace Server.Commands.ConfigCommands
         {
             if (type)
             {
-                ConfigFTP ftp = JsonConvert.DeserializeObject<ConfigFTP>(value)!;
-
-                this.tester.NoSpecialChars(dic, key, ftp.Username);
-                this.tester.IsValid(dic, key, ftp.Host, @"^((https://)?((www\.)?[\w\-]+(\.[\w\-]+)+)$", "Host adress ins't valid");
+                this.tester.TestFtpConfig(dic, key, value);
 
                 return dic;
             }
-            return this.IsValidFilePath(dic, key, value);
+            return this.tester.IsValidFilePath(dic, key, value);
 
-        }
-        private Dictionary<string, List<string>> FTPCheckPort(Dictionary<string, List<string>> dic, int port)
-        {
-            List<int> defaultPorts = new List<int>() { 20, 21, 22, 443, 990 };
-
-            if (!(defaultPorts.Any(x => x == port) || (port > 49152 && port < 65535)))
-                return this.tester.AddOrApend(dic, "path", "incorrect port");
-
-            return dic;
         }
         private List<int> AddPCs(int groupId)
         {

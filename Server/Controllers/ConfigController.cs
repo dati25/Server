@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Server.Commands;
 using Server.Commands.ConfigCommands;
 using Server.Results.ConfigResults;
@@ -117,25 +117,28 @@ public class ConfigController : ControllerBase
     }
 
     [HttpDelete("/api/{idConfig}/{idGroup}")]
-    [Authorize]
-    public IActionResult DeleteTask(int idConfig, int idObject, bool isGroup)
+    public IActionResult DeleteTask(int idConfig, int idGroup, char isGroup)
     {
         CommandsGetDelete command = new CommandsGetDelete();
-        if (isGroup)
+        if (isGroup == 't')
         {
-            command.Delete(this.context.Tasks!.Where(x => x.IdConfig == idConfig && x.IdGroup == idObject).First()!);
+            command.Delete(this.context.Tasks!.Where(x => x.IdConfig == idConfig && x.IdGroup == idGroup).First()!);
         }
-        else
+        else if (isGroup == 'f')
         {
-            Computer? pc = this.context.Computers!.Find(idObject);
-            if (pc != null)
+            Computer? pc = this.context.Computers!.Find(idGroup);
+            if (pc == null)
                 return NotFound();
 
-            Group? group = this.context.Groups!.Find("pc_" + pc!.Name);
-            if (pc != null)
+            Group? group = this.context.Groups!.Where(x => x.Name == "pc_" + pc!.Name).First();
+            if (pc == null)
                 return NotFound();
 
             command.Delete(this.context.Tasks!.Where(x => x.IdConfig == idConfig && x.IdGroup == group!.Id).First()!);
+        }
+        else
+        {
+            return BadRequest(new { message = "Invalid input." });
         }
         return Ok(true);
     }

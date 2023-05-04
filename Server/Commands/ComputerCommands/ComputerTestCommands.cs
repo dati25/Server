@@ -13,7 +13,7 @@ namespace Server.Commands.ComputerCommands
 
             this.tester.IsLongerThan(exceptions, "Name", computer.Name, 3);
             this.IsValidMac(exceptions, "MacAdress", computer.MacAddress);
-            this.IsValidIp(exceptions, "IPAdress", computer.IpAddress);
+            this.tester.IsValidIp(exceptions, "IPAdress", computer.IpAddress, "format isn't valid");
             this.IsValidStatus(exceptions, "Status", computer.Status);
             return exceptions;
         }
@@ -21,10 +21,7 @@ namespace Server.Commands.ComputerCommands
         {
             return this.tester.IsValid(dic, key, value.ToLower().Replace("-", string.Empty).Replace(":", string.Empty), @"^[0-9a-f]{12}$", "format isn't valid");
         }
-        public Dictionary<string, List<string>> IsValidIp(Dictionary<string, List<string>> dic, string key, string value)
-        {
-            return this.tester.IsValid(dic, key, value, @"^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$", "format isn't valid");
-        }
+
         public Dictionary<string, List<string>> IsValidStatus(Dictionary<string, List<string>> dic, string key, char? value)
         {
             if (!(value == 't' || value == 'f' || value == 'q'))
