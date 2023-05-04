@@ -4,6 +4,7 @@ using Server.Commands.ReportCommands;
 using Server.Results.ReportResults;
 using Server.Database.Models;
 using Server.Commands.ComputerCommands;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Server.Controllers;
 
@@ -39,6 +40,7 @@ public class ReportController : ControllerBase
     }
 
     [HttpPost]
+    [AllowAnonymous]
     public IActionResult Post([FromBody] ReportResultPost reportResult)
     {
         ReportTestCommands testCommands = new ReportTestCommands();

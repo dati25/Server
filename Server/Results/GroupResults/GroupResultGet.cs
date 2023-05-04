@@ -14,6 +14,6 @@ public class GroupResultGet
     {
         this.Id = group.Id;
         this.Name = group.Name;
-        context.PcGroups!.Where(x => x.IdGroup == group.Id).ToList().ForEach(x => PcGroups  .Add(new PcGroupResultGet(x, context)));
+        context.PcGroups!.Where(x => x.IdGroup == group.Id).ToList().ForEach(x => PcGroups.Add(new PcGroupResultGet(x, context)));
     }
 }

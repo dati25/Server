@@ -4,6 +4,7 @@ using Server.Commands.ConfigCommands;
 using Server.Results.ConfigResults;
 using Server.Database.Models;
 using Server.Results.TaskResults;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Server.Controllers;
 
@@ -40,6 +41,7 @@ public class ConfigController : ControllerBase
     }
 
     [HttpGet("/api/tasks/{idPC}")]
+    [AllowAnonymous]
     public IActionResult GetConfigsFromPCid(int idPC)
     {
         CommandsGetDelete command = new CommandsGetDelete();
@@ -51,6 +53,7 @@ public class ConfigController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public IActionResult Post([FromBody] ConfigCommandPost command)
     {
         ConfigTestCommands testCommands = new ConfigTestCommands();
@@ -66,6 +69,7 @@ public class ConfigController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize]
     public IActionResult Put(int id, [FromBody] ConfigCommandPut command)
     {
         Config config = command.Execute(id, context);
@@ -80,6 +84,7 @@ public class ConfigController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize]
     public IActionResult Delete(int id)
     {
         CommandsGetDelete command = new CommandsGetDelete();
@@ -90,6 +95,7 @@ public class ConfigController : ControllerBase
     }
 
     [HttpDelete("/api/sources/{id}")]
+    [Authorize]
     public IActionResult DeleteSource(int id)
     {
         CommandsGetDelete command = new CommandsGetDelete();
@@ -100,6 +106,7 @@ public class ConfigController : ControllerBase
     }
 
     [HttpDelete("/api/destinations/{id}")]
+    [Authorize]
     public IActionResult DeleteDestination(int id)
     {
         CommandsGetDelete command = new CommandsGetDelete();
@@ -110,6 +117,7 @@ public class ConfigController : ControllerBase
     }
 
     [HttpDelete("/api/{idConfig}/{idGroup}")]
+    [Authorize]
     public IActionResult DeleteTask(int idConfig, int idObject, bool isGroup)
     {
         CommandsGetDelete command = new CommandsGetDelete();

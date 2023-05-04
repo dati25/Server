@@ -4,11 +4,13 @@ using Server.Commands.ComputerCommands;
 using Server.Results.ComputerResults;
 using Server.Database.Models;
 using Microsoft.AspNetCore.Routing.Template;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Server.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class ComputerController : ControllerBase
 {
     MyContext context = new MyContext();
@@ -37,6 +39,7 @@ public class ComputerController : ControllerBase
     }
 
     [HttpPost]
+    [AllowAnonymous]
     public IActionResult Post([FromBody] ComputerResultPost computerResult)
     {
         ComputerTestCommands testCommands = new ComputerTestCommands();
@@ -53,6 +56,7 @@ public class ComputerController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [AllowAnonymous]
     public IActionResult Put(int id, [FromBody] ComputerCommandPut command)
     {
         Computer? pc = command.Execute(id);
@@ -76,9 +80,4 @@ public class ComputerController : ControllerBase
 
         return Ok(true);
     }
-    //[HttpGet("{idPC}/{idConfig}")]
-    //public IActionResult GetSnapshot(int idPC, int idConfig)
-    //{
-        
-    //}
 }

@@ -4,11 +4,13 @@ using Server.Commands.GroupCommands;
 using Server.Results.GroupResults;
 using Server.Database.Models;
 using Google.Protobuf.WellKnownTypes;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Server.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class GroupController : ControllerBase
 {
     private MyContext context = new MyContext();
