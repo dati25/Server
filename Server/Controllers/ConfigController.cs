@@ -3,8 +3,8 @@ using Server.Commands;
 using Server.Commands.ConfigCommands;
 using Server.Results.ConfigResults;
 using Server.Database.Models;
-using Server.Results.TaskResults;
-using Microsoft.AspNetCore.Authorization;
+using Server.Controllers.Attributes;
+using System.Reflection;
 
 namespace Server.Controllers;
 
@@ -15,6 +15,7 @@ public class ConfigController : ControllerBase
     private MyContext context = new MyContext();
 
     [HttpGet]
+    [Authorize]
     public IActionResult Get(int? count, int offset = 0)
     {
         CommandsGetDelete command = new CommandsGetDelete();
@@ -28,6 +29,7 @@ public class ConfigController : ControllerBase
 
 
     [HttpGet("{id}")]
+    [Authorize]
     public IActionResult Get(int id)
     {
         Config? config = context.Configs!.Find(id);
@@ -41,7 +43,6 @@ public class ConfigController : ControllerBase
     }
 
     [HttpGet("/api/tasks/{idPC}")]
-    [AllowAnonymous]
     public IActionResult GetConfigsFromPCid(int idPC)
     {
         CommandsGetDelete command = new CommandsGetDelete();
@@ -117,6 +118,7 @@ public class ConfigController : ControllerBase
     }
 
     [HttpDelete("/api/{idConfig}/{idGroup}")]
+    [Authorize]
     public IActionResult DeleteTask(int idConfig, int idGroup, char isGroup)
     {
         CommandsGetDelete command = new CommandsGetDelete();

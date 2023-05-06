@@ -3,9 +3,7 @@ using Server.Commands;
 using Server.Commands.GroupCommands;
 using Server.Results.GroupResults;
 using Server.Database.Models;
-using Google.Protobuf.WellKnownTypes;
-using Microsoft.AspNetCore.Authorization;
-
+using Server.Controllers.Attributes;
 namespace Server.Controllers;
 
 [Route("api/[controller]")]

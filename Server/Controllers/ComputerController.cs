@@ -3,18 +3,17 @@ using Server.Commands;
 using Server.Commands.ComputerCommands;
 using Server.Results.ComputerResults;
 using Server.Database.Models;
-using Microsoft.AspNetCore.Routing.Template;
-using Microsoft.AspNetCore.Authorization;
+using Server.Controllers.Attributes;
 
 namespace Server.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
 public class ComputerController : ControllerBase
 {
     MyContext context = new MyContext();
     [HttpGet]
+    [Authorize]
     public IActionResult Get(int? count, int offset = 0)
     {
         CommandsGetDelete command = new CommandsGetDelete();
@@ -28,6 +27,7 @@ public class ComputerController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize]
     public IActionResult Get(int id)
     {
         Computer? result = context.Computers!.Find(id);
@@ -39,7 +39,6 @@ public class ComputerController : ControllerBase
     }
 
     [HttpPost]
-    [AllowAnonymous]
     public IActionResult Post([FromBody] ComputerResultPost computerResult)
     {
         ComputerTestCommands testCommands = new ComputerTestCommands();
@@ -56,7 +55,6 @@ public class ComputerController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [AllowAnonymous]
     public IActionResult Put(int id, [FromBody] ComputerCommandPut command)
     {
         Computer? pc = command.Execute(id);
@@ -71,6 +69,7 @@ public class ComputerController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize]
     public IActionResult Delete(int id)
     {
         CommandsGetDelete command = new CommandsGetDelete();

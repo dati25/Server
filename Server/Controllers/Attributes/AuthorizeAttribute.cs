@@ -1,5 +1,6 @@
 ﻿using JWT.Algorithms;
 using JWT.Builder;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -28,5 +29,6 @@ namespace Server.Controllers.Attributes
                 };
             }
         }
+
     }
 }

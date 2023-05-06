@@ -4,7 +4,7 @@ using Server.Commands.ReportCommands;
 using Server.Results.ReportResults;
 using Server.Database.Models;
 using Server.Commands.ComputerCommands;
-using Microsoft.AspNetCore.Authorization;
+using Server.Controllers.Attributes;
 
 namespace Server.Controllers;
 
@@ -14,6 +14,7 @@ public class ReportController : ControllerBase
 {
     private MyContext context = new MyContext();
     [HttpGet]
+    [Authorize]
     public IActionResult Get(int? count, int offset = 0)
     {
         CommandsGetDelete command = new CommandsGetDelete();
@@ -27,6 +28,7 @@ public class ReportController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize]
     public IActionResult Get(int id)
     {
         Report? report = context.Reports!.Find(id);
@@ -40,7 +42,6 @@ public class ReportController : ControllerBase
     }
 
     [HttpPost]
-    [AllowAnonymous]
     public IActionResult Post([FromBody] ReportResultPost reportResult)
     {
         ReportTestCommands testCommands = new ReportTestCommands();
@@ -55,6 +56,7 @@ public class ReportController : ControllerBase
         return Ok(true);
     }
     [HttpPut("{id}")]
+    [Authorize]
     public IActionResult Put(int id, [FromBody] ReportCommandPut command)
     {
         Report? report = command.Execute(id);
@@ -68,6 +70,7 @@ public class ReportController : ControllerBase
         return Ok(true);
     }
     [HttpDelete("{id}")]
+    [Authorize]
     public IActionResult Delete(int id)
     {
         CommandsGetDelete command = new CommandsGetDelete();

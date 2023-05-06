@@ -11,6 +11,11 @@ public class Program
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+
+        //builder.Services.AddAuthorization(options =>
+        //options.AddPolicy("AllowAnonymous", policy =>
+        //policy.RequireAuthenticatedUser()));
+
         builder.Services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo

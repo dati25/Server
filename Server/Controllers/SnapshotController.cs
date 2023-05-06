@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Server.Database.Models;
 using Server.Results.SnapshotResults;
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Server.Controllers
 {
