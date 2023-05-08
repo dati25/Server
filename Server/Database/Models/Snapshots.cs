@@ -5,16 +5,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Server.Database.Models
 {
     [Table("tbSnapshots")]
-    [PrimaryKey("IdPC", "IdConfig")]
+    [PrimaryKey("ComputerId", "IdConfig")]
     public class Snapshots
     {
-        [JsonIgnore] public int IdPC { get; set; }
+        [JsonIgnore] public int ComputerId { get; set; }
         public int IdConfig { get; set; }
         public string? Snapshot { get; set; } = null;
 
-        public Snapshots(int idPC, int IdConfig)
+        public Snapshots(int ComputerId, int IdConfig)
         {
-            this.IdPC = idPC;   
+            this.ComputerId = ComputerId;   
             this.IdConfig = IdConfig;
         }
         public Snapshots(int idPC, int IdConfig, string Snapshot) : this(idPC, IdConfig)

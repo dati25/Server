@@ -19,7 +19,7 @@ namespace Server.Results.ComputerResults
             IpAddress = ipAddress;
             Name = name;
             Status = status;
-            context.Snapshots!.Where(x => x.IdPC == this.Id).ToList().ForEach(x => this.Snapshots!.Add(new SnapshotResultGet(x)));
+            context.Snapshots!.Where(x => x.ComputerId == this.Id).ToList().ForEach(x => this.Snapshots!.Add(new SnapshotResultGet(x)));
         }
     }
 }

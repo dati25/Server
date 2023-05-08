@@ -15,7 +15,7 @@ namespace Server.Controllers
         public IActionResult GetFromPCID(int idPC)
         {
             List<SnapshotResultGetWithId> snaps = new List<SnapshotResultGetWithId>();
-            this.context.Snapshots!.Where(x => x.IdPC == idPC).ToList().ForEach(x => snaps.Add(new SnapshotResultGetWithId(x.IdConfig, x.Snapshot)));
+            this.context.Snapshots!.Where(x => x.ComputerId == idPC).ToList().ForEach(x => snaps.Add(new SnapshotResultGetWithId(x.IdConfig, x.Snapshot)));
             if (snaps.Count <= 0)
                 return NotFound(new { message = "Object doesn't exist" });
             return Ok(snaps);
@@ -24,7 +24,7 @@ namespace Server.Controllers
         [HttpPut("{idPC}/{idConfig}")]
         public IActionResult Put(int idPC, int idConfig, [FromBody] string value)
         {
-            Snapshots snapshot = this.context.Snapshots!.Where(x => x.IdPC == idPC && x.IdConfig == idConfig).First();
+            Snapshots snapshot = this.context.Snapshots!.Where(x => x.ComputerId == idPC && x.IdConfig == idConfig).First();
             if (snapshot == null)
                 return NotFound(new {message = "Object doesn't exist"});
             snapshot.Snapshot = value;
