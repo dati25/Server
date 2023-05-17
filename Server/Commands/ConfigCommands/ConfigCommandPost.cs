@@ -41,7 +41,7 @@ public class ConfigCommandPost : ICommand
 
     public Config Execute(MyContext myContext)
     {
-        Config config = new Config(Name, Type, RepeatPeriod, ExpirationDate, Compress, Retention, PackageSize, CreatedBy, Status);
+        Config config = new Config(Name, Type, this.tester.QuestionMarkChange(RepeatPeriod!), ExpirationDate, Compress, Retention, PackageSize, CreatedBy, Status);
 
         myContext.Configs!.Add(config);
 

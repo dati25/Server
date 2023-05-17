@@ -15,7 +15,6 @@ public class ConfigController : ControllerBase
     private MyContext context = new MyContext();
 
     [HttpGet]
-    [Authorize]
     public IActionResult Get(int? count, int offset = 0)
     {
         CommandsGetDelete command = new CommandsGetDelete();
@@ -29,7 +28,6 @@ public class ConfigController : ControllerBase
 
 
     [HttpGet("{id}")]
-    [Authorize]
     public IActionResult Get(int id)
     {
         Config? config = context.Configs!.Find(id);
@@ -46,7 +44,15 @@ public class ConfigController : ControllerBase
     public IActionResult GetConfigsFromPCid(int idPC)
     {
         CommandsGetDelete command = new CommandsGetDelete();
-        List<int> results = command.GetConfigsFromidPC(idPC);
+
+        var pc = this.context.Computers!.Find(idPC);
+
+        if (pc == null)
+            return NotFound(new { message = "PC doesn't exist." });
+        if (pc.Status != 't')
+            return Unauthorized(new { message = "Computer isn't approved." });
+
+        List<int> results = command.GetConfigsFromidPC(pc);
         if (results == null)
             return NotFound(new { message = "No configs found." });
 

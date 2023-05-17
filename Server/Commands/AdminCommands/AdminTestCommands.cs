@@ -24,9 +24,5 @@ namespace Server.Commands.AdminCommands
         {
             return this.tester.IsValid(dic, key, value, @"^[\w-\.]+@([\w-]+\.)*[\w-]+\.[\w-]{2,4}$", "format isn't valid");
         }
-        public string SerializeDic(Dictionary<string, List<string>> dic)
-        {
-            return JsonConvert.SerializeObject(dic);
-        }
     }
 }

@@ -21,16 +21,11 @@ public class CommandsGetDelete : ICommand
         return resultList;
     }
 
-    public List<int> GetConfigsFromidPC(int idPC)
+    public List<int> GetConfigsFromidPC(Computer pc)
     {
         List<int> results = new List<int>();
 
-        
-        Computer pc = this.context.Computers!.Find(idPC)!;
-        if (pc == null)
-            return null!;
-
-        List<PcGroups> psg = this.context.PcGroups!.Where(psg => psg.IdPc == idPC).ToList();
+        List<PcGroups> psg = this.context.PcGroups!.Where(psg => psg.IdPc == pc.Id).ToList();
 
         List<Group> groups = new List<Group>();
         psg.ForEach(psg => groups.AddRange(this.context.Groups!.Where(group => group.Id == psg.IdGroup)));

@@ -30,17 +30,23 @@ public class ConfigCommandPut
         {
             return null!;
         }
-        config.Name = Name ?? config.Name;
-        config.Type = Type ?? config.Type;
-        config.RepeatPeriod = RepeatPeriod ?? config.RepeatPeriod;
-        config.ExpirationDate = ExpirationDate ?? config.ExpirationDate;
-        config.Compress = Compress ?? config.Compress;
-        config.Retention = Retention ?? config.Retention;
-        config.PackageSize = PackageSize ?? config.PackageSize;
-        config.CreatedBy = CreatedBy ?? config.CreatedBy;
-        config.Status = Status ?? config.Status;
-        config.Sources = Sources ?? config.Sources;
-        config.Destinations = Destinations ?? config.Destinations;
+        config.Name = this.Name ?? config.Name;
+        config.Type = this.Type ?? config.Type;
+        config.ExpirationDate = this.ExpirationDate ?? config.ExpirationDate;
+        config.Compress = this.Compress ?? config.Compress;
+        config.Retention = this.Retention ?? config.Retention;
+        config.PackageSize = this.PackageSize ?? config.PackageSize;
+        config.CreatedBy = this.CreatedBy ?? config.CreatedBy;
+        config.Status = this.Status ?? config.Status;
+        config.Sources = this.Sources ?? config.Sources;
+        config.Destinations = this.Destinations ?? config.Destinations;
+
+        if(this.RepeatPeriod != null)
+        {
+            var tester = new Tester();
+            config.RepeatPeriod = tester.QuestionMarkChange(this.RepeatPeriod);
+        }
+
         if(Groups != null)
         {
             config.Tasks = new List<Tasks>();

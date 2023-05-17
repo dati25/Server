@@ -11,7 +11,7 @@ namespace Server.Controllers
     {
         private MyContext context = new MyContext();
 
-        [HttpGet("api/Snapshots/{idPC}")]
+        [HttpGet("{idPC}")]
         public IActionResult GetFromPCID(int idPC)
         {
             List<SnapshotResultGetWithId> snaps = new List<SnapshotResultGetWithId>();
@@ -24,9 +24,10 @@ namespace Server.Controllers
         [HttpPut("{idPC}/{idConfig}")]
         public IActionResult Put(int idPC, int idConfig, [FromBody] string value)
         {
-            Snapshots snapshot = this.context.Snapshots!.Where(x => x.ComputerId == idPC && x.IdConfig == idConfig).First();
-            if (snapshot == null)
+            List<Snapshots>? snapshots = this.context.Snapshots!.Where(x => x.ComputerId == idPC && x.IdConfig == idConfig).ToList();
+            if (snapshots == null)
                 return NotFound(new {message = "Object doesn't exist"});
+            Snapshots snapshot = snapshots.First();
             snapshot.Snapshot = value;
             this.context.SaveChanges();
             return Ok(snapshot);

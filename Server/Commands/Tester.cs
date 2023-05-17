@@ -57,15 +57,20 @@ namespace Server.Commands
             FtpConfig ftp = new FtpConfig(value, destKey);
             return ftp.CheckAll(dic);
         }
+        public string QuestionMarkChange(string cronExpression)
+        {
+            CronExpression cron = new();
+            return cron.QuestionMarkChange(cronExpression);
+        }
         public class CronExpression
         {
             private Tester tester = new Tester();
-            private string regexPattern = @"^(?<minute>((\d{1,2},)*\d{1,2}|(\d{1,2}(\/|-)\d{1,2})|\*|\*\/\d{1,2}|\d{1,2}(\/|-)\*|\?)) (?<hour>((\d{1,2},)*\d{1,2}|(\d{1,2}(\/|-)\d{1,2})|\*|\*\/\d{1,2}|\d{1,2}(\/|-)\*|\?)) (?<dayMonth>((\d{1,2},)*\d{1,2}|(\d{1,2}(\/|-)\d{1,2})|\*|\*\/\d{1,2}|\d{1,2}(\/|-)\*|\?)) (?<month>((\d{1,2},)*\d{1,2}|(\d{1,2}(\/|-)\d{1,2})|\*|\*\/\d{1,2}|\d{1,2}(\/|-)\*|\?)) (?<dayWeek>((\d{1,2},)*\d{1,2}|(\d{1,2}(\/|-)\d{1,2})|\*|\*\/\d{1,2}|\d{1,2}(\/|-)\*|\?))$";
+            private string regexPattern = @"^(?<minute>((\d{1,2},)*\d{1,2}|(\d{1,2}(\/|-)\d{1,2})|\*|\*\/\d{1,2}|\d{1,2}(\/|-)\*|\?)) (?<hour>((\d{1,2},)*\d{1,2}|(\d{1,2}(\/|-)\d{1,2})|\*|\*\/\d{1,2}|\d{1,2}(\/|-)\*|\?)) (?<dayMonth>((\d{1,2},)*\d{1,2}|(\d{1,2}(\/|-)\d{1,2})|\*|\?|\*\/\d{1,2}|\d{1,2}(\/|-)\*|\?)) (?<month>((\d{1,2},)*\d{1,2}|(\d{1,2}(\/|-)\d{1,2})|\*|\*\/\d{1,2}|\d{1,2}(\/|-)\*|\?)) ((?<dayWeek>((\d,)*\d|(\d(\/|-)\d)|\*|\?|\*\/\d|\d(\/|-)\*|\?)))$";
             private bool failed = false;
             public Dictionary<string, List<string>> TestCronExpression(Dictionary<string, List<string>> dic, string key, string value)
             {
                 Match col = Regex.Match(value, this.regexPattern);
-
+                Regex.IsMatch("", @"^((?<dayWeek>((\d,)*\d|(\d(\/|-)\d)|\*|\?|\*\/\d|\d(\/|-)\*|\?)))$");
                 if (!col.Success)
                     return this.tester.AddOrApend(dic, key, "cron format is not valid");
 
@@ -75,7 +80,7 @@ namespace Server.Commands
                 this.ValuesCheck(dic, key, col.Groups["month"].Value, 12, "month", false, true);
                 if (!this.failed)
                     this.DayMonthCheck(dic, key, col.Groups["dayMonth"].Value, col.Groups["month"].Value, "day(month)");
-
+                this.DayMonthWeekCheck(dic, key, col.Groups["dayMonth"].Value, col.Groups["dayWeek"].Value);
                 return dic;
             }
             public Dictionary<string, List<string>> ValuesCheck(Dictionary<string, List<string>> dic, string key, string value, int highestValue, string valueType, bool canBeZero, bool monthCheck)
@@ -114,7 +119,7 @@ namespace Server.Commands
                     return dic;
                 int highestDayCount = 0;
                 List<int> months = new List<int>();
-                if(month == "*")
+                if (month == "*")
                 {
                     this.ValuesCheck(dic, key, value, 31, value, false, false);
                     return dic;
@@ -144,6 +149,31 @@ namespace Server.Commands
                 this.ValuesCheck(dic, key, value, highestDayCount, value, false, false);
                 return dic;
             }
+            public string QuestionMarkChange(string cronExpression)
+            {
+                var crons = cronExpression.Split(" ").ToList();
+                int amountQuest = cronExpression.Count(character => character == '?');
+                int amountAster = cronExpression.Count(character => character == '*');
+                if (crons[2] == "*" && crons[4] == "*")
+                    return this.ReplaceLastChar(cronExpression, '*', '?');
+
+                if (crons[2] == "?" && crons[4] == "?")
+                    return this.ReplaceLastChar(cronExpression, '?', '*');
+
+                return cronExpression;
+            }
+            private string ReplaceLastChar(string text, char oldChar, char newChar)
+            {
+                int position = text.LastIndexOf(oldChar);
+                return text.Remove(position).Insert(position, newChar.ToString());
+
+            }
+            public Dictionary<string, List<string>> DayMonthWeekCheck(Dictionary<string, List<string>> dic, string key, string dayMonth, string dayWeek)
+            {
+                if (int.TryParse(dayMonth, out int x) && int.TryParse(dayWeek, out int y))
+                    return this.tester.AddOrApend(dic, key, "Either dayMonth or dayWeek has to be ?");
+                return dic;
+            }
         }
         public class FtpConfig
         {
@@ -152,9 +182,6 @@ namespace Server.Commands
             private string destKey { get; set; }
             public FtpConfig(string ftpConfig, string destKey)
             {
-                //this.match = Regex.Match(ftpConfig, @"^ftp://(?<user>[a-zA-Z\.\-_]+):(?<password>.[^@]+)
-                //                                                \@(?<host>[1-9\.]{7,15}):(?<port>\d{1,5})
-                //                                                //(?<filePath>[^\\\/:\*\?""""<>\|]{2,})$");
                 this.match = Regex.Match(ftpConfig, @"^ftp://(?<user>[a-zA-Z\.\-_]+):(?<password>.[^@]+)\@(?<host>[1-9\.]+):(?<port>\d+)//(?<filePath>.+)$");
                 this.destKey = destKey;
             }
@@ -163,7 +190,7 @@ namespace Server.Commands
                 if (!this.match.Success)
                     return this.tester.AddOrApend(dic, destKey, "format isn't valid");
 
-                this.tester.IsValidIp(dic, destKey, match.Groups["host"].Value,"host adress isn't valid");
+                this.tester.IsValidIp(dic, destKey, match.Groups["host"].Value, "host adress isn't valid");
 
                 if (this.CheckFtpPort(int.Parse(this.match.Groups["port"].Value)))
                     this.tester.AddOrApend(dic, destKey, "incorrect port value");

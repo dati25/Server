@@ -33,14 +33,8 @@ namespace Server.Commands.ConfigCommands
             if (config.Destinations! != null)
             {
                 for (int i = 0; i < config.Destinations!.Count; i++)
-                {
-                    //if (config.Destinations[i].Type == false)
-                    //{
-                    //    this.IsValidFilePath(exceptions, $"Destination({i})", config.Destinations[i].Path);
-                    //    continue;
-                    //}
                     this.CheckDestination(exceptions, $"Destination({i})", config.Destinations[i].Path, config.Destinations[i].Type);
-                }
+
             }
             if (config.Groups != null)
                 this.CheckGroups(exceptions, config, idConfig);
