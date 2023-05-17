@@ -6,16 +6,18 @@ public class ReportResultGet
 {
     public int Id { get; set; }
     public int IdPc { get; set; }
-    public bool? Status { get; set; }
+    public int IdConfig { get; set; }
+    public bool Status { get; set; }
     public DateTime ReportTime { get; set; }
     public string? Description { get; set; }
 
     public ReportResultGet(Report report)
     {
-        Id = report.Id;
-        IdPc = report.IdPc;
-        Status = report.Status;
-        ReportTime = report.ReportTime;
-        Description = report.Description;
+        this.Id = report.Id;
+        this.IdPc = report.IdPc;
+        this.IdConfig = report.IdConfig;
+        this.Status = report.Status;
+        this.ReportTime = report.ReportTime;
+        this.Description = report.Description;
     }
 }

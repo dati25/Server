@@ -44,9 +44,9 @@ public class ReportController : ControllerBase
     [HttpPost]
     public IActionResult Post([FromBody] ReportResultPost reportResult)
     {
-        ReportTestCommands testCommands = new ReportTestCommands();
-        Report? report = new Report(reportResult.IdPc, reportResult.Status, DateTime.Now, reportResult.Description);
-        var exceptions = testCommands.CheckAll(report);
+        Report? report = new Report(reportResult.IdPc, reportResult.IdConfig, reportResult.Status, DateTime.Now, reportResult.Description);
+        ReportTestCommands testCommands = new ReportTestCommands(report);
+        var exceptions = testCommands.CheckAll();
 
         if (exceptions.Count > 0)
             return BadRequest(exceptions);
@@ -60,9 +60,9 @@ public class ReportController : ControllerBase
     public IActionResult Put(int id, [FromBody] ReportCommandPut command)
     {
         Report? report = command.Execute(id);
-        ReportTestCommands testCommands = new ReportTestCommands();
+        ReportTestCommands testCommands = new ReportTestCommands(report);
 
-        var exceptions = testCommands.CheckAll(report!);
+        var exceptions = testCommands.CheckAll();
         if (exceptions.Count > 0)
             return BadRequest(exceptions);
 

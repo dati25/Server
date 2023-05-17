@@ -41,7 +41,7 @@ namespace Server.Commands
         }
         public Dictionary<string, List<string>> IsValidFilePath(Dictionary<string, List<string>> dic, string key, string value)
         {
-            return this.IsValid(dic, key, value, @"@""(^[a-zA-Z]:[\\\/]{1,2}$)|(^([a-zA-Z]:([\\\/]{1,2}[^\\\/:\*\?""""<>\|]+)+)$)", "path is not valid");
+            return this.IsValid(dic, key, value, @"(^[a-zA-Z]:[\\\/]{1,2}$)|(^([a-zA-Z]:([\\\/]{1,2}[^\\\/:\*\?""""<>\|]+)+)$)", "path is not valid");
         }
         public Dictionary<string, List<string>> IsValidIp(Dictionary<string, List<string>> dic, string key, string value, string errormessage)
         {
