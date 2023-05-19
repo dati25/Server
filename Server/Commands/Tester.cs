@@ -70,7 +70,7 @@ namespace Server.Commands
             public Dictionary<string, List<string>> TestCronExpression(Dictionary<string, List<string>> dic, string key, string value)
             {
                 Match col = Regex.Match(value, this.regexPattern);
-                Regex.IsMatch("", @"^((?<dayWeek>((\d,)*\d|(\d(\/|-)\d)|\*|\?|\*\/\d|\d(\/|-)\*|\?)))$");
+
                 if (!col.Success)
                     return this.tester.AddOrApend(dic, key, "cron format is not valid");
 

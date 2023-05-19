@@ -11,6 +11,14 @@ namespace Server.Controllers
     public class SessionsController : ControllerBase
     {
         private MyContext context = new MyContext();
+        [HttpGet("{IdPc}")]
+        public IActionResult GetPcStatus(int IdPc)
+        {
+            var pc = this.context.Computers!.Find(IdPc);
+            if (pc == null)
+                return NotFound(new {message = "Object doesn't exist."});
+            return Ok(pc.Status);
+        }
         [HttpPost]
         public IActionResult Post(Login model)
         {

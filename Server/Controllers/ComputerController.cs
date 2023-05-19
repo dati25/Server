@@ -27,7 +27,6 @@ public class ComputerController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [Authorize]
     public IActionResult Get(int id)
     {
         Computer? result = context.Computers!.Find(id);
