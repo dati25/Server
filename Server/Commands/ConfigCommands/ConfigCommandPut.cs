@@ -46,15 +46,16 @@ public class ConfigCommandPut
             var tester = new Tester();
             config.RepeatPeriod = tester.QuestionMarkChange(this.RepeatPeriod);
         }
-
+        //if (Groups != null && Computers != null)
+        //    return;
         if(Groups != null)
         {
-            config.Tasks = new List<Tasks>();
+            //config.Tasks = new List<Tasks>();
             Groups.ForEach(group => config.Tasks.Add(new Tasks(group.IdGroup, id)));
         }
         if(Computers != null)
         {
-            config.Tasks = config.Tasks ?? new List<Tasks>();
+            //config.Tasks = config.Tasks ?? new List<Tasks>();
             Computers!.ForEach(pc =>
             {
                 var groups = context.Groups!.ToList();

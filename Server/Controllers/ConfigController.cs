@@ -26,7 +26,6 @@ public class ConfigController : ControllerBase
         return Ok(results);
     }
 
-
     [HttpGet("{id}")]
     public IActionResult Get(int id)
     {
