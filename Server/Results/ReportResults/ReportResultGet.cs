@@ -7,7 +7,7 @@ public class ReportResultGet
     public int Id { get; set; }
     public int IdPc { get; set; }
     public int IdConfig { get; set; }
-    public bool Status { get; set; }
+    public char Status { get; set; }
     public DateTime ReportTime { get; set; }
     public string? Description { get; set; }
 

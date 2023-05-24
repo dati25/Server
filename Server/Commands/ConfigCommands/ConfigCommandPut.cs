@@ -46,8 +46,7 @@ public class ConfigCommandPut
             var tester = new Tester();
             config.RepeatPeriod = tester.QuestionMarkChange(this.RepeatPeriod);
         }
-        //if (Groups != null && Computers != null)
-        //    return;
+
         if(Groups != null)
         {
             config.Tasks = new List<Tasks>();
