@@ -67,7 +67,7 @@ public class GroupController : ControllerBase
     }
 
     [HttpDelete("{idGroup}/{idPC}")]
-    public IActionResult DeletePcGroups(int idGroup, int idPC)
+    public IActionResult DeletePcGroups(int idGroup, string idPC)
     {
         CommandsGetDelete command = new CommandsGetDelete();
 

@@ -18,6 +18,6 @@ public class MyContext : DbContext
     public DbSet<Snapshots>? Snapshots { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseMySQL("server=mysqlstudenti.litv.sssvt.cz;database=3b1_veseckylukas_db1;user=veseckylukas;password=123456;SslMode=none");
+        optionsBuilder.UseMySQL("server=mysqlstudenti.litv.sssvt.cz;database=3b1_gazikmarcel_db2;user=gazikmarcel;password=123456;SslMode=none");
     }
 }

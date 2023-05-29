@@ -18,7 +18,7 @@ public class ComputerCommandPut : ICommand
         Name = name;
     }
 
-    public Computer Execute(int id)
+    public Computer Execute(string id)
     {
         Computer? computer = context.Computers!.Find(id);
         ComputerTestCommands tests = new ComputerTestCommands();
@@ -34,17 +34,5 @@ public class ComputerCommandPut : ICommand
 
         context.SaveChanges();
         return computer;
-    }
-
-    public bool IsValidIp(string ipAddress)
-    {
-        string pattern = @"^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$";
-        return Regex.IsMatch(ipAddress, pattern);
-    }
-
-    public bool IsValidMac(string macAddress)
-    {
-        string pattern = @"^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$";
-        return Regex.IsMatch(macAddress, pattern);
     }
 }

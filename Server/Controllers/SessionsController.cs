@@ -12,7 +12,7 @@ namespace Server.Controllers
     {
         private MyContext context = new MyContext();
         [HttpGet("{IdPc}")]
-        public IActionResult GetPcStatus(int IdPc)
+        public IActionResult GetPcStatus(string IdPc)
         {
             var pc = this.context.Computers!.Find(IdPc);
             if (pc == null)

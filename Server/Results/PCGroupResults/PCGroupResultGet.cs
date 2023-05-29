@@ -4,7 +4,7 @@ namespace Server.Results.PcGroupResults;
 
 public class PcGroupResultGet
 {
-    public int IdPc { get; set; }
+    public string IdPc { get; set; }
     public string Name { get; set; }
     public PcGroupResultGet(PcGroups pcGroup, MyContext context)
     {
@@ -12,7 +12,7 @@ public class PcGroupResultGet
         Computer pc = context.Computers!.Find(IdPc)!;
         Name = pc.Name;
     }
-    public PcGroupResultGet(int idPc, string name)
+    public PcGroupResultGet(string idPc, string name)
     {
         IdPc = idPc;
         Name = name;

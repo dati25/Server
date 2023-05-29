@@ -4,9 +4,9 @@ namespace Server.Results.ComputerResults;
 
 public class ComputerReturnPcID
 {
-    public int? IdPc { get; set; }
+    public string? IdPc { get; set; }
 
-    public ComputerReturnPcID(int? idPc)
+    public ComputerReturnPcID(string? idPc)
     {
         IdPc = idPc;
     }

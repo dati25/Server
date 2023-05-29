@@ -74,9 +74,9 @@ namespace Server.Commands.ConfigCommands
             return this.tester.IsValidFilePath(dic, key, value);
 
         }
-        private List<int> AddPCs(int groupId)
+        private List<string> AddPCs(int groupId)
         {
-            List<int> list = new List<int>();
+            List<string> list = new List<string>();
             Server.Database.Models.Group group = context.Groups!.Find(groupId)!;
             group.PcGroups = context.PcGroups!.Where(x => x.IdGroup == groupId).ToList();
             group.PcGroups!.ForEach(pcGroup => list.Add(pcGroup.IdPc));
@@ -102,7 +102,7 @@ namespace Server.Commands.ConfigCommands
         }
         private Dictionary<string, List<string>> CheckDuplicatePCs(Dictionary<string, List<string>> dic, ConfigCommandTest config, int? idConfig)
         {
-            List<int> idPCs = new List<int>();
+            List<string> idPCs = new List<string>();
 
             config.Groups!.ForEach(group => idPCs.AddRange(this.AddPCs(group)));
             if (idConfig != null)

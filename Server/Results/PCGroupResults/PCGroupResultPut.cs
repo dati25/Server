@@ -2,9 +2,9 @@
 
 public class PCGroupResultPut
 {
-    public int IdPc { get; set; }
+    public string IdPc { get; set; }
 
-    public PCGroupResultPut(int idPc)
+    public PCGroupResultPut(string idPc)
     {
         IdPc = idPc;
     }

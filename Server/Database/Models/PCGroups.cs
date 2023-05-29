@@ -8,9 +8,9 @@ namespace Server.Database.Models;
 [PrimaryKey("IdPc", "IdGroup")]
 public class PcGroups : IModel
 {
-    public int IdPc { get; set; }
+    public string IdPc { get; set; }
     [JsonIgnore] public int IdGroup { get; set; }
-    public PcGroups(int idPc, int idGroup)
+    public PcGroups(string idPc, int idGroup)
     {
         IdPc = idPc;
         IdGroup = idGroup;

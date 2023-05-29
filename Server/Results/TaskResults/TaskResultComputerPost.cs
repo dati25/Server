@@ -2,8 +2,8 @@
 {
     public class TaskResultComputerPost
     {
-        public int IdPc { get; set; }
-        public TaskResultComputerPost(int IdPc)
+        public string IdPc { get; set; }
+        public TaskResultComputerPost(string IdPc)
         {
             this.IdPc = IdPc;
         }

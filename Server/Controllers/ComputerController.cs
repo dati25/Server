@@ -27,7 +27,7 @@ public class ComputerController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public IActionResult Get(int id)
+    public IActionResult Get(string id)
     {
         Computer? result = context.Computers!.Find(id);
 
@@ -40,8 +40,10 @@ public class ComputerController : ControllerBase
     [HttpPost]
     public IActionResult Post([FromBody] ComputerResultPost computerResult)
     {
+        string UUID = Guid.NewGuid().ToString();
+
         ComputerTestCommands testCommands = new ComputerTestCommands();
-        Computer pc = new(computerResult.MacAddress, computerResult.IpAddress, computerResult.Name, computerResult.Status);
+        Computer pc = new(UUID, computerResult.MacAddress, computerResult.IpAddress, computerResult.Name, computerResult.Status);
 
         var exceptions = testCommands.CheckAll(pc);
         if (exceptions.Count > 0)
@@ -54,7 +56,7 @@ public class ComputerController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public IActionResult Put(int id, [FromBody] ComputerCommandPut command)
+    public IActionResult Put(string id, [FromBody] ComputerCommandPut command)
     {
         Computer? pc = command.Execute(id);
         ComputerTestCommands testCommands = new ComputerTestCommands();
@@ -69,7 +71,7 @@ public class ComputerController : ControllerBase
 
     [HttpDelete("{id}")]
     [Authorize]
-    public IActionResult Delete(int id)
+    public IActionResult Delete(string id)
     {
         CommandsGetDelete command = new CommandsGetDelete();
 

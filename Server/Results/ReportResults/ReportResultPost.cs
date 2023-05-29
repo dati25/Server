@@ -2,12 +2,12 @@
 
 public class ReportResultPost
 {
-    public int IdPc { get; set; }
+    public string IdPc { get; set; }
     public int IdConfig { get; set; }
     public char Status { get; set; }
     public string? Description { get; set; }
 
-    public ReportResultPost(int idPc, int idConfig, char status, string? description = null)
+    public ReportResultPost(string idPc, int idConfig, char status, string? description = null)
     {
         this.IdPc = idPc;
         this.IdConfig = idConfig;
