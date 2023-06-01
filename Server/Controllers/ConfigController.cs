@@ -26,7 +26,6 @@ public class ConfigController : ControllerBase
         return Ok(results);
     }
 
-
     [HttpGet("{id}")]
     public IActionResult Get(int id)
     {
@@ -121,7 +120,7 @@ public class ConfigController : ControllerBase
         return Ok(true);
     }
 
-    [HttpDelete("/api/{idConfig}/{idGroup}")]
+    [HttpDelete("/api/{idConfig}/{idGroup}/{isGroup}")]
     [Authorize]
     public IActionResult DeleteTask(int idConfig, int idGroup, char isGroup)
     {

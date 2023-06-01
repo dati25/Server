@@ -90,7 +90,8 @@ namespace Server.Commands
 
                 List<int> ints = new List<int>();
                 int i = canBeZero ? 1 : 0;
-                value.Split('-', '/', ',').ToList().ForEach(x => ints.Add(int.Parse(x)));
+                if (value.Contains('-') || value.Contains('/') || value.Contains(','))
+                    value.Split('-', '/', ',').ToList().ForEach(x => ints.Add(int.Parse(x)));
 
                 if (ints.Count > 1 && (ints[0] < ints[1] && value.Contains('-')))
                 {

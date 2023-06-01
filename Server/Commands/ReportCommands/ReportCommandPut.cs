@@ -5,11 +5,11 @@ namespace Server.Commands.ReportCommands
     public class ReportCommandPut : ICommand
     {
         public int? idPC { get; set; }
-        public bool? status { get; set; }
+        public char? status { get; set; }
         public DateTime? reportTime { get; set; }
         public string? description { get; set; }
 
-        public ReportCommandPut(int? idPC, bool? status, DateTime? reportTime, string? description)
+        public ReportCommandPut(int? idPC, char? status, DateTime? reportTime, string? description)
         {
             this.idPC = idPC;
             this.status = status;
