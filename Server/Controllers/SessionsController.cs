@@ -17,7 +17,8 @@ namespace Server.Controllers
             var pc = this.context.Computers!.Find(IdPc);
             if (pc == null)
                 return NotFound(new {message = "Object doesn't exist."});
-            return Ok(pc.Status);
+            char result = pc.Status;
+            return Ok(result);
         }
         [HttpPost]
         public IActionResult Post(Login model)

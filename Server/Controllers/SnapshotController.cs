@@ -17,7 +17,7 @@ namespace Server.Controllers
             List<SnapshotResultGetWithId> snaps = new List<SnapshotResultGetWithId>();
             this.context.Snapshots!.Where(x => x.ComputerId == idPC).ToList().ForEach(x => snaps.Add(new SnapshotResultGetWithId(x.IdConfig, x.Snapshot)));
             if (snaps.Count <= 0)
-                return NotFound(new { message = "Object doesn't exist" });
+                return NotFound(new { message = "Objects don't exist" });
             return Ok(snaps);
         }
 

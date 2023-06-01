@@ -49,8 +49,6 @@ public class ConfigController : ControllerBase
 
         if (pc == null)
             return NotFound(new { message = "PC doesn't exist." });
-        if (pc.Status != 't')
-            return Unauthorized(new { message = "Computer isn't approved." });
 
         List<int> results = command.GetConfigsFromidPC(pc);
         if (results == null)
