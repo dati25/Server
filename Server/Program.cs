@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.OpenApi.Models;
+using Server.Services.QuartzService;
 
 namespace Server;
 
@@ -71,6 +73,11 @@ public class Program
 
 		app.MapControllers();
 
+        var schedules = new ScheduleService();
+        var quartzBuilder = schedules.ScheduleAll().GetAwaiter().GetResult();
+
         app.Run();
+
+        //quartzBuilder.RunAsync().GetAwaiter();
     }
 }

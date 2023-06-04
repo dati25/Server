@@ -4,6 +4,7 @@ using Server.Commands.AdminCommands;
 using Server.Results.AdminResults;
 using Server.Database.Models;
 using Server.Controllers.Attributes;
+using Server.Services.QuartzService;
 
 namespace Server.Controllers;
 
@@ -12,7 +13,8 @@ namespace Server.Controllers;
 [Authorize]
 public class AdminController : ControllerBase
 {
-    MyContext context = new MyContext();
+    MyContext context = new();
+    ScheduleService scheduleService = new();
     [HttpGet]
     public IActionResult Get(int? count, int offset = 0)
     {
@@ -49,13 +51,14 @@ public class AdminController : ControllerBase
         AdminTestCommands testCommands = new AdminTestCommands();
         var hashedPassword = BCrypt.Net.BCrypt.EnhancedHashPassword(adminPost.Password, workFactor: 13);
 
-        Admin admin = new Admin(adminPost.Username, hashedPassword, adminPost.Email, null);
+        Admin admin = new Admin(adminPost.Username, hashedPassword, adminPost.Email, null, DateTime.Now);
         var exceptions = testCommands.CheckAll(admin);
         if (exceptions.Count > 0)
             return BadRequest(exceptions);
 
         context.Add(admin);
         context.SaveChanges();
+        this.scheduleService.ScheduleJob(admin).GetAwaiter();
         return Ok(true);
 
     }
@@ -71,16 +74,19 @@ public class AdminController : ControllerBase
             return BadRequest(exceptions);
 
         context.SaveChanges();
+        this.scheduleService.RescheduleJob(admin!).GetAwaiter();
         return Ok(true);
     }
 
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
+        var admin = this.context.Admins!.Find(id);
         CommandsGetDelete command = new CommandsGetDelete();
-        if (!command.Delete(this.context.Admins!.Find(id)!))
+        if (!command.Delete(admin!))
             return BadRequest(new {message = "Object doesn't exist."});
-
+        
+        this.scheduleService.UnscheduleJob(admin!).GetAwaiter();
         return Ok(true);
     }
 }
