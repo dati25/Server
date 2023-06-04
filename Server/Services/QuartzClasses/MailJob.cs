@@ -13,7 +13,14 @@ namespace Server.Services.QuartzClasses
             var admin = (Admin)map["admin"];
             var mails = new MailService();
 
-            mails.SendMail(admin);
+            try
+            {
+                mails.SendMail(admin);
+            }
+            catch (Exception)
+            { 
+
+            }
         }
     }
 }
