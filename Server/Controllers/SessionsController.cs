@@ -36,7 +36,7 @@ namespace Server.Controllers
                       .AddClaim("login", admin.Username)
                       .Encode();
 
-                    return Ok(new { token = token });
+                    return Ok(new { token = token, admin = admin });
                 }
 
                 return Unauthorized(new { message = "Invalid credentials" });
