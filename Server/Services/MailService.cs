@@ -30,7 +30,8 @@ namespace Server.Services
                 reports = reports.Where(report => report.ReportTime > admin.LastEmail).ToList();
             }
 
-            return $"Total number of new reports: {reports.Count}";
+            return $"Total number of new reports: {reports.Count}, {reports.Count(report => report.Status == 'f')} of them failed, {reports.Count(report => report.Status == 'w')} of them ended with warning.";
         }
+
     }
 }
