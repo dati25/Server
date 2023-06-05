@@ -1,9 +1,12 @@
-﻿namespace Server.Results.ReportResults;
+﻿using Org.BouncyCastle.Asn1.Mozilla;
+
+namespace Server.Results.ReportResults;
 
 public class ReportResultPost
 {
     public int IdPc { get; set; }
     public int IdConfig { get; set; }
+    public DateTime ReportTime { get; set; }    
     public char Status { get; set; }
     public string? Description { get; set; }
 

@@ -21,6 +21,11 @@ namespace Server.Commands.ReportCommands
                 return this.tester.AddOrApend(expections, "IDPC", "Related PC doesn't exist");
             }
 
+            if (this.report.ReportTime >  DateTime.Now)
+            {
+                return this.tester.AddOrApend(expections, "ReportTime", "ReportTime cannot be in the future");
+            }
+
             return this.CheckConnection(expections, "RelationException");
         }
         private Dictionary<string, List<string>> CheckConnection(Dictionary<string, List<string>> dic, string key)

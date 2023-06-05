@@ -12,20 +12,21 @@ public class AdminCommandPut
 
     public AdminCommandPut(string? username, string? password, string? email, string? repeatPeriod)
     {
-        Username = username;
-        Password = password;
-        Email = email;
-        RepeatPeriod = repeatPeriod;
+        this.Username = username;
+        this.Password = password;
+        this.Email = email;
+        this.RepeatPeriod = repeatPeriod;
     }
     public Admin? Execute(int id, MyContext context)
     {
         AdminTestCommands tests = new AdminTestCommands();
         Admin? admin = context.Admins!.Find(id);
+        var tester = new Tester();
 
-        admin!.Username = Username ?? admin.Username;
-        admin.Password = Password ?? admin.Password;
-        admin.Email = Email ?? admin.Email;
-        admin.RepeatPeriod = RepeatPeriod ?? admin.RepeatPeriod;
+        admin!.Username = this.Username ?? admin.Username;
+        admin.Password = this.Password ?? admin.Password;
+        admin.Email = this.Email ?? admin.Email;
+        admin.RepeatPeriod = this.RepeatPeriod != null ? tester.QuestionMarkChange(this.RepeatPeriod) : admin.RepeatPeriod;
 
 
         return admin!;

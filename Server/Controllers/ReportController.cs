@@ -44,7 +44,7 @@ public class ReportController : ControllerBase
     [HttpPost]
     public IActionResult Post([FromBody] ReportResultPost reportResult)
     {
-        Report? report = new Report(reportResult.IdPc, reportResult.IdConfig, reportResult.Status, DateTime.Now, reportResult.Description);
+        Report? report = new Report(reportResult.IdPc, reportResult.IdConfig, reportResult.Status, reportResult.ReportTime, reportResult.Description);
         ReportTestCommands testCommands = new ReportTestCommands(report);
         var exceptions = testCommands.CheckAll();
 

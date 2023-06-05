@@ -11,11 +11,13 @@ public class Admin : IModel
     [JsonIgnore] public string Password { get; set; }
     public string Email { get; set; }
     public string? RepeatPeriod { get; set; } // Null = monthly
-    public Admin(string username, string password, string email, string? repeatPeriod)
+    public DateTime? LastEmail { get; set; }
+    public Admin(string username, string password, string email, string? repeatPeriod, DateTime? LastEmail)
     {
-        Username = username;
-        Password = password;
-        Email = email;
-        RepeatPeriod = repeatPeriod ?? "0 0 1 * *";
+        this.Username = username;
+        this.Password = password;
+        this.Email = email;
+        this.RepeatPeriod = repeatPeriod ?? "0 0 1 * ?";
+        this.LastEmail = LastEmail;
     }
 }
