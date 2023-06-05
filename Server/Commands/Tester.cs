@@ -183,7 +183,7 @@ namespace Server.Commands
             private string destKey { get; set; }
             public FtpConfig(string ftpConfig, string destKey)
             {
-                this.match = Regex.Match(ftpConfig, @"^ftp:\/\/(?<user>[a-zA-Z.\-_]+):(?<password>.[^@]+)@(?<host>[0-9.]+):(?<port>\d+)\/\/(?<filePath>.+)$");
+                this.match = Regex.Match(ftpConfig, @"^ftp:\/\/(?<user>[a-zA-Z.\-_]+):(?<password>.[^@]+)@(?<host>[0-9.]+):(?<port>\d+)\/\/(?<filePath>.*)$");
                 this.destKey = destKey;
             }
             public Dictionary<string, List<string>> CheckAll(Dictionary<string, List<string>> dic)
