@@ -24,7 +24,7 @@ public class AdminCommandPut
         var tester = new Tester();
 
         admin!.Username = this.Username ?? admin.Username;
-        admin.Password = this.Password ?? admin.Password;
+        admin.Password = this.Password != null ? BCrypt.Net.BCrypt.EnhancedHashPassword(this.Password, workFactor: 13) : admin.Password;
         admin.Email = this.Email ?? admin.Email;
         admin.RepeatPeriod = this.RepeatPeriod != null ? tester.QuestionMarkChange(this.RepeatPeriod) : admin.RepeatPeriod;
 
