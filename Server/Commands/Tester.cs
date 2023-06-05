@@ -183,7 +183,7 @@ namespace Server.Commands
             private string destKey { get; set; }
             public FtpConfig(string ftpConfig, string destKey)
             {
-                this.match = Regex.Match(ftpConfig, @"^ftp://(?<user>[a-zA-Z\.\-_]+):(?<password>.[^@]+)\@(?<host>[1-9\.]+):(?<port>\d+)//(?<filePath>.+)$");
+                this.match = Regex.Match(ftpConfig, @"^ftp:\/\/(?<user>[a-zA-Z.\-_]+):(?<password>.[^@]+)@(?<host>[0-9.]+):(?<port>\d+)\/\/(?<filePath>.+)$");
                 this.destKey = destKey;
             }
             public Dictionary<string, List<string>> CheckAll(Dictionary<string, List<string>> dic)
@@ -193,10 +193,11 @@ namespace Server.Commands
 
                 this.tester.IsValidIp(dic, destKey, match.Groups["host"].Value, "host adress isn't valid");
 
-                if (this.CheckFtpPort(int.Parse(this.match.Groups["port"].Value)))
+                if (!this.CheckFtpPort(int.Parse(this.match.Groups["port"].Value)))
                     this.tester.AddOrApend(dic, destKey, "incorrect port value");
 
-                this.tester.IsValidFilePath(dic, destKey, match.Groups["filePath"].Value);
+                // DOESNT WORK WITH FTP PATHS - looks for something like C: but ftp paths don't start with disks
+                // this.tester.IsValidFilePath(dic, destKey, match.Groups["filePath"].Value);
 
                 return dic;
             }
